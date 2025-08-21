@@ -39,7 +39,7 @@ export default function ConfirmResetPage() {
     }
 
     try {
-      const res = await fetch("/api/reset-password/", {
+      const res = await fetch("http://localhost:8000/api/reset-password/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -66,13 +66,17 @@ export default function ConfirmResetPage() {
     <div className="min-h-screen flex">
       {/* Left Image */}
       <div
-        className="w-1/2 bg-cover bg-center"
+        className="w-1/2 bg-cover bg-center md:flex hidden"
         style={{ backgroundImage: "url('/goat.jpg')" }}
       ></div>
 
       {/* Right Form */}
-      <div className="w-1/2 flex items-center justify-center p-8">
+      <div className="md:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
+            <div className="flex  justify-between">
+            <img src="/emblem.png" className="w-[100px] h-[100px]" />
+            <img src="/cog.png" className="w-[100px] h-[100px]" />
+          </div>
           <h2 className="text-2xl font-bold mb-6">Reset Password</h2>
           {message && <p className="mb-4 text-red-600">{message}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -14,7 +14,10 @@ export default function LoginPage() {
     const loginData = localStorage.getItem("login_response");
     if (loginData) {
       const parsed = JSON.parse(loginData);
-      if (parsed?.user?.role?.toUpperCase() === "REVIEWER" || parsed?.user?.role?.toUpperCase() === "ADMIN") {
+      if (
+        parsed?.user?.role?.toUpperCase() === "REVIEWER" ||
+        parsed?.user?.role?.toUpperCase() === "ADMIN"
+      ) {
         router.push("/aha-admin/home");
       } else {
         router.push("/applicant/home");
@@ -63,19 +66,23 @@ export default function LoginPage() {
     <div className="min-h-screen flex">
       {/* Left Image */}
       <div
-        className="w-1/2 bg-cover bg-center"
+        className="w-1/2 bg-cover bg-center md:flex hidden"
         style={{ backgroundImage: "url('/cow.jpg')" }}
       ></div>
 
       {/* Right Form */}
-      <div className="w-1/2 flex items-center justify-center p-8">
+      <div className="md:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
-          <div className="md:flex hidden justify-between">
+          <div className="flex  justify-between">
             <img src="/emblem.png" className="w-[100px] h-[100px]" />
             <img src="/cog.png" className="w-[100px] h-[100px]" />
           </div>
           <h3 className="mt-5">
-            Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign Application form
+            Ward Veterinary Surgeons and Veterinary Para Professionals for
+            County FMD & PPR Vaccination Campaign Application form
+          </h3>
+           <h3 className="mt-5">
+            By having an account you can be able to track your application
           </h3>
           <h2 className="text-2xl font-bold mb-6">Login</h2>
           {message && <p className="mb-4 text-red-600">{message}</p>}
@@ -106,6 +113,22 @@ export default function LoginPage() {
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
+
+          {/* Extra links */}
+          <div className="mt-4 flex justify-between text-sm">
+            <button
+              onClick={() => router.push("/aha/sign-up")}
+              className="text-teal-600 hover:underline"
+            >
+              Create account
+            </button>
+            <button
+              onClick={() => router.push("/aha/request-reset")}
+              className="text-teal-600 hover:underline"
+            >
+              Forgot password?
+            </button>
+          </div>
         </div>
       </div>
     </div>

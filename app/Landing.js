@@ -79,15 +79,20 @@ export default function Page() {
   const campaign = data[0];
 
   return (
-    <main className="min-h-screen   to-white p-6 md:p-5">
+    <main className="min-h-screen border-t-8 border-t-[#009639]  to-white p-6 md:p-5">
+        <div className="flex md:hidden  justify-between">
+                  <img src="/emblem.png" className="w-[100px] h-[100px]"></img>
+
+                  <img src="/cog.png" className="w-[100px] h-[100px]"></img>
+                </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-8xl mx-auto">
         {/* LEFT SIDE - PDF Viewer */}
-  <div className="md:col-span-1 bg-white rounded-2xl shadow-md overflow-hidden h-[95vh]">
+  <div className="md:col-span-1 bg-white rounded-2xl shadow-md overflow-hidden md:h-[95vh] ">
           {/* <iframe
             src="/advert_Vaccination_sample.pdf" // 👈 replace with your PDF path (e.g., /public/sample.pdf)
             className="w-full h-full"
           /> */}
-          <div className="w-full h-full flex items- justify-center">
+          <div className="md:w-full md:h-full  md:flex items- justify-center  hidden">
             <img
               src="/cow.jpg" // 👈 replace with your image path
               alt="Advertisement"
@@ -97,8 +102,8 @@ export default function Page() {
         </div>
 
         {/* RIGHT SIDE - Campaign Info */}
-  <div className="md:col-span-2 space-y-3 overflow-y-auto h-[95vh] pr-2">
-             <div className="md:flex hidden   justify-between">
+  <div className="md:col-span-2 space-y-3 overflow-y-auto md:h-[95vh]  pr-2">
+             <div className="md:flex hidden  justify-between">
                   <img src="/emblem.png" className="w-[100px] h-[100px]"></img>
 
                   <img src="/cog.png" className="w-[100px] h-[100px]"></img>

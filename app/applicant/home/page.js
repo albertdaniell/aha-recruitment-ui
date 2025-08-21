@@ -83,7 +83,7 @@ export default function HomePage() {
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Update Profile Card */}
-        <div className="bg-white shadow-md rounded-lg p-8 flex flex-col justify-between hover:shadow-xl transition">
+        <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
             <Person size={40} />
             <h2 className="text-2xl font-bold mb-2 mt-5">Update Profile</h2>
@@ -100,13 +100,13 @@ export default function HomePage() {
         </div>
 
         {/* Apply Now / Continue Application Card */}
-        <div className="bg-white shadow-md rounded-lg p-8 flex flex-col justify-between hover:shadow-xl transition">
+        <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
             <Clipboard size={40} />
             <h2 className="text-2xl font-bold mb-2 mt-5">
               {application
                 ? application.status === "draft"
-                  ? "Continue Your Application"
+                  ? "Continue Your Application- Deadline (25th Aug)"
                   : "Application Submitted"
                 : "Apply Now & Upload Certificates"}
             </h2>
@@ -140,7 +140,7 @@ export default function HomePage() {
         </div>
 
         {/* Complaints / Help Card */}
-        <div className="bg-white shadow-md rounded-lg p-8 flex flex-col justify-between hover:shadow-xl transition">
+        <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
             <InfoFill size={40} />
 

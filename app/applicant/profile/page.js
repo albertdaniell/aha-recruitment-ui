@@ -7,9 +7,11 @@ export default function UpdateProfilePage() {
   const [profile, setProfile] = useState({
     bio: "",
     location: "",
+    date_of_birth: "",
+    gender: "",
     profile_picture: null,
   });
-  const [preview, setPreview] = useState(null); // preview URL
+  const [preview, setPreview] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -34,7 +36,7 @@ export default function UpdateProfilePage() {
 
         if (res.status === 404) {
           setHasProfile(false);
-          setProfile({ bio: "", location: "", profile_picture: null });
+          setProfile({ bio: "", location: "", date_of_birth: "", gender: "", profile_picture: null });
         } else if (!res.ok) {
           throw new Error("Failed to fetch profile");
         } else {
@@ -43,9 +45,10 @@ export default function UpdateProfilePage() {
           setProfile({
             bio: data.bio || "",
             location: data.location || "",
+            date_of_birth: data.date_of_birth || "",
+            gender: data.gender || "",
             profile_picture: null,
           });
-          // Show existing profile picture
           if (data.profile_picture) setPreview(data.profile_picture);
         }
       } catch (err) {
@@ -63,7 +66,7 @@ export default function UpdateProfilePage() {
     if (files) {
       const file = files[0];
       setProfile({ ...profile, [name]: file });
-      setPreview(URL.createObjectURL(file)); // show selected image preview
+      setPreview(URL.createObjectURL(file));
     } else {
       setProfile({ ...profile, [name]: value });
     }
@@ -86,6 +89,8 @@ export default function UpdateProfilePage() {
       const formData = new FormData();
       formData.append("bio", profile.bio);
       formData.append("location", profile.location);
+      formData.append("date_of_birth", profile.date_of_birth);
+      formData.append("gender", profile.gender);
       if (profile.profile_picture) {
         formData.append("profile_picture", profile.profile_picture);
       }
@@ -117,64 +122,95 @@ export default function UpdateProfilePage() {
   if (loading) return <p className="p-8">Loading profile...</p>;
 
   return (
-    <div className="">
+    <div>
       <h1 className="text-4xl font-bold mb-6">Update Profile</h1>
       
       {message && <p className="mb-4 text-red-600">{message}</p>}
-     <form onSubmit={handleSubmit} className="space-y-4">
-  <div>
-    <label className="block mb-1 font-medium">Location</label>
-    <input
-      type="text"
-      name="location"
-      placeholder="Enter your location"
-      value={profile.location}
-      onChange={handleChange}
-      className="w-full p-2 border rounded"
-    />
-  </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
 
-  <div>
-    <label className="block mb-1 font-medium">Bio</label>
-    <textarea
-      name="bio"
-      placeholder="Write a short bio"
-      value={profile.bio}
-      onChange={handleChange}
-      className="w-full p-2 border rounded"
-    />
-  </div>
+          <div>
+          <label className="block mb-1 font-medium">Gender</label>
+          <select
+            name="gender"
+            value={profile.gender}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
 
-  <div>
-    <label className="block mb-1 font-medium">Profile Picture</label>
-    {preview && (
-      <img
-        src={preview}
-        alt="Profile Preview"
-        className="mb-2 w-32 h-32 object-cover rounded-full"
-      />
-    )}
-    <input
-      type="file"
-      name="profile_picture"
-      accept="image/*"
-      onChange={handleChange}
-      className="w-full file:py-2 file:px-4 file:border-0 file:bg-teal-50 file:text-teal-600 hover:file:bg-teal-100 rounded"
-    />
-  </div>
 
-  <button
-    type="submit"
-    disabled={saving}
-    className="w-full bg-teal-600 text-white py-3 rounded hover:bg-teal-700 text-lg font-bold transition"
-  >
-    {saving
-      ? "Saving..."
-      : hasProfile
-      ? "Update Profile"
-      : "Create Profile"}
-  </button>
-</form>
+        <div>
+          <label className="block mb-1 font-medium">Date of Birth</label>
+          <input
+            type="date"
+            name="date_of_birth"
+            value={profile.date_of_birth}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        
+        <div>
+          <label className="block mb-1 font-medium">Physical Address</label>
+          <input
+            type="text"
+            name="location"
+            placeholder="Enter your physical address eg Nairobi"
+            value={profile.location}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Bio</label>
+          <textarea
+            name="bio"
+            placeholder="Write a short bio"
+            value={profile.bio}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+
+      
+        <div>
+          <label className="block mb-1 font-medium">Profile Picture</label>
+          {preview && (
+            <img
+              src={preview}
+              alt="Profile Preview"
+              className="mb-2 w-32 h-32 object-cover rounded-full"
+            />
+          )}
+          <input
+            type="file"
+            name="profile_picture"
+            accept="image/*"
+            onChange={handleChange}
+            className="w-full file:py-2 file:px-4 file:border-0 file:bg-teal-50 file:text-teal-600 hover:file:bg-teal-100 rounded"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={saving}
+          className="w-full bg-teal-600 text-white py-3 rounded hover:bg-teal-700 text-lg font-bold transition"
+        >
+          {saving
+            ? "Saving..."
+            : hasProfile
+            ? "Update Profile"
+            : "Create Profile"}
+        </button>
+      </form>
     </div>
   );
 }

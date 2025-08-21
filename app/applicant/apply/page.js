@@ -11,7 +11,19 @@ export default function ApplyPage() {
   const [application, setApplication] = useState(null);
   const [draftStatus, setDraftStatus] = useState("Draft");
   const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
-const [messages, setMessages] = useState({});
+  const [messages, setMessages] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
+
+  const openPdfModal = (url) => {
+    setPdfUrl(url);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setPdfUrl(null);
+  };
   const router = useRouter();
 
   useEffect(() => {
@@ -55,50 +67,49 @@ const [messages, setMessages] = useState({});
   };
 
   const handleFileSave = async (field) => {
-  if (draftStatus === "submitted") return;
-  if (!application || !application[field]) return; // <-- prevents null access
+    if (draftStatus === "submitted") return;
+    if (!application || !application[field]) return; // <-- prevents null access
 
-  setMessage("");
-  const loginData = JSON.parse(localStorage.getItem("login_response"));
-  if (!loginData) {
-    router.push("/aha/login");
-    return;
-  }
-  const token = loginData.access;
-
-  const body = new FormData();
-  body.append(field, application[field]);
-
-  try {
-    const res = await fetch("http://localhost:8000/api/application/", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body,
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.detail || "Failed to save document");
+    setMessage("");
+    const loginData = JSON.parse(localStorage.getItem("login_response"));
+    if (!loginData) {
+      router.push("/aha/login");
+      return;
     }
+    const token = loginData.access;
 
-    const updated = await res.json();
-    setApplication(updated);
-    setDraftStatus(updated.status);
-    // setMessage(`✅ ${field} saved successfully!`);
+    const body = new FormData();
+    body.append(field, application[field]);
 
-    setMessages((prev) => ({
-      ...prev,
-      [field]: `${field.replace("_", " ")} uploaded successfully ✅`,
-    }));
-    
-  } catch (err) {
-    setMessages((prev) => ({
-      ...prev,
-      [field]: `Failed to upload ${field.replace("_", " ")}`,
-    }));
-    // setMessage(err.message);
-  }
-};
+    try {
+      const res = await fetch("http://localhost:8000/api/application/", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body,
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.detail || "Failed to save document");
+      }
+
+      const updated = await res.json();
+      setApplication(updated);
+      setDraftStatus(updated.status);
+      // setMessage(`✅ ${field} saved successfully!`);
+
+      setMessages((prev) => ({
+        ...prev,
+        [field]: `${field.replace("_", " ")} uploaded successfully ✅`,
+      }));
+    } catch (err) {
+      setMessages((prev) => ({
+        ...prev,
+        [field]: `Failed to upload ${field.replace("_", " ")}`,
+      }));
+      // setMessage(err.message);
+    }
+  };
   const handleSubmitApplication = async () => {
     setShowConfirm(true);
   };
@@ -137,7 +148,8 @@ const [messages, setMessages] = useState({});
       <div className="p-8 text-center">
         <h1 className="text-5xl font-extrabold text-red-600 mb-4">Oops! 🚫</h1>
         <p className="text-xl text-gray-700 mb-6">
-          You need to <span className="font-bold">update your profile</span> before applying.
+          You need to <span className="font-bold">update your profile</span>{" "}
+          before applying.
         </p>
         <button
           onClick={() => router.push("/applicant/profile")}
@@ -160,21 +172,23 @@ const [messages, setMessages] = useState({});
       <p className="text-lg mb-6">
         <strong>Status:</strong> {draftStatus}
       </p>
-      
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           { label: "CV", field: "cv" },
           { label: "Cover Letter", field: "cover_letter" },
           { label: "KVB Certificate", field: "kvb_certificate" },
-          { label: "Professional Certificate", field: "professional_certificate" },
+          {
+            label: "Professional Certificate",
+            field: "professional_certificate",
+          },
           { label: "National ID Document", field: "national_id_document" },
         ].map(({ label, field }) => (
-          <div key={field} className="bg-white p-6 shadow-md rounded-lg">
+          <div key={field} className="bg-white p-6 shadow-md rounded-2xl">
             <label className="block font-semibold mb-2">{label}</label>
             {messages[field] && (
-  <p className="mb-4 text-green-600">{messages[field]}</p>
-)}
+              <p className="mb-4 text-green-600">{messages[field]}</p>
+            )}
             <input
               type="file"
               name={field}
@@ -182,28 +196,67 @@ const [messages, setMessages] = useState({});
               onChange={handleFileChange}
               disabled={draftStatus === "submitted"}
               className={`w-full file:py-2 file:px-4 file:border-0 file:bg-teal-50 file:text-teal-600 hover:file:bg-teal-100 rounded mb-3 ${
-                draftStatus === "submitted" ? "cursor-not-allowed opacity-50" : ""
+                draftStatus === "submitted"
+                  ? "cursor-not-allowed opacity-50"
+                  : ""
               }`}
             />
+            <hr className="my-5"></hr>
+            <div className="flex flex-col justify-between ">
+
+                </div>
+                
+
             {application && application[field] && typeof application[field] === "string" && (
-              <p className="mb-2 text-gray-600">Current: {application[field].split("/").pop()}</p>
-            )}
-          <button
-  onClick={() => handleFileSave(field)}
-  disabled={
-    draftStatus === "submitted" || !application || !application[field]
-  }
-  className={`w-full py-2 rounded-lg font-bold transition ${
-    draftStatus === "submitted" || !application || !application[field]
-      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-      : "bg-indigo-600 text-white hover:bg-indigo-700"
-  }`}
->
-  Save {label}
-</button>
+            <div className="flex flex-col space-y-2">
+              {/* <p className="text-gray-600">Current: {application[field].split("/").pop()}</p> */}
+
+              {/* View Button */}
+              <button
+                onClick={() => openPdfModal(application[field])}
+                className="py-2  text-blue-600  transition"
+              >
+                View Current {label}
+              </button>
+            </div>
+          )}
+            <button
+              onClick={() => handleFileSave(field)}
+              disabled={
+                draftStatus === "submitted" ||
+                !application ||
+                !application[field]
+              }
+              className={`w-full py-2 rounded-lg font-bold transition ${
+                draftStatus === "submitted" ||
+                !application ||
+                !application[field]
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              }`}
+            >
+              Save {label}
+            </button>
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white w-11/12 md:w-3/4 lg:w-2/3 h-[90vh] rounded-xl shadow-lg overflow-hidden relative">
+            {/* Close button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 font-bold"
+            >
+              ✕
+            </button>
+            {/* PDF iframe */}
+            <iframe src={pdfUrl} title="PDF Viewer" className="w-full h-full" />
+          </div>
+        </div>
+      )}
 
       <div className="mt-6">
         <button
@@ -215,7 +268,10 @@ const [messages, setMessages] = useState({});
               : "bg-[#009639] hover:bg-green-700"
           }`}
         >
-        <Send/>  {draftStatus === "submitted" ? "Already Submitted" : "Submit Application"}
+          <Send />{" "}
+          {draftStatus === "submitted"
+            ? "Already Submitted"
+            : "Submit Application"}
         </button>
       </div>
 
@@ -225,7 +281,8 @@ const [messages, setMessages] = useState({});
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-bold mb-4">Confirm Submission</h2>
             <p className="mb-6">
-              Are you sure you want to submit your application? Once submitted, you won't be able to edit documents.
+              Are you sure you want to submit your application? Once submitted,
+              you won't be able to edit documents.
             </p>
             <div className="flex justify-end gap-4">
               <button

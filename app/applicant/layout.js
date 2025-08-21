@@ -80,13 +80,17 @@ export default function DashboardLayout({ children }) {
           <h2 className="text-2xl font-bold mb-6 text-white">Dashboard</h2>
           <nav className="flex flex-col space-y-3">
             {sidebarLinks.map((link) => {
-              const isActive = pathname?.includes(link.href);
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(link.href);
+
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded text-white hover:text-teal-600 hover:bg-gray-50 ${
-                    isActive ? "bg-teal-900 text-slate-700 font-semibold" : ""
+                  className={`px-3 py-2 rounded  hover:text-teal-600 hover:bg-gray-50 ${
+                    isActive ? "bg-white text-slate-700 font-semibold" : "text-white"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
