@@ -68,7 +68,7 @@ export default function HomePage() {
     <div className="">
       {/* Welcome Header */}
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-[#009639]">Welcome, {user.first_name}!</h1>
+        <h1 className="text-3xl font-bold text-[#009639]">Welcome, {user.first_name} {user.last_name}!</h1>
         <p className="text-gray-600 mt-2">Email: {user.email}</p>
         <p className="text-gray-600 mt-2">
           Get started by updating your profile or applying to the program.
