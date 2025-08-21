@@ -1,0 +1,113 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function LoginPage() {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+
+  // Check localStorage on mount
+  useEffect(() => {
+    const loginData = localStorage.getItem("login_response");
+    if (loginData) {
+      const parsed = JSON.parse(loginData);
+      if (parsed?.user?.role?.toUpperCase() === "REVIEWER" || parsed?.user?.role?.toUpperCase() === "ADMIN") {
+        router.push("/aha-admin/home");
+      } else {
+        router.push("/applicant/home");
+      }
+    }
+  }, [router]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("http://localhost:8000/api/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.detail || "Login failed");
+
+      // Store login response in localStorage
+      localStorage.setItem("login_response", JSON.stringify(data));
+
+      // Redirect by role
+      const role = data?.user?.role?.toUpperCase();
+      if (role === "REVIEWER" || role === "ADMIN") {
+        router.push("/aha-admin/home");
+      } else {
+        router.push("/applicant/home");
+      }
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Left Image */}
+      <div
+        className="w-1/2 bg-cover bg-center"
+        style={{ backgroundImage: "url('/cow.jpg')" }}
+      ></div>
+
+      {/* Right Form */}
+      <div className="w-1/2 flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          <div className="md:flex hidden justify-between">
+            <img src="/emblem.png" className="w-[100px] h-[100px]" />
+            <img src="/cog.png" className="w-[100px] h-[100px]" />
+          </div>
+          <h3 className="mt-5">
+            Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign Application form
+          </h3>
+          <h2 className="text-2xl font-bold mb-6">Login</h2>
+          {message && <p className="mb-4 text-red-600">{message}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+            <button
+              type="submit"
+              className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

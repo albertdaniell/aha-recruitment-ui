@@ -1,0 +1,65 @@
+[
+   {
+    "id":"1000",
+    "title": "Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign",
+    "project": "NAVCDP Project",
+    "system": "E-Voucher System",
+    "deadline": "27th August 2025",
+    "issued_by": [
+      "County Governments",
+      "National Agricultural Value Chain Development Project (NAVCDP)",
+      "Directorate of Veterinary Services"
+    ],
+    "description": "The County Governments, in collaboration with NAVCDP and the Directorate of Veterinary Services, invite qualified and licensed Veterinarians and Veterinary Para-professionals to apply for the upcoming Foot and Mouth Disease (FMD) and Peste des Petits Ruminants (PPR) vaccination campaign. The campaign will be implemented through the e-voucher system to ensure efficient service delivery and transparent compensation.",
+    "objectives": [
+      "Enhance livestock health and productivity across Kenya",
+      "Prevent and control outbreaks of FMD and PPR",
+      "Strengthen veterinary service delivery through digital platforms"
+    ],
+    "eligibility": {
+      "who_should_apply": "Licensed Veterinarians and Veterinary Para-professionals",
+      "requirements": [
+        "Registered, retained and authorized to practice with the Kenya Veterinary Board (KVB)",
+        "Familiar with digital tools and mobile-based service delivery",
+        "Available for deployment between September and November 2025"
+      ]
+    },
+    "responsibilities": [
+      "Administer FMD and PPR vaccines to targeted livestock populations",
+      "Record and report vaccination data via the e-voucher system",
+      "Register animals through the digital platform",
+      "Engage with livestock owners and local stakeholders",
+      "Ensure cold chain and vaccine integrity throughout the campaign period"
+    ],
+    "remuneration": {
+      "VPPs": {
+        "cattle": "Ksh. 24 per head",
+        "sheep_goat": "Ksh. 3 per head"
+      },
+      "VSs": {
+        "cattle": "Ksh. 8 per head",
+        "sheep_goat": "Ksh. 1 per head"
+      },
+      "target_animals": ["cattle", "sheep", "goats"]
+    },
+    "e_voucher_system": {
+      "features": [
+        "Facilitates service tracking and reporting",
+        "Enables timely payments for services rendered",
+        "Provides real-time data for monitoring and evaluation"
+      ]
+    },
+    "application_process": {
+      "required_documents": [
+        "Cover letter expressing interest",
+        "Updated CV with relevant experience",
+        "Copy of updated KVB registration certificate",
+        "Copy of professional certificate",
+        "National ID and contact details"
+      ],
+      "submission_format": "All documents should be compiled into a single PDF file for upload.",
+      "submission_deadline": "27th August 2025",
+      "submission_method": "Submit via the application portal"
+    }
+}
+]

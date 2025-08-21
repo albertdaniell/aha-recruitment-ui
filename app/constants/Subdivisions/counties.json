@@ -1,0 +1,425 @@
+[
+    {
+        "id": "1",
+        "name": "Machakos",
+        "lat": "-1.51285",
+        "lng": "37.2369",
+        "category": "Museum",
+        "code": "16",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d5237d26\/machakos\/\" data-label_1=\"MACHAKOS\" data-label_2=\"WEATHER\" data-theme=\"pure\" >MACHAKOS WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "2",
+        "name": "Bomet",
+        "lat": "0.706106",
+        "lng": "35.018",
+        "category": "Museum",
+        "code": "36",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d7935d34\/bomet-county\/\" data-label_1=\"BOMET COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >BOMET COUNTY WEATHER<\/a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');<\/script>"
+    },
+    {
+        "id": "3",
+        "name": "Bungoma",
+        "lat": "0.794535",
+        "lng": "34.4365",
+        "category": "Museum",
+        "code": "39",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d5734d56\/bungoma\/\" data-label_1=\"BUNGOMA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >BUNGOMA WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "4",
+        "name": "Busia",
+        "lat": "0.151132",
+        "lng": "34.3384",
+        "category": "Museum",
+        "code": "40",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d4634d11\/busia\/\" data-label_1=\"BUSIA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >BUSIA WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "5",
+        "name": "Elgeyo Marakwet",
+        "lat": "0.753373",
+        "lng": "34.8753",
+        "category": "Museum",
+        "code": "28",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d6735d51\/elgeyo-marakwet-county\/\" data-label_1=\"ELGEYO MARAKWET\" data-label_2=\"WEATHER\" data-theme=\"pure\" >ELGEYO MARAKWET WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "6",
+        "name": "Embu",
+        "lat": "-0.547062",
+        "lng": "37.3208",
+        "category": "Museum",
+        "code": "14",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d5837d63\/embu-county\/\" data-label_1=\"EMBU COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >EMBU COUNTY WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "7",
+        "name": "Garrisa",
+        "lat": "-0.532196",
+        "lng": "38.9946",
+        "category": "Museum",
+        "code": "7",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d4539d65\/garissa\/\" data-label_1=\"GARISSA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >GARISSA WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "8",
+        "name": "Homabay",
+        "lat": "-0.571412",
+        "lng": "34.4702",
+        "category": "Museum",
+        "code": "43",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d5434d45\/homa-bay\/\" data-label_1=\"HOMA BAY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >HOMA BAY WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "9",
+        "name": "Nairobi",
+        "lat": "-1.30897",
+        "lng": "36.738",
+        "category": "Museum",
+        "code": "47",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d2936d82\/nairobi\/\" data-label_1=\"NAIROBI\" data-label_2=\"WEATHER\" data-theme=\"pure\" >NAIROBI WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "10",
+        "name": "Mombasa",
+        "lat": "-4.03519",
+        "lng": "39.5962",
+        "category": "Museum",
+        "code": "1",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n4d0439d67\/mombasa\/\" data-label_1=\"MOMBASA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >MOMBASA WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "11",
+        "name": "Kwale",
+        "lat": "-4.17865",
+        "lng": "39.44",
+        "category": "Museum",
+        "code": "2",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n4d1839d46\/kwale\/\" data-label_1=\"KWALE\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KWALE WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "12",
+        "name": "Kilifi",
+        "lat": "-3.17573",
+        "lng": "38.5507",
+        "category": "Museum",
+        "code": "3",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n3d5139d91\/kilifi\/\" data-label_1=\"KILIFI\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KILIFI WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "13",
+        "name": "Tana River",
+        "lat": "-1.54782",
+        "lng": "38.4368",
+        "category": "Museum",
+        "code": "4",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d5939d44\/tana-river-county\/\" data-label_1=\"TANA RIVER\" data-label_2=\"WEATHER\" data-theme=\"pure\" >TANA RIVER WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "14",
+        "name": "Lamu",
+        "lat": "-2.06417",
+        "lng": "40.3215",
+        "category": "Museum",
+        "code": "5",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n2d2740d90\/lamu\/\" data-label_1=\"LAMU\" data-label_2=\"WEATHER\" data-theme=\"pure\" >LAMU WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "15",
+        "name": "Taita Taveta",
+        "lat": "-3.42156",
+        "lng": "37.849",
+        "category": "Museum",
+        "code": "6",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n3d3938d57\/taita-taveta-county\/\" data-label_1=\"TAITA-TAVETA COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >TAITA-TAVETA COUNTY WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "16",
+        "name": "Wajir",
+        "lat": "1.89871",
+        "lng": "37.7073",
+        "category": "Museum",
+        "code": "8",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/1d7540d06\/wajir\/\" data-label_1=\"WAJIR\" data-label_2=\"WEATHER\" data-theme=\"pure\" >WAJIR WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "17",
+        "name": "Mandera",
+        "lat": "3.16798",
+        "lng": "39.6873",
+        "category": "Museum",
+        "code": "9",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/3d9441d86\/mandera\/\" data-label_1=\"MANDERA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >MANDERA WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "18",
+        "name": "Marsabit",
+        "lat": "2.33997",
+        "lng": "37.9705",
+        "category": "Museum",
+        "code": "10",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/2d3437d99\/marsabit\/\" data-label_1=\"MARSABIT\" data-label_2=\"WEATHER\" data-theme=\"pure\" >MARSABIT WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "19",
+        "name": "Isiolo",
+        "lat": "0.349818",
+        "lng": "37.5727",
+        "category": "Museum",
+        "code": "11",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d3637d58\/isiolo\/\" data-label_1=\"ISIOLO\" data-label_2=\"WEATHER\" data-theme=\"pure\" >ISIOLO WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "20",
+        "name": "Meru",
+        "lat": "0.0483656",
+        "lng": "37.626",
+        "category": "Museum",
+        "code": "12",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d0537d65\/meru\/\" data-label_1=\"MERU\" data-label_2=\"WEATHER\" data-theme=\"pure\" >MERU WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "21",
+        "name": "Tharaka-Nithi",
+        "lat": "-0.194585",
+        "lng": "37.6618",
+        "category": "Museum",
+        "code": "13",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d1637d98\/tharaka-nithi-county\/\" data-label_1=\"THARAKA-NITHI COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >THARAKA-NITHI COUNTY WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "22",
+        "name": "Kitui",
+        "lat": "-1.372",
+        "lng": "37.9765",
+        "category": "Museum",
+        "code": "15",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d3838d00\/kitui\/\" data-label_1=\"KITUI\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KITUI WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "23",
+        "name": "Makueni",
+        "lat": "-2.26089",
+        "lng": "37.2725",
+        "category": "Museum",
+        "code": "17",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d7937d63\/makueni-county\/\" data-label_1=\"MAKUENI\" data-label_2=\"WEATHER\" data-theme=\"original\" >MAKUENI WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "24",
+        "name": "Nyandarua ",
+        "lat": "-0.406093",
+        "lng": "35.9071",
+        "category": "Museum",
+        "code": "18",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d4036d49\/nyandarua-county\/\" data-label_1=\"NYANDARUA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >NYANDARUA WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "25",
+        "name": "Nyeri",
+        "lat": "-0.439955",
+        "lng": "36.9177",
+        "category": "Museum",
+        "code": "19",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d4436d96\/nyeri\/\" data-label_1=\"NYERI\" data-label_2=\"WEATHER\" data-theme=\"clear\" >NYERI WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "26",
+        "name": "Kirinyaga",
+        "lat": "-0.471701",
+        "lng": "37.0377",
+        "category": "Museum",
+        "code": "20",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d5737d33\/kirinyaga-county\/\" data-label_1=\"KIRINYAGA COUNTY\" data-label_2=\"WEATHER\" data-theme=\"clear\" >KIRINYAGA COUNTY WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "27",
+        "name": "Murang'a",
+        "lat": "-0.834521",
+        "lng": "36.7822",
+        "category": "Museum",
+        "code": "21",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d8037d13\/muranga-county\/\" data-label_1=\"MURANGA\" data-label_2=\"WEATHER\" data-theme=\"clear\" >MURANGA WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "28",
+        "name": "Kiambu",
+        "lat": "-1.04336",
+        "lng": "36.6454",
+        "category": "Museum",
+        "code": "22",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d1736d83\/kiambu\/\" data-label_1=\"KIAMBU\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KIAMBU WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "29",
+        "name": "Turkana",
+        "lat": "3.77692",
+        "lng": "35.0899",
+        "category": "Museum",
+        "code": "23",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/3d1235d60\/turkana-county\/\" data-label_1=\"TURKANA COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >TURKANA COUNTY WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "30",
+        "name": "Kakamega",
+        "lat": "0.502334",
+        "lng": "34.1911",
+        "category": "Museum",
+        "code": "37",
+        "loccode": ""
+    },
+    {
+        "id": "31",
+        "name": "Samburu",
+        "lat": "1.54454",
+        "lng": "36.062",
+        "category": "Museum",
+        "code": "25",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d6437d65\/samburu\/\" data-label_1=\"SAMBURU\" data-label_2=\"WEATHER\" data-theme=\"pure\" >SAMBURU WEATHER<\/a>\r\n<script>\r\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');\r\n<\/script>"
+    },
+    {
+        "id": "32",
+        "name": "Trans-Nzoia",
+        "lat": "1.05234",
+        "lng": "34.6974",
+        "category": "Museum",
+        "code": "26",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/1d0235d00\/trans-nzoia-county\/\" data-label_1=\"TRANS-NZOIA COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >TRANS-NZOIA COUNTY WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "33",
+        "name": "Uasin Gishu",
+        "lat": "0.480314",
+        "lng": "34.6667",
+        "category": "Museum",
+        "code": "27",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d5135d27\/uasin-gishu-county\/\" data-label_1=\"UASIN GISHU COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >UASIN GISHU COUNTY WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "34",
+        "name": "Nandi",
+        "lat": "0.226762",
+        "lng": "34.808",
+        "category": "Museum",
+        "code": "29",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d1035d18\/nandi-county\/\" data-label_1=\"NANDI\" data-label_2=\"WEATHER\" data-theme=\"pure\" >NANDI WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "35",
+        "name": "Baringo",
+        "lat": "0.737361",
+        "lng": "34.8817",
+        "category": "Museum",
+        "code": "30",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d4935d74\/baringo-county\/\" data-label_1=\"BARINGO\" data-label_2=\"WEATHER\" data-theme=\"pure\" >BARINGO WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "36",
+        "name": "Laikipia",
+        "lat": "0.293624",
+        "lng": "36.2392",
+        "category": "Museum",
+        "code": "31",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d4037d16\/laikipia-county\/\" data-label_1=\"LAIKIPIA\" data-label_2=\"WEATHER\" data-theme=\"pure\" >LAIKIPIA WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "37",
+        "name": "Nakuru",
+        "lat": "-0.315811",
+        "lng": "35.9388",
+        "category": "Museum",
+        "code": "32",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d3036d08\/nakuru\/\" data-label_1=\"NAKURU\" data-label_2=\"WEATHER\" data-theme=\"pure\" >NAKURU WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "38",
+        "name": "Narok",
+        "lat": "-1.0787",
+        "lng": "35.8538",
+        "category": "Museum",
+        "code": "33",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d0935d88\/narok\/\" data-label_1=\"NAROK\" data-label_2=\"WEATHER\" data-theme=\"pure\" >NAROK WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "39",
+        "name": "Kajiado",
+        "lat": "-2.13013",
+        "lng": "35.8555",
+        "category": "Museum",
+        "code": "34",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d8436d79\/kajiado\/\" data-label_1=\"KAJIADO\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KAJIADO WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "40",
+        "name": "Kericho",
+        "lat": "-0.366602",
+        "lng": "35.2643",
+        "category": "Museum",
+        "code": "35",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d3735d29\/kericho\/\" data-label_1=\"KERICHO\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KERICHO WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "41",
+        "name": "Kisumu",
+        "lat": "-0.0749726",
+        "lng": "34.5981",
+        "category": "Museum",
+        "code": "42",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d0934d77\/kisumu\/\" data-label_1=\"KISUMU\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KISUMU WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "42",
+        "name": "Migori",
+        "lat": "-1.0131",
+        "lng": "34.0982",
+        "category": "Museum",
+        "code": "44",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n1d0734d48\/migori\/\" data-label_1=\"MIGORI\" data-label_2=\"WEATHER\" data-theme=\"pure\" >MIGORI WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "43",
+        "name": "Kisii",
+        "lat": "-0.680374",
+        "lng": "34.76",
+        "category": "Museum",
+        "code": "45",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d6834d78\/kisii\/\" data-label_1=\"KISII\" data-label_2=\"WEATHER\" data-theme=\"pure\" >KISII WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "44",
+        "name": "Nyamira",
+        "lat": "-0.563416",
+        "lng": "34.9107",
+        "category": "Museum",
+        "code": "46",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/n0d5734d93\/nyamira\/\" data-label_1=\"NYAMIRA\" data-label_2=\"WEATHER\" data-theme=\"original\" >NYAMIRA WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "45",
+        "name": "Siaya",
+        "lat": "0.064373",
+        "lng": "34.2547",
+        "category": "Museum",
+        "code": "41",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d0634d29\/siaya\/\" data-label_1=\"SIAYA\" data-label_2=\"WEATHER\" data-theme=\"original\" >SIAYA WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "46",
+        "name": "Vihiga",
+        "lat": "0.0843902",
+        "lng": "34.5919",
+        "category": "Museum",
+        "code": "38",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/0d0834d72\/vihiga-county\/\" data-label_1=\"VIHIGA COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >VIHIGA COUNTY WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    },
+    {
+        "id": "47",
+        "name": "West Pokot",
+        "lat": "1.72566",
+        "lng": "35.5149",
+        "category": "Museum",
+        "code": "24",
+        "loccode": "<a class=\"weatherwidget-io\" href=\"https:\/\/forecast7.com\/en\/1d5935d29\/west-pokot-county\/\" data-label_1=\"WEST POKOT COUNTY\" data-label_2=\"WEATHER\" data-theme=\"pure\" >WEST POKOT COUNTY WEATHER<\/a> <script> !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https:\/\/weatherwidget.io\/js\/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js'); <\/script>"
+    }
+]
