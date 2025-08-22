@@ -42,13 +42,12 @@ export default function ApplyPage() {
       try {
         
         let profileRes = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL)
-        console.log({profileRes})
 
-        const appRes2 = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setProfileExists({appRes2});
+        setProfileExists(profileRes.ok);
 
+        // const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // });
 
         let appRes = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL)
 
@@ -250,7 +249,7 @@ export default function ApplyPage() {
     //     method: "POST",
     //     headers: { Authorization: `Bearer ${token}` },
     //   });
-        let res = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL,"POST")
+        let res = await APP_FETCH(process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL,"POST")
 
 
       if (!res.ok) {
