@@ -248,7 +248,7 @@ export default function LandingPage() {
         {/* logos */}
 
         <section className="px-6 md:px-20 py-16 flex flex-col  gap-4">
-          <div className="flex md:flex-row gap-3 justify-between">
+          <div className="flex md:flex-row  gap-3 justify-between overflow-auto">
             <Image
               alt="Agripreneur Expression of Interest Form
         "
