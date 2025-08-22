@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ConfirmResetPage() {
   const searchParams = useSearchParams();
@@ -63,21 +64,22 @@ export default function ConfirmResetPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Image */}
-      <div
-        className="w-1/2 bg-cover bg-center md:flex hidden"
-        style={{ backgroundImage: "url('/goat.jpg')" }}
-      ></div>
+    <div>
+     
 
       {/* Right Form */}
-      <div className="md:w-1/2 flex items-center justify-center p-8">
+      <div>
         <div className="w-full max-w-md">
-            <div className="flex  justify-between">
-            <img src="/emblem.png" className="w-[100px] h-[100px]" />
-            <img src="/cog.png" className="w-[100px] h-[100px]" />
-          </div>
-          <h2 className="text-2xl font-bold mb-6">Reset Password</h2>
+              <div className="flex items-center justify-between mb-6">
+                    <Link
+                      href="/aha/login"
+                      className="text-blue-600 hover:underline text-sm font-medium"
+                    >
+                      ← Back to Login
+                    </Link>
+                    <h2 className="text-2xl font-bold">Reset Password</h2>
+                  </div>
+          <p className="text-lg mb-6">Enter the code that was sent to your email below</p>
           {message && <p className="mb-4 text-red-600">{message}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
             <input

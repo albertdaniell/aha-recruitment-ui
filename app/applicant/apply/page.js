@@ -42,12 +42,13 @@ export default function ApplyPage() {
       try {
         
         let profileRes = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL)
+        console.log({profileRes})
 
-        setProfileExists(profileRes.ok);
+        const appRes2 = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProfileExists({appRes2});
 
-        // const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // });
 
         let appRes = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL)
 
@@ -183,6 +184,8 @@ export default function ApplyPage() {
       "kvb_certificate",
       "professional_certificate",
       "national_id_document",
+      "personal_insurance",
+
     ];
 
     let allSaved = true;
@@ -333,6 +336,8 @@ export default function ApplyPage() {
             field: "professional_certificate",
           },
           { label: "National ID Document", field: "national_id_document" },
+          { label: "Personal Insurance", field: "personal_insurance" },
+
         ].map(({ label, field }) => (
           <div key={field} className="bg-white p-6 shadow-md rounded-2xl">
             <label className="block font-semibold mb-2">{label}</label>

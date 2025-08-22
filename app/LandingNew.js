@@ -67,8 +67,9 @@ const data = [
       ],
       submission_format:
         "All documents should be compiled into a single PDF file for upload.",
+        info:"Recruited veterinarians will be required to have a personal insurance cover against any incident or accident that may occur during this exercise",
       submission_deadline: "27th August 2025",
-      submission_method: "Submit via the application portal",
+      submission_method: "Submit via this application portal",
     },
   },
 ];
@@ -216,7 +217,10 @@ export default function LandingPage() {
             <p className="mt-3 text-gray-600">
               {campaign.application_process.submission_format}
             </p>
-            <p className="mt-1 text-gray-600 font-medium">
+            <p className="mt-3 text-gray-600">
+              {campaign.application_process.info}
+            </p>
+            <p className="mt-3 text-gray-600 font-medium">
               Deadline: {campaign.application_process.submission_deadline}
             </p>
             <p className="mt-1 text-emerald-700 font-semibold">
@@ -244,7 +248,7 @@ export default function LandingPage() {
         </section>
       </div>
 
-      <div className="bg-slate-100" id="logos">
+      <div className="bg-white border-t-2 border-t-slate-100" id="logos">
         {/* logos */}
 
         <section className="px-6 md:px-20 py-16 flex flex-col  gap-4">

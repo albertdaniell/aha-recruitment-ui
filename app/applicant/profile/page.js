@@ -10,7 +10,7 @@ export default function UpdateProfilePage() {
     date_of_birth: "",
     gender: "",
     county: "",
-    is_pwd: false, // ✅ boolean
+    is_pwd: false,
     disability_type: "",
     disability_certificate: null,
     profile_picture: null,
@@ -19,22 +19,23 @@ export default function UpdateProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-    const [counties, setCounties] = useState([]); // ✅ state for fetched counties
-
+  const [counties, setCounties] = useState([]);
   const [hasProfile, setHasProfile] = useState(false);
   const router = useRouter();
 
-//   const counties = [
-//     "Taita Taveta",
-//     "Meru",
-//     "Bomet",
-//     "Bungoma",
-//     "Kiambu",
-//     "Kakamega",
-//     "Kajiado",
-//     "Narok",
-//     "Usin Gishu",
-//   ];
+  // ✅ PWD Disability Categories
+  const disabilityTypes = [
+    "Physical Disability",
+    "Visual Disability (Blind/Low Vision)",
+    "Hearing Disability (Deaf/Hard of Hearing)",
+    "Speech and Language Disability",
+    "Intellectual Disability",
+    "Mental/Psychosocial Disability",
+    "Autism Spectrum Disorder (ASD)",
+    "Multiple Disabilities",
+    "Other",
+
+  ];
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -75,9 +76,10 @@ export default function UpdateProfilePage() {
         }
 
         // Fetch counties
-        const countiesRes = await fetch(process.env.NEXT_PUBLIC_COUNTY_LIST_URL, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const countiesRes = await fetch(
+          process.env.NEXT_PUBLIC_COUNTY_LIST_URL,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         if (!countiesRes.ok) throw new Error("Failed to fetch counties");
         const countiesData = await countiesRes.json();
         setCounties(countiesData);
@@ -127,7 +129,7 @@ export default function UpdateProfilePage() {
       formData.append("date_of_birth", profile.date_of_birth);
       formData.append("gender", profile.gender);
       formData.append("county", profile.county);
-      formData.append("is_pwd", profile.is_pwd); // ✅ boolean
+      formData.append("is_pwd", profile.is_pwd);
       if (profile.is_pwd) {
         formData.append("disability_type", profile.disability_type);
         if (profile.disability_certificate) {
@@ -175,11 +177,14 @@ export default function UpdateProfilePage() {
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        className=" gap-6"
       >
         {/* LEFT SIDE */}
         <div className="space-y-4">
-          <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Gender */}
+
+ <div>
             <label className="block mb-1 font-medium">Gender</label>
             <select
               name="gender"
@@ -193,7 +198,7 @@ export default function UpdateProfilePage() {
               <option value="other">Other</option>
             </select>
           </div>
-
+          {/* Date of Birth */}
           <div>
             <label className="block mb-1 font-medium">Date of Birth</label>
             <input
@@ -205,8 +210,25 @@ export default function UpdateProfilePage() {
             />
           </div>
 
+          {/* Address */}
+          <div>
+            <label className="block mb-1 font-medium">Physical Address</label>
+            <input
+              type="text"
+              name="location"
+              placeholder="Enter your physical address e.g Nairobi"
+              value={profile.location}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+            </div>
+
          
 
+          
+
+          {/* PWD Section */}
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -219,19 +241,27 @@ export default function UpdateProfilePage() {
 
           {profile.is_pwd && (
             <>
+              {/* Disability Type */}
               <div>
                 <label className="block mb-1 font-medium">
                   Disability Type
                 </label>
-                <input
-                  type="text"
+                <select
                   name="disability_type"
                   value={profile.disability_type}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
-                />
+                >
+                  <option value="">Select Disability Type</option>
+                  {disabilityTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
               </div>
 
+              {/* Upload Disability Certificate */}
               <div>
                 <label className="block mb-1 font-medium">
                   Upload Disability Certificate
@@ -250,19 +280,10 @@ export default function UpdateProfilePage() {
 
         {/* RIGHT SIDE */}
         <div className="space-y-4">
-          <div>
-            <label className="block mb-1 font-medium">Physical Address</label>
-            <input
-              type="text"
-              name="location"
-              placeholder="Enter your physical address e.g Nairobi"
-              value={profile.location}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
+          
 
-          <div>
+          {/* Bio */}
+          <div className="mt-5">
             <label className="block mb-1 font-medium">Bio</label>
             <textarea
               name="bio"
@@ -273,7 +294,8 @@ export default function UpdateProfilePage() {
             />
           </div>
 
-          <div>
+          {/* Profile Picture */}
+          <div className="">
             <label className="block mb-1 font-medium">Profile Picture</label>
             {preview && (
               <img
@@ -293,7 +315,7 @@ export default function UpdateProfilePage() {
         </div>
 
         {/* Submit button full width */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 mt-5">
           <button
             type="submit"
             disabled={saving}

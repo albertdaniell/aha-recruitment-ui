@@ -123,6 +123,12 @@ export default function ApplicationsPage() {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 text-left text-sm font-semibold">
+                #
+              </th>
+              <th className="px-4 py-2 text-left text-sm font-semibold">
+                Application ID
+              </th>
+              <th className="px-4 py-2 text-left text-sm font-semibold">
                 First name
               </th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
@@ -143,7 +149,7 @@ export default function ApplicationsPage() {
             </tr>
           </thead>
           <tbody>
-            {applications?.map((app) => (
+            {applications?.map((app,index) => (
               <tr
                 key={app.id}
                 className={`${
@@ -152,6 +158,10 @@ export default function ApplicationsPage() {
                     : "bg-white"
                 } border-t`}
               >
+                <td className="px-4 py-2">{index+1}</td>
+
+                <td className="px-4 py-2">{app?.id || "—"}</td>
+
                 <td className="px-4 py-2">{app?.first_name || "—"}</td>
                 <td className="px-4 py-2">{app.last_name || "—"}</td>
                 <td className="px-4 py-2 font-medium">{renderStatus(app)}</td>

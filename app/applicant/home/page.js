@@ -72,6 +72,8 @@ export default function HomePage() {
           Welcome, {user.first_name} {user.last_name}!
         </h1>
         <p className="text-gray-600 mt-2">Email: {user.email}</p>
+        <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
+
         <p className="text-gray-600 mt-2">
           Get started by updating your profile or applying to the program.
         </p>
@@ -124,12 +126,12 @@ export default function HomePage() {
         <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
             <Clipboard size={40} />
-            <h2 className="text-2xl font-bold mb-2 mt-5">
+            <h2 className="text-xl font-bold mb-2 mt-5">
               {application
                 ? application.status === "draft"
                   ? "Continue Your Application- Deadline (25th Aug)"
                   : "Application Submitted"
-                : `Apply Now ${user.county?.name ? `for ${user.county.name}`:""} & Upload Certificates`}
+                : `Apply Now ${user.county?.name ? `for ${user.county.name} - ${user?.fpo?.name}`:""} & Upload Certificates`}
             </h2>
             <p className="text-gray-600">
               {hasProfile
