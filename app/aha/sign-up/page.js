@@ -159,7 +159,7 @@ export default function RegisterPage() {
       if (!res.ok) throw new Error(data.detail || "Registration failed");
 
       setMessage("✅ Account created successfully!");
-      showSuccess(true);
+      SetShowSuccess(true);
       setFormData({
         first_name: "",
         last_name: "",
