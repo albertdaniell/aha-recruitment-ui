@@ -82,7 +82,7 @@ export default function LandingPage() {
         {/* Left Content */}
         <section className="px-6 md:px-20 py-16 flex flex-col md:flex-row items-center gap-5">
           <div className="md:w-1/2 mb-12 md:mb-0">
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-snug text-slate-700">
+            <h1 className="text-2xl md:text-5xl font-extrabold leading-snug text-slate-700">
               Ward Veterinary Surgeons and Veterinary Para Professionals for{" "}
               <span className="text-[#05a552]">
                 County FMD & PPR Vaccination
@@ -90,7 +90,7 @@ export default function LandingPage() {
               Campaign
             </h1>
 
-            <p className="mt-6 text-slate-600 text-lg">
+            <p className="mt-6 text-slate-600 md:text-lg">
               The County Governments, in collaboration with NAVCDP and the
               Directorate of Veterinary Services, invite qualified and licensed
               Veterinarians and Veterinary Para-professionals to apply for the
