@@ -39,7 +39,7 @@ export default function ConfirmResetPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/api/reset-password/", {
+      const res = await fetch(process.env.NEXT_PUBLIC_RESET_PASSWORD_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

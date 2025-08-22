@@ -17,7 +17,7 @@ export default function RequestResetPage() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:8000/api/request-reset-code/", {
+      const res = await fetch(process.env.NEXT_PUBLIC_REQUEST_RESET_CODE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 

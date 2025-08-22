@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -35,7 +36,7 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:8000/api/login/", {
+      const res = await fetch(process.env.NEXT_PUBLIC_LOGIN_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -81,10 +82,21 @@ export default function LoginPage() {
             Ward Veterinary Surgeons and Veterinary Para Professionals for
             County FMD & PPR Vaccination Campaign Application form
           </h3>
-           <h3 className="mt-5">
+          <h3 className="mt-5">
             By having an account you can be able to track your application
           </h3>
-          <h2 className="text-2xl font-bold mb-6">Login</h2>
+          <div className="flex items-center justify-between mb-6">
+            {/* Left: Back to Home */}
+            <Link
+              href="/"
+              className="text-blue-600 hover:underline text-sm font-medium"
+            >
+              ← Back to Home
+            </Link>
+
+            {/* Right: Login title */}
+            <h2 className="text-2xl font-bold">Login</h2>
+          </div>
           {message && <p className="mb-4 text-red-600">{message}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
             <input

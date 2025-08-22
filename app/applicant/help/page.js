@@ -13,6 +13,8 @@ export default function ComplaintsPage() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
+  
+
   useEffect(() => {
     const fetchUserAndComplaints = async () => {
       const loginData = JSON.parse(localStorage.getItem("login_response"));
@@ -24,7 +26,7 @@ export default function ComplaintsPage() {
 
       try {
         const token = loginData.access;
-        const res = await fetch("http://localhost:8000/api/complaints/", {
+        const res = await fetch(process.env.NEXT_PUBLIC_COMPLAINT_LIST_URL, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +63,7 @@ export default function ComplaintsPage() {
     const token = loginData.access;
 
     try {
-      const res = await fetch("http://localhost:8000/api/complaints/create/", {
+      const res = await fetch(process.env.NEXT_PUBLIC_COMPLAINT_CREATE_URL, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -96,6 +98,7 @@ export default function ComplaintsPage() {
       {/* Post Complaint Form */}
       <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Submit a New Complaint</h2>
+        <p className="text-slate-500 mb-5 text-sm">Relies will be sent via email to {user?.email}</p>
         {error && <p className="text-red-600 mb-2">{error}</p>}
         <form onSubmit={handlePostComplaint} className="space-y-4">
           <input
@@ -117,7 +120,7 @@ export default function ComplaintsPage() {
             type="submit"
             disabled={posting}
             className={`w-full py-3 rounded text-white font-bold ${
-              posting ? "bg-gray-400" : "bg-teal-600 hover:bg-teal-700"
+              posting ? "bg-gray-400" : "bg-yellow-600 hover:bg-yellow-700"
             }`}
           >
             {posting ? "Posting..." : "Submit Complaint"}

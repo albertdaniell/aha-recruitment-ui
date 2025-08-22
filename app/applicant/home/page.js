@@ -25,13 +25,13 @@ export default function HomePage() {
 
       try {
         // Check profile
-        const profileRes = await fetch("http://localhost:8000/api/profile/", {
+        const profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setHasProfile(profileRes.ok);
 
         // Get application
-        const appRes = await fetch("http://localhost:8000/api/application/", {
+        const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (appRes.ok) {
@@ -68,16 +68,36 @@ export default function HomePage() {
     <div className="">
       {/* Welcome Header */}
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-[#009639]">Welcome, {user.first_name} {user.last_name}!</h1>
+        <h1 className="text-3xl font-bold text-[#009639]">
+          Welcome, {user.first_name} {user.last_name}!
+        </h1>
         <p className="text-gray-600 mt-2">Email: {user.email}</p>
         <p className="text-gray-600 mt-2">
           Get started by updating your profile or applying to the program.
         </p>
-        {application?.status === "submitted" && (
-          <p className="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-semibold">
-            ✅ We have received your application! Thank you for submitting.
+        {application?.status === "submitted" &&
+          !application?.is_shortlisted &&
+          !application?.is_not_shortlisted && (
+            <p className="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-semibold">
+              ✅ We have received your application! Thank you for submitting.
+            </p>
+          )}
+
+        {application?.status === "submitted" && application?.is_shortlisted && (
+          <p className="mt-4 p-4 bg-blue-100 text-blue-800 rounded-lg font-semibold">
+            🎉 Congratulations! Your application has been shortlisted. We’ll
+            contact you with the next steps.
           </p>
         )}
+
+        {application?.status === "submitted" &&
+          application?.is_not_shortlisted && (
+            <p className="mt-4 p-4 bg-red-100 text-red-800 rounded-lg font-semibold">
+              ❌ Unfortunately, your application was not shortlisted. We
+              appreciate your effort and encourage you to apply for future
+              opportunities.
+            </p>
+          )}
       </div>
 
       {/* Cards */}
@@ -88,12 +108,13 @@ export default function HomePage() {
             <Person size={40} />
             <h2 className="text-2xl font-bold mb-2 mt-5">Update Profile</h2>
             <p className="text-gray-600">
-              Keep your personal information up to date before making an application
+              Keep your personal information up to date before making an
+              application
             </p>
           </div>
           <button
             onClick={handleUpdateProfile}
-            className="mt-6 bg-[#009639] text-white py-3 rounded-lg hover:bg-teal-700 text-lg font-bold transition"
+            className="mt-6 bg-[#009639] text-white py-3 rounded-lg hover:bg-[#007a2f] text-lg font-bold transition"
           >
             Update Profile
           </button>
@@ -108,13 +129,17 @@ export default function HomePage() {
                 ? application.status === "draft"
                   ? "Continue Your Application- Deadline (25th Aug)"
                   : "Application Submitted"
-                : "Apply Now & Upload Certificates"}
+                : `Apply Now ${user.county?.name ? `for ${user.county.name}`:""} & Upload Certificates`}
             </h2>
             <p className="text-gray-600">
               {hasProfile
                 ? application
                   ? application.status === "draft"
                     ? "You have a draft application. Continue uploading your documents and submit."
+                    : application.is_shortlisted
+                    ? "🎉 Congratulations! Your application has been shortlisted."
+                    : application.is_not_shortlisted
+                    ? "❌ Unfortunately, your application was not shortlisted."
                     : "Your application has been submitted and is under review."
                   : "Apply to available programs and submit your certificates for review."
                 : "Please update your profile before applying."}
@@ -146,7 +171,8 @@ export default function HomePage() {
 
             <h2 className="text-2xl font-bold mb-2 mt-5">Complaints / Help</h2>
             <p className="text-gray-600">
-              Need assistance or want to submit a complaint? We are here to help you!
+              Need assistance or want to submit a complaint? We are here to help
+              you!
             </p>
           </div>
           <button

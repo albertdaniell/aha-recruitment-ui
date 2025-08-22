@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#009639] shadow-md p-6 flex flex-col justify-between transform transition-transform duration-300 z-40
+        className={`fixed top-0 left-0 h-full w-64 bg-teal-900 shadow-md p-6 flex flex-col justify-between transform transition-transform duration-300 z-40
     ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <div className="mt-14 md:mt-0">
@@ -87,8 +87,8 @@ export default function DashboardLayout({ children }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded text-white hover:text-teal-600 hover:bg-gray-50 ${
-                    isActive ? "bg-teal-900 text-slate-700 font-semibold" : ""
+                  className={`px-3 py-2 rounded  hover:text-teal-600 hover:bg-gray-50 ${
+                    isActive ? "bg-white text-slate-700 font-semibold" : "text-white"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >

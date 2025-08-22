@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -8,10 +9,10 @@ export default function ApplicationsPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
- const router = useRouter();
-   useEffect(() => {
+  const router = useRouter();
 
-  async function fetchApplications() {
+  useEffect(() => {
+    async function fetchApplications() {
       try {
         const loginDataRaw = localStorage.getItem("login_response");
 
@@ -28,22 +29,18 @@ export default function ApplicationsPage() {
           return;
         }
 
-
         const token = loginData?.access;
         if (!token) {
           router.push("/aha/login");
           return;
         }
-        console.log({token})
 
-        const res = await fetch("http://localhost:8000/api/applications/", {
+        const res = await fetch(process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log({res})
-
 
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
@@ -63,7 +60,6 @@ export default function ApplicationsPage() {
     fetchApplications();
   }, [router]);
 
-
   useEffect(() => {
     const fetchUserData = async () => {
       const loginData = JSON.parse(localStorage.getItem("login_response"));
@@ -72,29 +68,55 @@ export default function ApplicationsPage() {
         return;
       }
       setUser(loginData.user);
-      setLoading(false)
+      setLoading(false);
     };
 
     fetchUserData();
   }, [router]);
 
-
   if (loading) return <p className="p-8">Loading...</p>;
 
-  // console.log({ applications });
+  function renderStatus(app) {
+    if (app.status === "draft") {
+      return (
+        <span className="px-2 py-1 rounded bg-gray-400 text-white text-xs">
+          Draft
+        </span>
+      );
+    }
+    if (app.is_shortlisted) {
+      return (
+        <span className="px-2 py-1 rounded bg-blue-600 text-white text-xs">
+          Shortlisted
+        </span>
+      );
+    }
+    if (app.is_not_shortlisted) {
+      return (
+        <span className="px-2 py-1 rounded bg-red-600 text-white text-xs">
+          Rejected
+        </span>
+      );
+    }
+    return (
+      <span className="px-2 py-1 rounded bg-green-600 text-white text-xs">
+        Submitted
+      </span>
+    );
+  }
 
   return (
     <div className="">
-       <div className="mb-4">
+      <div className="mb-4">
         <h1 className="text-3xl font-bold text-[#009639]">
           Welcome, Admin - {user?.first_name}!
         </h1>
         <p className="text-gray-600 mt-2">Email: {user?.email}</p>
-          <p className="text-gray-600 mt-2">
+        <p className="text-gray-600 mt-2">
           Get started by viewing applications
         </p>
       </div>
-      <h1 className="text-2xl font-bold mb-6">Applications</h1>
+      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
 
       <div className="overflow-x-auto rounded-lg shadow">
         <table className="min-w-full border border-gray-200">
@@ -110,7 +132,13 @@ export default function ApplicationsPage() {
                 Status
               </th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
-                Date Submitted
+                Date Created
+              </th>
+               <th className="px-4 py-2 text-left text-sm font-semibold">
+                Date Updated
+              </th>
+              <th className="px-4 py-2 text-left text-sm font-semibold">
+                Action
               </th>
             </tr>
           </thead>
@@ -121,26 +149,41 @@ export default function ApplicationsPage() {
                 className={`${
                   app.status === "draft"
                     ? "bg-gray-200 text-gray-500"
-                    : "bg-green-50"
+                    : "bg-white"
                 } border-t`}
               >
                 <td className="px-4 py-2">{app?.first_name || "—"}</td>
                 <td className="px-4 py-2">{app.last_name || "—"}</td>
-                <td className="px-4 py-2 font-medium">
-                  {app.status === "draft" ? (
-                    <span className="px-2 py-1 rounded bg-gray-400 text-white text-xs">
-                      Draft
-                    </span>
-                  ) : (
-                    <span className="px-2 py-1 rounded bg-green-600 text-white text-xs">
-                      Submitted
-                    </span>
-                  )}
-                </td>
+                <td className="px-4 py-2 font-medium">{renderStatus(app)}</td>
                 <td className="px-4 py-2">
                   {app.created_at
                     ? new Date(app.created_at).toLocaleDateString()
                     : "—"}
+                </td>
+                 <td className="px-4 py-2">
+                  {app.created_at
+                    ? new Date(app.updated_at).toLocaleDateString()
+                    : "—"}
+                </td>
+                <td>
+                 {
+                  app.status === "draft"?
+                  <>
+                   <Link
+                    className="text-slate-400 hover:cursor-not-allowed"
+                    href={"#"}
+                  >
+                    View
+                  </Link>
+                  </>
+                  :
+                   <Link
+                    className="text-blue-500 hover:underline"
+                    href={`applications/${app?.id}/`}
+                  >
+                    View
+                  </Link>
+                 }
                 </td>
               </tr>
             ))}

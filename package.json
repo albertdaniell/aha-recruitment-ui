@@ -11,7 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "akar-icons": "^1.9.31",
-    "axios": "^1.6.8",
+    "axios": "^1.11.0",
     "flowbite-react": "^0.9.0",
     "highcharts": "^11.4.1",
     "highcharts-react-official": "^3.2.1",
