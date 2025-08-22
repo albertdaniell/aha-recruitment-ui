@@ -9,9 +9,9 @@ export const metadata = {
   icons: {
     icon: './favicon.ico', // /public path
   },
-  title: "Agripreneur Expression of Interest Form",
+  title: "Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign Application form",
   description:
-    "The Government of Kenya, with the support of the World Bank through the NAVCDP and FSRP projects, is rolling out a business acceleration model in 46 counties. This program will equip individuals, especially youth, with correct skills to become agricultural entrepreneurs or 'agripreneurs.'These agripreneurs will serve as catalysts for change, bringing innovative technologies, resources, and market connections to farmers. Agripreneurs will operate as independent businesses, providing services and products to farmers for a fee or other forms of remuneration, making the model sustainable and scalable. Recognizing the value of experience, the government is prioritizing youth who participated in last year's national farmer registration exercise.",
+    "The County Governments, in collaboration with NAVCDP and the Directorate of Veterinary Services, invite qualified and licensed Veterinarians and Veterinary Para-professionals to apply for the upcoming Foot and Mouth Disease (FMD) and Peste des Petits Ruminants (PPR) vaccination campaign. The campaign will be implemented through the e-voucher system to ensure efficient service delivery and transparent compensation.",
 };
 
 const Poppins_Font = Poppins({
