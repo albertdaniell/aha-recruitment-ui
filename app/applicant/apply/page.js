@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Send } from "akar-icons";
-import AppModal from "@/app/components/AppModal/AppModal"
+import AppModal from "@/app/components/AppModal/AppModal";
+import {APP_FETCH} from "@/app/constants/FetchService"
 import axios from "axios";
-
 
 export default function ApplyPage() {
   const [profileExists, setProfileExists] = useState(false);
@@ -19,11 +19,7 @@ export default function ApplyPage() {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showMessage, set_showMessage] = useState(null);
   const [Message, set_Message] = useState(null);
-  
-    const [uploadProgress, setUploadProgress] = useState({}); // { fieldName: 0-100 }
-
-
-
+  const [uploadProgress, setUploadProgress] = useState({}); // { fieldName: 0-100 }
 
   const openPdfModal = (url) => {
     setPdfUrl(url);
@@ -44,15 +40,16 @@ export default function ApplyPage() {
       const token = loginData.access;
 
       try {
-        const profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        
+        let profileRes = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL)
 
         setProfileExists(profileRes.ok);
 
-        const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // });
+
+        let appRes = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL)
 
         if (appRes.ok) {
           const data = await appRes.json();
@@ -72,7 +69,7 @@ export default function ApplyPage() {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (files && files[0]) {
-      setApplication({ ...application, [name]: files[0],saved:false });
+      setApplication({ ...application, [name]: files[0], saved: false });
     }
   };
 
@@ -92,11 +89,14 @@ export default function ApplyPage() {
     body.append(field, application[field]);
 
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body,
-      });
+    //   const res = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
+    //     method: "POST",
+    //     headers: { Authorization: `Bearer ${token}` },
+    //     body,
+    //   });
+
+        let res = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL,"POST",body)
+      
 
       if (!res.ok) {
         const data = await res.json();
@@ -108,18 +108,18 @@ export default function ApplyPage() {
       setDraftStatus(updated.status);
       // setMessage(`✅ ${field} saved successfully!`);
 
-      let msg= `${field.replace("_", " ")} uploaded successfully ✅`
-      set_Message(msg)
-      set_showMessage(true)
+      let msg = `${field.replace("_", " ")} uploaded successfully ✅`;
+      set_Message(msg);
+      set_showMessage(true);
 
       setMessages((prev) => ({
         ...prev,
         [field]: msg,
       }));
     } catch (err) {
-      let err_msg= `${field.replace("_", " ")} uploaded successfully ✅`
-      set_Message(err_msg)
-      set_showMessage(true)
+      let err_msg = `${field.replace("_", " ")} uploaded successfully ✅`;
+      set_Message(err_msg);
+      set_showMessage(true);
 
       setMessages((prev) => ({
         ...prev,
@@ -129,109 +129,110 @@ export default function ApplyPage() {
     }
   };
 
-
- 
-
-const handleFileSave = async (field) => {
-  if (draftStatus === "submitted") return;
-  const file = application?.[field];
-  if (!file) return;
-
-  const loginData = JSON.parse(localStorage.getItem("login_response"));
-  if (!loginData) return router.push("/aha/login");
-  const token = loginData.access;
-
-  const body = new FormData();
-  body.append(field, file);
-
-  try {
-    const res = await axios.post(process.env.NEXT_PUBLIC_APPLICATION_URL, body, {
-      headers: { Authorization: `Bearer ${token}` },
-      onUploadProgress: (progressEvent) => {
-        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        setUploadProgress((prev) => ({ ...prev, [field]: percent }));
-      },
-    });
-
-    const updated = res.data;
-    setApplication(updated);
-    setDraftStatus(updated.status);
-
-    const msg = `✅ ${field.replace("_", " ")} uploaded successfully`;
-    setMessages((prev) => ({ ...prev, [field]: msg }));
-    set_Message(msg);
-    set_showMessage(true);
-
-    // reset progress
-    setUploadProgress((prev) => ({ ...prev, [field]: 0 }));
-  } catch (err) {
-    console.log({err})
-    const msg = `❌ Failed to upload ${field.replace("_", " ")}`;
-    setMessages((prev) => ({ ...prev, [field]: msg }));
-    set_Message(msg);
-    set_showMessage(true);
-  }
-};
-
-const isAllDocumentsSaved = () => {
-  const requiredFields = [
-    "cv",
-    "cover_letter",
-    "kvb_certificate",
-    "professional_certificate",
-    "national_id_document",
-  ];
-
-  let allSaved = true;
-
-  requiredFields.forEach((field) => {
+  const handleFileSave = async (field) => {
+    if (draftStatus === "submitted") return;
     const file = application?.[field];
-
-    // No file uploaded → ignore
     if (!file) return;
 
-    // File exists → check if it's marked as saved
-    if (typeof file === "object" && !file.saved) {
-      const msg = `⚠️ ${field.replace("_", " ")} file not saved!`;
+    const loginData = JSON.parse(localStorage.getItem("login_response"));
+    if (!loginData) return router.push("/aha/login");
+    const token = loginData.access;
+
+    const body = new FormData();
+    body.append(field, file);
+
+    try {
+      const res = await axios.post(
+        process.env.NEXT_PUBLIC_APPLICATION_URL,
+        body,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress((prev) => ({ ...prev, [field]: percent }));
+          },
+        }
+      );
+
+      const updated = res.data;
+      setApplication(updated);
+      setDraftStatus(updated.status);
+
+      const msg = `✅ ${field.replace("_", " ")} uploaded successfully`;
+      setMessages((prev) => ({ ...prev, [field]: msg }));
       set_Message(msg);
       set_showMessage(true);
-      setMessages((prev) => ({
-        ...prev,
-        [field]: msg,
-      }));
-      allSaved = false;
-    }
-  });
 
-  return allSaved;
-};
+      // reset progress
+      setUploadProgress((prev) => ({ ...prev, [field]: 0 }));
+    } catch (err) {
+      console.log({ err });
+      const msg = `❌ Failed to upload ${field.replace("_", " ")}`;
+      setMessages((prev) => ({ ...prev, [field]: msg }));
+      set_Message(msg);
+      set_showMessage(true);
+    }
+  };
+
+  const isAllDocumentsSaved = () => {
+    const requiredFields = [
+      "cv",
+      "cover_letter",
+      "kvb_certificate",
+      "professional_certificate",
+      "national_id_document",
+    ];
+
+    let allSaved = true;
+
+    requiredFields.forEach((field) => {
+      const file = application?.[field];
+
+      // No file uploaded → ignore
+      if (!file) return;
+
+      // File exists → check if it's marked as saved
+      if (typeof file === "object" && !file.saved) {
+        const msg = `⚠️ ${field.replace("_", " ")} file not saved!`;
+        set_Message(msg);
+        set_showMessage(true);
+        setMessages((prev) => ({
+          ...prev,
+          [field]: msg,
+        }));
+        allSaved = false;
+      }
+    });
+
+    return allSaved;
+  };
   const handleSubmitApplication2 = async () => {
     setShowConfirm(true);
   };
 
   const handleSubmitApplication = () => {
-    console.log({application})
+    console.log({ application });
 
-    if(application === null ) {
-        set_Message("At least select a file and click the save button")
-        set_showMessage(true)
-        return false
-
+    if (application === null) {
+      set_Message("At least select a file and click the save button");
+      set_showMessage(true);
+      return false;
     }
-  if (!isAllDocumentsSaved()) {
-    
-    set_Message("🛑 You have uploaded documents that are not saved. Please save all documents before final submission.")
-    set_showMessage(true)
-     
+    if (!isAllDocumentsSaved()) {
+      set_Message(
+        "🛑 You have uploaded documents that are not saved. Please save all documents before final submission."
+      );
+      set_showMessage(true);
 
-    // alert(
-    //   "You have uploaded documents that are not saved. Please save all documents before final submission."
-    // );
-    return;
-  }
-  setShowConfirm(true); // open the confirmation modal
-};
-  
+      // alert(
+      //   "You have uploaded documents that are not saved. Please save all documents before final submission."
+      // );
+      return;
+    }
+    setShowConfirm(true); // open the confirmation modal
+  };
 
   const confirmSubmit = async () => {
     setShowConfirm(false);
@@ -242,10 +243,12 @@ const isAllDocumentsSaved = () => {
     const token = loginData.access;
 
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    //   const res = await fetch(process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL, {
+    //     method: "POST",
+    //     headers: { Authorization: `Bearer ${token}` },
+    //   });
+        let res = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL,"POST")
+
 
       if (!res.ok) {
         const data = await res.json();
@@ -254,14 +257,14 @@ const isAllDocumentsSaved = () => {
 
       const updated = await res.json();
       setDraftStatus(updated.status);
-      let msg = "🎉 Application submitted successfully!"
+      let msg = "🎉 Application submitted successfully!";
       setMessage(msg);
-      set_Message(msg)
-      set_showMessage(true)
+      set_Message(msg);
+      set_showMessage(true);
     } catch (err) {
       setMessage(err.message);
-      set_Message(err?.message || "Failed to submit your application")
-      set_showMessage(true)
+      set_Message(err?.message || "Failed to submit your application");
+      set_showMessage(true);
     }
   };
 
@@ -286,44 +289,39 @@ const isAllDocumentsSaved = () => {
 
   return (
     <div className="">
-        <AppModal
-         isOpen={showMessage} setIsClose={()=>{
-            set_showMessage(false)
-            set_Message(null)
-
+      <AppModal
+        isOpen={showMessage}
+        setIsClose={() => {
+          set_showMessage(false);
+          set_Message(null);
         }}
         // title={"Cannot submit"}
-        body={<p>
-
-            {Message}
-        </p>}
-        />
-      {draftStatus === "submitted" && (
-  application?.is_shortlisted ? (
-    <div className="mb-4 p-4 bg-blue-100 border border-blue-300 text-blue-800 rounded">
-      🎉 Congratulations! Your application has been shortlisted.
-    </div>
-  ) : application?.is_not_shortlisted ? (
-    <div className="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
-      ❌ Unfortunately, your application was not shortlisted.
-    </div>
-  ) : (
-    <div className="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
-      ✅ We have received your application.
-    </div>
-  )
-)}
+        body={<p>{Message}</p>}
+      />
+      {draftStatus === "submitted" &&
+        (application?.is_shortlisted ? (
+          <div className="mb-4 p-4 bg-blue-100 border border-blue-300 text-blue-800 rounded">
+            🎉 Congratulations! Your application has been shortlisted.
+          </div>
+        ) : application?.is_not_shortlisted ? (
+          <div className="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+            ❌ Unfortunately, your application was not shortlisted.
+          </div>
+        ) : (
+          <div className="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
+            ✅ We have received your application.
+          </div>
+        ))}
 
       <h1 className="text-4xl font-bold mb-2">Application</h1>
       <p className="text-lg mb-2">
         <strong>Status:</strong> {draftStatus}
       </p>
-      {application?.id &&
-      <p className="text-sm mb-4 text-slate-500">
-        Application ID: {application?.id}
-      </p>
-      }
-      
+      {application?.id && (
+        <p className="text-sm mb-4 text-slate-500">
+          Application ID: {application?.id}
+        </p>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
@@ -354,32 +352,31 @@ const isAllDocumentsSaved = () => {
               }`}
             />
             {uploadProgress[field] > 0 && (
-  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-    <div
-      className="bg-green-600 h-2 rounded-full"
-      style={{ width: `${uploadProgress[field]}%` }}
-    ></div>
-  </div>
-)}
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  className="bg-green-600 h-2 rounded-full"
+                  style={{ width: `${uploadProgress[field]}%` }}
+                ></div>
+              </div>
+            )}
             <hr className="my-5"></hr>
-            <div className="flex flex-col justify-between ">
+            <div className="flex flex-col justify-between "></div>
 
+            {application &&
+              application[field] &&
+              typeof application[field] === "string" && (
+                <div className="flex flex-col space-y-2">
+                  {/* <p className="text-gray-600">Current: {application[field].split("/").pop()}</p> */}
+
+                  {/* View Button */}
+                  <button
+                    onClick={() => openPdfModal(application[field])}
+                    className="py-2  text-blue-600  transition text-sm"
+                  >
+                    View Current {label}
+                  </button>
                 </div>
-                
-
-            {application && application[field] && typeof application[field] === "string" && (
-            <div className="flex flex-col space-y-2">
-              {/* <p className="text-gray-600">Current: {application[field].split("/").pop()}</p> */}
-
-              {/* View Button */}
-              <button
-                onClick={() => openPdfModal(application[field])}
-                className="py-2  text-blue-600  transition text-sm"
-              >
-                View Current {label}
-              </button>
-            </div>
-          )}
+              )}
             <button
               onClick={() => handleFileSave(field)}
               disabled={

@@ -1,9 +1,7 @@
-// app/page.tsx
-"use client";
-
+import Link from "next/link";
+import React from "react";
 import { Calendar, FileText, ClipboardList, DollarSign } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 const data = [
   {
@@ -74,69 +72,75 @@ const data = [
     },
   },
 ];
-
-export default function Page() {
+export default function LandingPage() {
   const campaign = data[0];
 
   return (
-    <main className="min-h-screen border-t-8 border-t-[#009639]  to-white p-6 md:p-5">
-      <div className="flex md:hidden  justify-between">
-        <img src="/emblem.png" className="w-[100px] h-[100px]"></img>
+    <div className="min-h-screen  flex flex-col">
+      {/* Main Section */}
+      <main className="flex flex-col md:flex-row items-center justify-between bg-slate-50 text-slate-800">
+        {/* Left Content */}
+        <section className="px-6 md:px-20 py-16 flex flex-col md:flex-row items-center gap-5">
+          <div className="md:w-1/2 mb-12 md:mb-0">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-snug text-slate-700">
+              Ward Veterinary Surgeons and Veterinary Para Professionals for{" "}
+              <span className="text-[#05a552]">
+                County FMD & PPR Vaccination
+              </span>{" "}
+              Campaign
+            </h1>
 
-        <img src="/cog.png" className="w-[100px] h-[100px]"></img>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-8xl mx-auto">
-        {/* LEFT SIDE - PDF Viewer */}
-        <div className="md:col-span-1 bg-white rounded-2xl shadow-md overflow-hidden md:h-[95vh] ">
-          {/* <iframe
-            src="/advert_Vaccination_sample.pdf" // 👈 replace with your PDF path (e.g., /public/sample.pdf)
-            className="w-full h-full"
-          /> */}
-          <div className="md:w-full md:h-full  md:flex items- justify-center  hidden">
-            <img
-              src="/cow.jpg" // 👈 replace with your image path
-              alt="Advertisement"
-              className="w-full h-full object-cover rounded-lg shadow"
-            />
-          </div>
-        </div>
-
-        {/* RIGHT SIDE - Campaign Info */}
-        <div className="md:col-span-2 space-y-3 overflow-y-auto md:h-[95vh]  pr-2">
-          <div className="md:flex hidden  justify-between">
-            <img src="/emblem.png" className="w-[100px] h-[100px]"></img>
-
-            <img src="/cog.png" className="w-[100px] h-[100px]"></img>
-          </div>
-          {/* Title */}
-          <div className="bg-[#009639] text-white rounded-2xl shadow-md p-6">
-            <h1 className="text-2xl md:text-3xl font-bold">{campaign.title}</h1>
-            <p className="mt-2">{campaign.description}</p>
+            <p className="mt-6 text-slate-600 text-lg">
+              The County Governments, in collaboration with NAVCDP and the
+              Directorate of Veterinary Services, invite qualified and licensed
+              Veterinarians and Veterinary Para-professionals to apply for the
+              upcoming Foot and Mouth Disease (FMD) and Peste des Petits
+              Ruminants (PPR) vaccination campaign. The campaign will be
+              implemented through the e-voucher system to ensure efficient
+              service delivery and transparent compensation.
+            </p>
             <div className="mt-3 flex items-center gap-2 text-sm font-medium">
               <Calendar className="w-4 h-4" />
               Deadline: {campaign.deadline}
             </div>
+
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link
+                href="/aha/login/"
+                className="inline-block px-6 py-3 text-white font-semibold text-lg rounded-lg shadow-lg bg-[#009639] hover:bg-[#1a5a33f1] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 animate-pulse"
+              >
+                Apply Now
+              </Link>
+
+              <a
+                href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
+                download
+                className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
+              >
+                Download Ad
+              </a>
+
+              <Link
+                href="#learn-more"
+                className="border bg-[#009639] hover:bg-[#1a5a33f1] text-white border-[#05a552] px-6 py-3 rounded-lg transition-all duration-300"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
 
-          <div className="mt-6 flex gap-4">
-            {/* Apply Now button */}
-            <Link
-              href="/aha/login/" // 👈 change to your application form route or external link
-              className="inline-block px-6 py-3 text-white font-semibold text-lg rounded-full shadow-lg bg-[#009639] hover:bg-[#1a5a33f1] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 animate-pulse"
-            >
-              Apply Now
-            </Link>
-
-            {/* Download PDF button */}
-            <a
-              href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
-              download
-              className="inline-block px-6 py-3 text-slate-700 font-semibold text-lg rounded-full shadow-lg border-[1px] border-[#009639] bg-[#0096396d]  transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
-            >
-              Download Ad
-            </a>
+          {/* Right Illustration */}
+          <div className="md:w-1/2 flex justify-center">
+            <img
+              src="/cow.jpg"
+              alt="Agricultural Illustration"
+              className="w-full max-w-lg rounded-3xl shadow-lg"
+            />
           </div>
-
+        </section>
+      </main>
+      <div id="learn-more">
+        <section className="px-6 md:px-20 py-16 flex flex-col  gap-4">
           {/* Issued By */}
           <section className="bg-white rounded-2xl shadow-md p-5">
             <h2 className="text-lg font-semibold text-emerald-700 mb-2">
@@ -222,66 +226,84 @@ export default function Page() {
             <div className="mt-6 flex gap-4">
               {/* Apply Now button */}
               <Link
-                href="/aha/login/" // 👈 change to your application form route or external link
-                className="inline-block px-6 py-3 text-white font-semibold text-lg rounded-full shadow-lg bg-[#009639] hover:bg-[#1a5a33f1] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 animate-pulse"
+                href="/aha/login/"
+                className="inline-block px-6 py-3 text-white font-semibold text-lg rounded-lg shadow-lg bg-[#009639] hover:bg-[#1a5a33f1] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 animate-pulse"
               >
                 Apply Now
               </Link>
 
-              {/* Download PDF button */}
               <a
                 href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
                 download
-                className="inline-block px-6 py-3 text-slate-700 font-semibold text-lg rounded-full shadow-lg border-[1px] border-[#009639] bg-[#0096396d]  transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
+                className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
               >
                 Download Ad
               </a>
             </div>
           </section>
-          <div className="flex  flex-row gap-3 overflow-auto">
-            <div className="flex-1">
-              <Image
-                alt="Agripreneur Expression of Interest Form
-        "
-                width={100}
-                height={100}
-                src="/kalro.png"
-                className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
-              ></Image>
-            </div>
-            <div className="flex-1">
-              <Image
-                alt="Agripreneur Expression of Interest Form
-        "
-                width={100}
-                height={100}
-                src="/navcdp.png"
-                className="md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
-              ></Image>
-            </div>
-            <div className="flex-1">
-              <Image
-                alt="Agripreneur Expression of Interest Form
-        "
-                width={100}
-                height={100}
-                src="/fsrp.png"
-                className="md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
-              ></Image>
-            </div>
-            <div className="flex-1">
-              <Image
-                alt="Agripreneur Expression of Interest Form
-        "
-                width={100}
-                height={100}
-                src="/worldbank.png"
-                className="md:w-[120px] md:h-[120px] w-[75px] h-[75px] my-5"
-              ></Image>
-            </div>
-          </div>
-        </div>
+        </section>
       </div>
-    </main>
+
+      <div className="bg-slate-100" id="logos">
+        {/* logos */}
+
+        <section className="px-6 md:px-20 py-16 flex flex-col  gap-4">
+          <div className="flex md:flex-row gap-3 justify-between">
+            <Image
+              alt="Agripreneur Expression of Interest Form
+        "
+              width={100}
+              height={100}
+              src="/emblem.png"
+              className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
+            ></Image>
+            <Image
+              alt="Agripreneur Expression of Interest Form
+        "
+              width={100}
+              height={100}
+              src="/cog.png"
+              className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
+            ></Image>
+            <Image
+              alt="Agripreneur Expression of Interest Form
+        "
+              width={100}
+              height={100}
+              src="/kalro.png"
+              className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
+            ></Image>
+            <Image
+              alt="Agripreneur Expression of Interest Form
+        "
+              width={100}
+              height={100}
+              src="/navcdp.png"
+              className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
+            ></Image>
+            <Image
+              alt="Agripreneur Expression of Interest Form
+        "
+              width={100}
+              height={100}
+              src="/fsrp.png"
+              className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px]  my-5"
+            ></Image>
+            <Image
+              alt="Agripreneur Expression of Interest Form
+        "
+              width={100}
+              height={100}
+              src="/worldbank.png"
+              className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px] my-5"
+            ></Image>
+          </div>
+        </section>
+      </div>
+
+      <div className="bg-gray-800 p-8 text-white text-center">
+        <p>Developed by KALRO ICT</p>
+      </div>
+    </div>
   );
 }

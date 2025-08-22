@@ -103,7 +103,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen md:flex">
       {/* Left Image */}
       <div
         className="w-1/2 bg-cover bg-center md:flex hidden"
@@ -112,14 +112,15 @@ export default function RegisterPage() {
 
       {/* Right Form */}
       <div className="md:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md ">
           <div className="flex justify-between">
-            <img src="/emblem.png" className="w-[100px] h-[100px]" />
-            <img src="/cog.png" className="w-[100px] h-[100px]" />
+            <img src="/emblem.png" className="w-[50px] h-[50px]" />
+            <img src="/cog.png" className="w-[50px] h-[50px]" />
           </div>
 
           <h3 className="mt-5">
-            Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign Application form
+            Ward Veterinary Surgeons and Veterinary Para Professionals for
+            County FMD & PPR Vaccination Campaign Application form
           </h3>
           <h3 className="mt-5">
             By having an account you can track your application
@@ -146,31 +147,34 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="first_name"
-              placeholder="First Name"
-              value={formData.first_name}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-            <input
-              type="text"
-              name="last_name"
-              placeholder="Last Name"
-              value={formData.last_name}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
+            <div className="grid md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="first_name"
+                placeholder="First Name"
+                value={formData.first_name}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+                required
+              />
+              <input
+                type="text"
+                name="last_name"
+                placeholder="Last Name"
+                value={formData.last_name}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+                required
+              />
+            </div>
+
             <input
               type="email"
               name="email"
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded focus:border-green-500"
               required
             />
             <input
@@ -179,7 +183,7 @@ export default function RegisterPage() {
               placeholder="Phone Number (e.g., 254712345678)"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded focus:border-green-500"
               required
             />
 
@@ -188,7 +192,7 @@ export default function RegisterPage() {
               name="county"
               value={formData.county}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded focus:border-green-500"
               required
             >
               <option value="">Select County</option>
@@ -199,24 +203,26 @@ export default function RegisterPage() {
               ))}
             </select>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-            <input
-              type="password"
-              name="password2"
-              placeholder="Confirm Password"
-              value={formData.password2}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
+            <div className="grid md:grid-cols-2 gap-4">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+                required
+              />
+              <input
+                type="password"
+                name="password2"
+                placeholder="Confirm Password"
+                value={formData.password2}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+                required
+              />
+            </div>
 
             <button
               type="submit"

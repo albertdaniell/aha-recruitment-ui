@@ -64,7 +64,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen md:flex">
       {/* Left Image */}
       <div
         className="w-1/2 bg-cover bg-center md:flex hidden"
