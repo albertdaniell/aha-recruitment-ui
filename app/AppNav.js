@@ -39,13 +39,13 @@ function AppNav() {
         <div className="flex flex-row gap-3">
  <Link
           href="/aha/login"
-          className="bg-[#05a552] text-white px-6 py-3 rounded-lg hover:bg-green-800 transition"
+          className="bg-[#05a552] text-white md:px-6 md:py-3 px-3 py-2 md:text-lg text-sm rounded-lg hover:bg-green-800 transition"
         >
           Login
         </Link>
          <Link
                 href="/aha/sign-up"
-                className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
+                className="border border-[#05a552] text-[#05a552] md:px-6 md:py-3 px-3 py-2 md:text-lg text-sm rounded-lg hover:bg-green-50 transition-all duration-300"
               >
                 Create Account
               </Link>
