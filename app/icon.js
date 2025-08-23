@@ -27,7 +27,7 @@ export default function Icon() {
           borderRadius:100,
         }}
       >
-       AGP
+       AHA
       </div>
     ),
     // ImageResponse options

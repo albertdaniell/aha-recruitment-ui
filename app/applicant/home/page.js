@@ -9,8 +9,32 @@ export default function HomePage() {
   const [hasProfile, setHasProfile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState(null); // store user application
-
+  const [userCounty, setUserCounty] = useState(null); // store user application
+  const [counties, setCounties] = useState(null);
   const router = useRouter();
+
+  // Fetch counties on mount
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_COUNTY_LIST_URL);
+        if (!res.ok) throw new Error("Failed to fetch counties");
+        const data = await res.json();
+        setCounties(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCounties();
+  }, []);
+
+  useEffect(() => {
+    if (counties && user) {
+      let county = counties?.find((c) => c?.id === user.county?.id);
+      setUserCounty(county);
+    }
+  }, [user, counties]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -67,26 +91,54 @@ export default function HomePage() {
   return (
     <div className="">
       {/* Welcome Header */}
-      <div className="mb-4">
-        <h1 className="text-3xl font-bold text-[#009639]">
-          Welcome, {user.first_name} {user.last_name}!
-        </h1>
-        <p className="text-gray-600 mt-2">Email: {user.email}</p>
-        <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
+      {/* {JSON?.stringify(userCounty)} */}
 
-        <p className="text-gray-600 mt-2">
+      {userCounty && (
+        <div className="flex items-start justify-between">
+          {/* LEFT SIDE */}
+          <div>
+            <h1 className="text-3xl font-bold text-[#009639]">
+              Welcome, {user.first_name} {user.last_name}!
+            </h1>
+            <p className="text-gray-600 mt-2">Email: {user.email}</p>
+            {user.fpo?.name && (
+              <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
+            )}
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="inline-flex items-center gap-4 px-2 py-3 border-green-500 border rounded-2xl mb-4 bg-white">
+            <img
+              src={userCounty.logo || "/cog.png"}
+              alt={userCounty?.name}
+              className="w-16 h-16 object-contain rounded-md"
+            />
+            <div className="min-w-0">
+              <h2 className="font-semibold truncate text-slate-600">
+                {userCounty.name} County
+              </h2>
+              <p className="text-slate-500 text-xs">
+                Ends: {userCounty.end_of_application  || "Not specified"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="mb-4">
+        {/* <p className="text-gray-600 mt-2">
           Get started by updating your profile or applying to the program.
-        </p>
+        </p> */}
         {application?.status === "submitted" &&
           !application?.is_shortlisted &&
           !application?.is_not_shortlisted && (
-            <p className="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-semibold">
+            <p className=" p-4 bg-green-100 text-green-800 rounded-lg font-semibold">
               ✅ We have received your application! Thank you for submitting.
             </p>
           )}
 
         {application?.status === "submitted" && application?.is_shortlisted && (
-          <p className="mt-4 p-4 bg-blue-100 text-blue-800 rounded-lg font-semibold">
+          <p className=" p-4 bg-blue-100 text-blue-800 rounded-lg font-semibold">
             🎉 Congratulations! Your application has been shortlisted. We’ll
             contact you with the next steps.
           </p>
@@ -131,7 +183,11 @@ export default function HomePage() {
                 ? application.status === "draft"
                   ? "Continue Your Application- Deadline (25th Aug)"
                   : "Application Submitted"
-                : `Apply Now ${user.county?.name ? `for ${user.county.name} - ${user?.fpo?.name}`:""} & Upload Certificates`}
+                : `Apply Now ${
+                    user.county?.name
+                      ? `for ${user.county.name} - ${user?.fpo?.name}`
+                      : ""
+                  } & Upload Certificates`}
             </h2>
             <p className="text-gray-600">
               {hasProfile

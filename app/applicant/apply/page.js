@@ -409,12 +409,12 @@ export default function ApplyPage() {
             {/* Close button */}
             <button
               onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 font-bold"
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 font-bold bg-red-500  rounded-full h-6 w-6"
             >
               ✕
             </button>
             {/* PDF iframe */}
-            <iframe src={pdfUrl} title="PDF Viewer" className="w-full h-full" />
+            <iframe src={pdfUrl} title="PDF Viewer" className="w-full h-full m-2" />
           </div>
         </div>
       )}

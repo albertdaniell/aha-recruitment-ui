@@ -116,8 +116,29 @@ export default function ApplicationsPage() {
           Get started by viewing applications
         </p>
       </div>
-      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
 
+
+    <div className="grid md:grid-cols-3  gap-6 my-4">
+      {/* School Year */}
+      <div className="bg-gradient-to-r from-sky-400 to-sky-500 rounded-2xl shadow-md px-6 py-4  text-center">
+        <p className="text-sm text-white opacity-80">Applications</p>
+        <p className="text-xl font-bold text-white">{applications?.length || 0}</p>
+      </div>
+
+      {/* Semester */}
+      <div className="bg-gradient-to-r from-pink-400 to-red-500 rounded-2xl shadow-md px-6 py-4  text-center">
+        <p className="text-sm text-white opacity-80">Submitted</p>
+        <p className="text-xl font-bold text-white">{applications?.filter(app=>app?.status === "submitted")?.length || 0}</p>
+      </div>
+
+      {/* Quarter */}
+      <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl shadow-md px-6 py-4  text-center">
+        <p className="text-sm text-white opacity-80">Quarter</p>
+        <p className="text-xl font-bold text-white">2</p>
+      </div>
+    </div>
+      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
+      
       <div className="overflow-x-auto rounded-lg shadow">
         <table className="min-w-full border border-gray-200">
           <thead className="bg-gray-100">
