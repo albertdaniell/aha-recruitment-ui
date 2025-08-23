@@ -10,34 +10,35 @@ const data = [
       "Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign",
     project: "NAVCDP Project",
     system: "E-Voucher System",
-    deadline: "27th August 2025",
+    deadline: "………… 2025", // left as in PDF since exact date not filled
     issued_by: [
       "County Governments",
       "National Agricultural Value Chain Development Project (NAVCDP)",
       "Directorate of Veterinary Services",
     ],
     description:
-      "The County Governments, in collaboration with NAVCDP and the Directorate of Veterinary Services, invite qualified and licensed Veterinarians and Veterinary Para-professionals to apply for the upcoming Foot and Mouth Disease (FMD) and Peste des Petits Ruminants (PPR) vaccination campaign. The campaign will be implemented through the e-voucher system to ensure efficient service delivery and transparent compensation.",
+      "The County Governments in collaboration with the National Agricultural Value Chain Development Project (NAVCDP) and the Directorate of Veterinary Services invite qualified and licensed Veterinarians and Veterinary Para-professionals to apply to participate in the upcoming Foot and Mouth Disease (FMD) and Peste des Petits Ruminants (PPR) vaccination campaign. This initiative will be implemented through the e-voucher system to ensure efficient service delivery and transparent compensation.",
     objectives: [
       "Enhance livestock health and productivity across Kenya",
       "Prevent and control outbreaks of FMD and PPR",
-      "Strengthen veterinary service delivery through digital platforms",
+      "Strengthen Animal Health Service delivery through digital platforms",
     ],
     eligibility: {
       who_should_apply:
         "Licensed Veterinarians and Veterinary Para-professionals",
       requirements: [
-        "Registered, retained and authorized to practice with the Kenya Veterinary Board (KVB)",
-        "Familiar with digital tools and mobile-based service delivery",
+        "Registered, retained and therefore eligible to practice as per the Kenya Veterinary Board (KVB)",
+        "Familiar with digital tools leveraging on mobile technology communication",
         "Available for deployment between September and November 2025",
       ],
     },
     responsibilities: [
-      "Administer FMD and PPR vaccines to targeted livestock populations",
+      "Administer FMD and/or PPR vaccines to targeted livestock populations",
       "Record and report vaccination data via the e-voucher system",
       "Register animals through the digital platform",
-      "Engage with livestock owners and local stakeholders",
+      "Effectively engage with livestock owners and local stakeholders",
       "Ensure cold chain and vaccine integrity throughout the campaign period",
+      "Target animals include cattle, sheep, and goats where applicable",
     ],
     remuneration: {
       VPPs: {
@@ -66,10 +67,9 @@ const data = [
         "National ID and contact details",
       ],
       submission_format:
-        "All documents should be compiled into a single PDF file for upload.",
-        info:"Recruited veterinarians will be required to have a personal insurance cover against any incident or accident that may occur during this exercise",
-      submission_deadline: "27th August 2025",
-      submission_method: "Submit via this application portal",
+        "All the above documents should be compiled as one PDF document for ease of upload and download.",
+      submission_deadline: "………… 2025",
+      submission_method: "Submit your application via the portal",
     },
   },
 ];
@@ -83,7 +83,7 @@ export default function LandingPage() {
         {/* Left Content */}
         <section className="px-6 md:px-20 py-16 flex flex-col md:flex-row items-center gap-5">
           <div className="md:w-1/2 mb-12 md:mb-0">
-            <h1 className="text-2xl md:text-5xl font-extrabold leading-snug text-slate-700">
+            <h1 className="text-2xl md:text-4xl font-extrabold leading-snug text-slate-700">
               Ward Veterinary Surgeons and Veterinary Para Professionals for{" "}
               <span className="text-[#05a552]">
                 County FMD & PPR Vaccination
@@ -107,7 +107,7 @@ export default function LandingPage() {
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
-                href="/aha/login/"
+                href="/aha/sign-up/"
                 className="inline-block px-6 py-3 text-white font-semibold text-lg rounded-lg shadow-lg bg-[#009639] hover:bg-[#1a5a33f1] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 animate-pulse"
               >
                 Apply Now

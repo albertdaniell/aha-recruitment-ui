@@ -459,16 +459,16 @@ export default function RegisterPage() {
           </div>
         </>
       )}
-      <div className="mt-4 flex justify-between text-sm">
+      <div className="mt-4 flex shrink justify-between text-sm">
         <button
           onClick={() => router.push("/aha/login")}
-          className="text-teal-600 hover:underline"
+          className="text-teal-600 underline"
         >
-          Back to Login
+          Go to Login if you have an account
         </button>
         <button
           onClick={() => router.push("/aha/request-reset")}
-          className="text-teal-600 hover:underline"
+          className="text-teal-600 underline"
         >
           Forgot password?
         </button>
