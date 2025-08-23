@@ -230,7 +230,7 @@ export default function LandingPage() {
             <div className="mt-6 flex gap-4">
               {/* Apply Now button */}
               <Link
-                href="/aha/login/"
+                href="/aha/sign-up/"
                 className="inline-block px-6 py-3 text-white font-semibold text-lg rounded-lg shadow-lg bg-[#009639] hover:bg-[#1a5a33f1] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 animate-pulse"
               >
                 Apply Now
