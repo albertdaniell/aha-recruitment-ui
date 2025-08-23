@@ -181,9 +181,9 @@ export default function HomePage() {
             <h2 className="text-xl font-bold mb-2 mt-5">
               {application
                 ? application.status === "draft"
-                  ? "Continue Your Application- Deadline (25th Aug)"
+                  ? `Continue Your Application ${userCounty?.end_of_application ? `Deadline - (${userCounty?.end_of_application})`: "- Deadline not specificied"}`
                   : "Application Submitted"
-                : `Apply Now ${
+                : `Apply Now ${userCounty?.end_of_application ? `Deadline - (${userCounty?.end_of_application})`: "(Deadline not specificied)"} ${
                     user.county?.name
                       ? `for ${user.county.name} - ${user?.fpo?.name}`
                       : ""
