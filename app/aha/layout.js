@@ -48,8 +48,8 @@ function Layout({ children }) {
       <main className="md:ml-[50%] flex-1 flex items-center justify-center md:p-8 p-5">
         <div className="w-full">
           <div className="flex justify-between">
-            <img src="/emblem.png" className="w-[80px] h-[80px]" />
-            <img src="/cog.png" className="w-[80px] h-[80px]" />
+            <img src="/emblem.png" className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]" />
+            <img src="/cog.png" className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]" />
           </div>
 
           <h3 className="mt-5">
