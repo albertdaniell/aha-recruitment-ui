@@ -69,7 +69,7 @@ export default function ConfirmResetPage() {
 
       {/* Right Form */}
       <div>
-        <div className="w-full max-w-md">
+        <div className="w-full">
               <div className="flex items-center justify-between mb-6">
                     <Link
                       href="/aha/login"

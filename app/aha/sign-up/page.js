@@ -196,7 +196,7 @@ export default function RegisterPage() {
     <div>
       {countySelectionOpen ? (
         <>
-          <div className="bg-slate-100 p-4 max-h-[500px] overflow-auto mt-5">
+          <div className="bg-slate-100 p-2 max-h-[500px] overflow-auto mt-5">
             <h1 className="text-xl font-bold mb-4">Select Your County</h1>
 
             {/* Search */}
@@ -205,11 +205,11 @@ export default function RegisterPage() {
               placeholder="Search county..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full p-2 mb-6 border rounded-lg"
+              className="w-full p-2 mb-6 border border-green-400 focus:border-green-400 rounded-lg"
             />
 
             {/* Counties List */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div className="grid xl:grid-cols-3 grid-cols-2 gap-4">
               {filteredCounties.map((county) => {
                 const isDisabled = !county.is_open;
 
@@ -225,22 +225,24 @@ export default function RegisterPage() {
           } 
           ${
             selectedCounty?.id === county.id && !isDisabled
-              ? "border-blue-500 bg-blue-50"
+              ? "border-green-500 bg-green-50"
               : ""
           }`}
                   >
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={county.logo || "/cog.png"}
-                        alt={county.name}
-                        className="w-12 h-12 object-contain rounded-md"
-                      />
-                      <div>
-                        <h2 className="text-lg font-semibold">{county.name}</h2>
-                      </div>
-                    </div>
+                   <div className="sm:flex items-center gap-4">
+  <img
+    src={county.logo || "/cog.png"}
+    alt={county.name}
+    className="sm:w-12 sm:h-12 w-8 h-8 object-contain rounded-md"
+  />
+  <div className="min-w-0">
+    <h2 className="md:text-md font-semibold break-words whitespace-normal">
+      {county.name}
+    </h2>
+  </div>
+</div>
 
-                    <p className="text-sm text-gray-600 mt-3">
+                    <p className="md:text-sm text-xs text-gray-600 mt-3">
                       {isDisabled
                         ? "Applications not open"
                         : `Application Ends: ${
@@ -342,11 +344,11 @@ export default function RegisterPage() {
               <div className="grid lg:grid-cols-2 gap-4">
                 {/* County dropdown */}
                 <div className="w-full border border-slate-500 rounded focus:border-green-500">
-                  <div className="flex items-center gap-4 px-2">
+                  <div className="flex items-center gap-4 px-2 py-1">
                     <img
                       src={selectedCounty.logo || "/cog.png"}
                       alt={selectedCounty?.name}
-                      className="w-12 h-12 object-contain rounded-md"
+                      className="w-10 h-10 object-contain rounded-md"
                     />
                     <div className="flex-1 min-w-0">
                       <h2 className="font-semibold truncate text-slate-600">

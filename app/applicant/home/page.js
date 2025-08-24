@@ -94,9 +94,9 @@ export default function HomePage() {
       {/* {JSON?.stringify(userCounty)} */}
 
       {userCounty && (
-        <div className="flex items-start justify-between">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-start justify-between">
           {/* LEFT SIDE */}
-          <div>
+          <div className="col-span-2">
             <h1 className="text-3xl font-bold text-[#009639]">
               Welcome, {user.first_name} {user.last_name}!
             </h1>
@@ -155,7 +155,7 @@ export default function HomePage() {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Update Profile Card */}
         <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>

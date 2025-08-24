@@ -44,7 +44,7 @@ export default function RequestResetPage() {
 
       {/* Right Form */}
       <div>
-        <div className="w-full max-w-md">
+        <div className="w-full">
             
           <h2 className="text-2xl font-bold mb-6">Request Password Reset</h2>
           {message && <p className="mb-4 text-red-600">{message}</p>}
