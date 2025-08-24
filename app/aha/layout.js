@@ -45,7 +45,7 @@ function Layout({ children }) {
       ></div>
 
       {/* Right Scrollable Content */}
-      <main className="md:ml-[50%] flex-1 flex items-center justify-center md:p-8 p-3">
+      <main className="md:ml-[50%] flex-1 flex items-center justify-center md:p-8 p-5">
         <div className="w-full">
           <div className="flex justify-between">
             <img src="/emblem.png" className="w-[80px] h-[80px]" />
