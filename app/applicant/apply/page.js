@@ -214,8 +214,26 @@ export default function ApplyPage() {
     setShowConfirm(true);
   };
 
+  function hasAllCertificates(application) {
+  const requiredFields = [
+    "cv",
+    "cover_letter",
+    "kvb_certificate",
+    "professional_certificate",
+    "national_id_document",
+  ];
+
+  return requiredFields.every((field) => application[field] !== null);
+}
+
   const handleSubmitApplication = () => {
     console.log({ application });
+
+     if (!hasAllCertificates(application)) {
+    set_Message("❌ Cannot submit. Some required certificates are missing.");
+      set_showMessage(true);
+      return false;
+  }
 
     if (application === null) {
       set_Message("At least select a file and click the save button");

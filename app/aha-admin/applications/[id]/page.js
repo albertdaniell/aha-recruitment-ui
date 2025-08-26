@@ -1,4 +1,6 @@
 "use client";
+import AppModal from "@/app/components/AppModal/AppModal";
+import { Spinner } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,6 +11,8 @@ export default function ApplicationDetails({ params }) {
 
   const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
+  const [showDoneShortlist, setShowDownShortlist] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(null);
   const [accordionOpen, setAccordionOpen] = useState(false);
@@ -63,6 +67,7 @@ export default function ApplicationDetails({ params }) {
     if (!actionType) return;
 
     try {
+      setLoading2(true);
       const loginDataRaw = localStorage.getItem("login_response");
       const loginData = JSON.parse(loginDataRaw);
       const token = loginData?.access;
@@ -85,15 +90,23 @@ export default function ApplicationDetails({ params }) {
       );
 
       if (!res.ok) {
+        setLoading2(false);
+
         throw new Error("Failed to update shortlist status");
       }
 
       const updated = await res.json();
       setApplication((prev) => ({ ...prev, ...updated }));
+      setLoading2(false);
+      setShowDownShortlist(true);
+
     } catch (err) {
+      setLoading(false);
+
       console.error(err);
       alert("Something went wrong while updating status.");
     } finally {
+      setLoading2(false);
       setShowModal(false);
       setActionType(null);
     }
@@ -170,6 +183,15 @@ export default function ApplicationDetails({ params }) {
       </div>
 
       {/* Modal */}
+       <AppModal
+                  isOpen={showDoneShortlist}
+                  setIsClose={() => {
+                    setShowDownShortlist(false);
+                  }}
+                  // title={"Cannot submit"}
+                  body={<p>Done shortlisting!</p>}
+                />
+
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -181,24 +203,28 @@ export default function ApplicationDetails({ params }) {
               </span>{" "}
               this application?
             </p>
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className={`px-4 py-2 text-white rounded ${
-                  actionType === "shortlist"
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-red-600 hover:bg-red-700"
-                }`}
-                onClick={handleActionConfirm}
-              >
-                Confirm
-              </button>
-            </div>
+            {loading2 ? (
+              <Spinner className="mt-3" />
+            ) : (
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className={`px-4 py-2 text-white rounded ${
+                    actionType === "shortlist"
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-red-600 hover:bg-red-700"
+                  }`}
+                  onClick={handleActionConfirm}
+                >
+                  Confirm
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -221,7 +247,6 @@ export default function ApplicationDetails({ params }) {
           (doc) =>
             doc.url && (
               <div key={doc.label} className="border rounded-lg p-2">
-                
                 <p className="font-semibold mb-2">{doc.label}</p>
                 <iframe
                   src={doc.url}
@@ -229,15 +254,15 @@ export default function ApplicationDetails({ params }) {
                   title={doc.label}
                 />
                 <div className="my-3">
-<Link
-                  href={doc.url}
-                  className="text-blue-600 underline break-all text-sm"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {doc.url}
-                </Link>
-                  </div>
+                  <Link
+                    href={doc.url}
+                    className="text-blue-600 underline break-all text-sm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {doc.url}
+                  </Link>
+                </div>
               </div>
             )
         )}
