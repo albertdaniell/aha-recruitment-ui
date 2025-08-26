@@ -228,6 +228,11 @@ export default function ApplyPage() {
 
   const handleSubmitApplication = () => {
     console.log({ application });
+      if (application === null) {
+      set_Message("Cannot submit. Some required information are missing");
+      set_showMessage(true);
+      return false;
+    }
 
      if (!hasAllCertificates(application)) {
     set_Message("❌ Cannot submit. Some required certificates are missing.");
@@ -235,11 +240,7 @@ export default function ApplyPage() {
       return false;
   }
 
-    if (application === null) {
-      set_Message("At least select a file and click the save button");
-      set_showMessage(true);
-      return false;
-    }
+  
     if (!isAllDocumentsSaved()) {
       set_Message(
         "🛑 You have uploaded documents that are not saved. Please save all documents before final submission."
@@ -343,6 +344,68 @@ export default function ApplyPage() {
         </p>
       )}
 
+      {/* 🔑 Position Field */}
+<div className="bg-white p-6 shadow-md rounded-2xl mb-6">
+  <label className="block font-semibold mb-2">Position</label>
+  <select
+    name="position"
+    value={application?.position || ""}
+    onChange={async (e) => {
+      const selected = e.target.value;
+      setApplication((prev) => ({ ...prev, position: selected }));
+
+      // ✅ Save immediately to backend using axios
+      const loginData = JSON.parse(localStorage.getItem("login_response"));
+      if (!loginData) return router.push("/aha/login");
+      const token = loginData.access;
+
+      const body = new FormData();
+      body.append("position", selected);
+
+      try {
+        const res = await axios.post(
+          process.env.NEXT_PUBLIC_APPLICATION_URL,
+          body,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const updated = res.data; // ✅ axios already parses JSON
+        setApplication(updated);
+        set_Message("✅ Position saved successfully");
+        set_showMessage(true);
+      } catch (err) {
+        console.error("❌ Failed to save position", err);
+        set_Message("❌ Failed to save position");
+        set_showMessage(true);
+      }
+    }}
+    disabled={draftStatus === "submitted"}
+    className={`w-full p-2 border rounded ${
+      draftStatus === "submitted" ? "cursor-not-allowed opacity-50" : ""
+    }`}
+  >
+    <option value="" disabled>-- Select Position --</option>
+    <option value="VS">Veterinary Surgeon (VS)</option>
+    <option value="VPP">Veterinary Para-professional (VPP)</option>
+  </select>
+
+  {application?.position && (
+    <p className="mt-2 text-sm text-gray-600">
+      Current selection:{" "}
+      <strong>
+        {application?.position === "VS"
+          ? "Veterinary Surgeon"
+          : "Veterinary Para-professional"}
+      </strong>
+    </p>
+  )}
+</div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           { label: "CV", field: "cv" },
@@ -440,9 +503,9 @@ export default function ApplyPage() {
       <div className="mt-6">
         <button
           onClick={handleSubmitApplication}
-          disabled={draftStatus === "submitted"}
+          disabled={draftStatus === "submitted" || !application}
           className={`w-full py-3 rounded-lg font-bold text-white text-lg transition flex gap-5 items-center justify-center ${
-            draftStatus === "submitted"
+            draftStatus === "submitted" || !application
               ? "bg-gray-300 cursor-not-allowed"
               : "bg-[#009639] hover:bg-green-700"
           }`}
