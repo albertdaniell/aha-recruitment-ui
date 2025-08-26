@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Clipboard, InfoFill, Person } from "akar-icons";
+import { FormatDate } from "@/app/constants/utils";
 
 export default function HomePage() {
   const [user, setUser] = useState(null);
@@ -118,7 +119,7 @@ export default function HomePage() {
                 {userCounty.name} County
               </h2>
               <p className="text-slate-500 text-xs">
-                Ends: {userCounty.end_of_application  || "Not specified"}
+                Ends: {FormatDate(userCounty.end_of_application,false) || "Not specified"}
               </p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-function FormatDate(d) {
+function FormatDate(d,showTime=true) {
   let date = new Date(d);
   var parts = date.toString().split(" ");
 
@@ -21,7 +21,7 @@ function FormatDate(d) {
 
   return d === undefined
     ? ""
-    : `${parts[1]} ${parts[2]}, ${parts[3]} Time: ${parts[4]}`;
+    : `${parts[1]} ${parts[2]}, ${parts[3]} ${showTime ? `Time: ${parts[4]}`:""}`;
 }
 function groupDataByForecastPeriod(data) {
   const groupedData = {};

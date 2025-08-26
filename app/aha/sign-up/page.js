@@ -1,6 +1,7 @@
 "use client";
 
 import AppModal from "@/app/components/AppModal/AppModal";
+import { FormatDate } from "@/app/constants/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -306,7 +307,7 @@ export default function RegisterPage() {
                       {isDisabled
                         ? "Applications not open"
                         : `Ends: ${
-                            county.end_of_application || "Not specified"
+                           FormatDate(county.end_of_application,false) || "Not specified"
                           }`}
                     </p>
                   </div>
