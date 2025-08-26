@@ -305,7 +305,7 @@ export default function RegisterPage() {
                     <p className="md:text-sm text-xs text-gray-600 mt-2">
                       {isDisabled
                         ? "Applications not open"
-                        : `Application Ends: ${
+                        : `Ends: ${
                             county.end_of_application || "Not specified"
                           }`}
                     </p>
