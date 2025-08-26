@@ -70,6 +70,8 @@ const data = [
       ],
       submission_format:
         "All the above documents should be compiled as one PDF document for ease of upload and download.",
+        submission_format2:
+      "• Successful applicants will be required to have personal Insurance against any incidents or accidents that may occur during this exercise.",
       submission_deadline: "………… 2025",
       submission_method: "Submit your application via the portal",
     },
@@ -195,6 +197,9 @@ export default function Page() {
             </ul>
             <p className="mt-3 text-gray-600">
               {campaign.application_process.submission_format}
+            </p>
+            <p className="mt-3 text-gray-600">
+              {campaign.application_process.submission_format2}
             </p>
             <p className="mt-1 text-gray-600 font-medium">
               Deadline: {campaign.application_process.submission_deadline}
