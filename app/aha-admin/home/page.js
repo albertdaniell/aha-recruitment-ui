@@ -8,8 +8,34 @@ export default function ApplicationsPage() {
   const [applications, setApplications] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [counties, setCounties] = useState(null);
+  const [userCounty, setUserCounty] = useState(null); // store user application
 
   const router = useRouter();
+
+  // Fetch counties on mount
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_COUNTY_LIST_URL);
+        if (!res.ok) throw new Error("Failed to fetch counties");
+        const data = await res.json();
+        setCounties(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCounties();
+  }, []);
+
+
+  useEffect(() => {
+    if (counties && user) {
+      let county = counties?.find((c) => c?.id === user.county?.id);
+      setUserCounty(county);
+    }
+  }, [user, counties]);
 
   useEffect(() => {
     async function fetchApplications() {
@@ -107,15 +133,39 @@ export default function ApplicationsPage() {
 
   return (
     <div className="">
-      <div className="mb-4">
-        <h1 className="text-3xl font-bold text-[#009639]">
-          Welcome, Admin - {user?.first_name}!
-        </h1>
-        <p className="text-gray-600 mt-2">Email: {user?.email}</p>
-        <p className="text-gray-600 mt-2">
-          Get started by viewing applications
-        </p>
-      </div>
+    
+       {userCounty && (
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-start justify-between">
+          {/* LEFT SIDE */}
+          <div className="col-span-2">
+            <h1 className="text-3xl font-bold text-[#009639]">
+                Welcome, Admin - {user?.first_name}!
+
+            </h1>
+            <p className="text-gray-600 mt-2">Email: {user.email}</p>
+            {user.fpo?.name && (
+              <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
+            )}
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="inline-flex items-center gap-4 px-2 py-3 border-green-500 border rounded-2xl mb-4 bg-white">
+            <img
+              src={userCounty.logo || "/cog.png"}
+              alt={userCounty?.name}
+              className="w-16 h-16 object-contain rounded-md"
+            />
+            <div className="min-w-0">
+              <h2 className="font-semibold truncate text-slate-600">
+                {userCounty.name} County
+              </h2>
+              <p className="text-slate-500 text-xs">
+                Ends: {userCounty.end_of_application  || "Not specified"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
 
     <div className="grid md:grid-cols-3  gap-6 my-4">
@@ -133,8 +183,9 @@ export default function ApplicationsPage() {
 
       {/* Quarter */}
       <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl shadow-md px-6 py-4  text-center">
-        <p className="text-sm text-white opacity-80">Quarter</p>
-        <p className="text-xl font-bold text-white">2</p>
+        <p className="text-sm text-white opacity-80">Drafts</p>
+               <p className="text-xl font-bold text-white">{applications?.filter(app=>app?.status === "draft")?.length || 0}</p>
+
       </div>
     </div>
       <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>

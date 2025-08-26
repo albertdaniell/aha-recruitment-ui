@@ -335,7 +335,7 @@ export default function ApplyPage() {
             field: "professional_certificate",
           },
           { label: "National ID Document", field: "national_id_document" },
-          { label: "Personal Insurance", field: "personal_insurance" },
+        //   { label: "Personal Insurance", field: "personal_insurance" },
 
         ].map(({ label, field }) => (
           <div key={field} className="bg-white p-6 shadow-md rounded-2xl">

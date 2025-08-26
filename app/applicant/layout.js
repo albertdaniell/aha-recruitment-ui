@@ -34,6 +34,7 @@ export default function DashboardLayout({ children }) {
   const sidebarLinks = [
     { name: "Home", href: "/applicant/home" },
     { name: "Profile", href: "/applicant/profile" },
+    { name: "User Account", href: "/applicant/user" },
     { name: "Application", href: "/applicant/apply" },
     { name: "Help", href: "/applicant/help" },
     { name: "Advertisement", href: "/applicant/advertisement" },

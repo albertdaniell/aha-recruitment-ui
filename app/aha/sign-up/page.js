@@ -37,10 +37,9 @@ export default function RegisterPage() {
     county.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  let setSelectedCountyFn=(county)=>{
-    setSelectedCounty(county)
-    
-  }
+  let setSelectedCountyFn = (county) => {
+    setSelectedCounty(county);
+  };
 
   // Fetch counties on mount
   useEffect(() => {
@@ -82,25 +81,72 @@ export default function RegisterPage() {
 
   // Fetch wards when subcounty changes
   useEffect(() => {
-    if (!formData.subcounty) {
+    console.log({selectedCounty})
+    if (!selectedCounty?.id) {
       setWards([]);
       setFormData((prev) => ({ ...prev, ward: "", fpo: "" }));
       return;
     }
     const fetchWards = async () => {
       try {
+        // let wards_ = fpos?.filter((fpo)=>{
+        //     return parseInt(fpo.id) === parseInt(formData?.fpo)
+        // })
+        // console.log({wards_})
+        // console.log(fpos)
+        // console.log(formData?.fpo)
+        // if(wards_){
+        // setWards(wards_?.wards);
+
+        // }
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?subcounty_id=${formData.subcounty}`
+          `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?county=${selectedCounty?.id}`
         );
         if (!res.ok) throw new Error("Failed to fetch wards");
         const data = await res.json();
         setWards(data);
+
       } catch (err) {
         console.error(err);
       }
     };
-    fetchWards();
-  }, [formData.subcounty]);
+   selectedCounty && fetchWards();
+  }, [selectedCounty]);
+
+  useEffect(() => {
+    console.log({selectedCounty})
+    if (!formData?.fpo) {
+      setWards([]);
+      setFormData((prev) => ({ ...prev, ward: "", fpo: "" }));
+      return;
+    }
+    const fetchWards = async () => {
+      try {
+        let wards_ = fpos?.filter((fpo)=>{
+            return parseInt(fpo.id) === parseInt(formData?.fpo)
+        })
+        console.log({wards_})
+        // console.log(fpos)
+        // console.log(formData?.fpo)
+        if(wards_){
+        console.log(wards_[0]?.wards)
+
+        setWards(wards_[0]?.wards);
+
+        }
+        // const res = await fetch(
+        //   `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?county=${selectedCounty?.id}`
+        // );
+        // if (!res.ok) throw new Error("Failed to fetch wards");
+        // const data = await res.json();
+        // setWards(data);
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+   fetchWards();
+  }, [formData?.fpo]);
 
   // Fetch FPOs when ward changes
   useEffect(() => {
@@ -109,18 +155,30 @@ export default function RegisterPage() {
       setFormData((prev) => ({ ...prev, fpo: "" }));
       return;
     }
-    const fetchFpos = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_FPO_LIST_URL}?county=${selectedCounty?.id}`
-        );
-        if (!res.ok) throw new Error("Failed to fetch fpos");
-        const data = await res.json();
-        setFpos(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const fetchFpos = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FPO_LIST_URL}?county=${selectedCounty?.id}`
+    );
+    if (!res.ok) throw new Error("Failed to fetch fpos");
+    const data = await res.json();
+
+    // ✅ Deduplicate FPOs by `id` (and fallback to name if needed)
+    const uniqueFpos = Object.values(
+      data.reduce((acc, fpo) => {
+        const key = `${fpo.id}-${fpo.name}`;
+        if (!acc[key]) {
+          acc[key] = fpo;
+        }
+        return acc;
+      }, {})
+    );
+
+    setFpos(uniqueFpos);
+  } catch (err) {
+    console.error(err);
+  }
+};
     fetchFpos();
   }, [selectedCounty?.id]);
 
@@ -143,10 +201,7 @@ export default function RegisterPage() {
       setMessage("Phone number must be in format 2547XXXXXXXX");
       return false;
     }
-    if (
-      !selectedCounty ||
-      !formData.fpo
-    ) {
+    if (!selectedCounty || !formData.fpo) {
       setMessage("Please select county, subcounty, ward and FPO");
       return false;
     }
@@ -159,8 +214,13 @@ export default function RegisterPage() {
     if (!validateForm()) return;
     setLoading(true);
 
-    let dataToPost = {...formData}
-    dataToPost.county = selectedCounty?.id
+    let dataToPost = { ...formData };
+    dataToPost.county = selectedCounty?.id;
+
+    if(dataToPost.ward){
+    // dataToPost.subcounty = selectedCounty?.id;
+
+    }
 
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_REGISTER_URL, {
@@ -209,7 +269,7 @@ export default function RegisterPage() {
             />
 
             {/* Counties List */}
-            <div className="grid xl:grid-cols-3 grid-cols-2 gap-4">
+            <div className="grid xl:grid-cols-3 grid-cols-2 gap-3">
               {filteredCounties.map((county) => {
                 const isDisabled = !county.is_open;
 
@@ -221,7 +281,7 @@ export default function RegisterPage() {
           ${
             isDisabled
               ? "bg-slate-200 cursor-not-allowed opacity-70 border-slate-300 text-slate-600"
-              : "cursor-pointer hover:bg-gray-50 bg-white" 
+              : "cursor-pointer hover:bg-gray-50 bg-white"
           } 
           ${
             selectedCounty?.id === county.id && !isDisabled
@@ -229,20 +289,20 @@ export default function RegisterPage() {
               : ""
           }`}
                   >
-                   <div className="sm:flex items-center gap-4">
-  <img
-    src={county.logo || "/cog.png"}
-    alt={county.name}
-    className="sm:w-12 sm:h-12 w-8 h-8 object-contain rounded-md"
-  />
-  <div className="min-w-0">
-    <h2 className="md:text-md font-semibold break-words whitespace-normal">
-      {county.name}
-    </h2>
-  </div>
-</div>
+                    <div className="sm:flex items-center gap-4">
+                      <img
+                        src={county.logo || "/cog.png"}
+                        alt={county.name}
+                        className="sm:w-12 sm:h-12 w-8 h-8 object-contain rounded-md"
+                      />
+                      <div className="min-w-0">
+                        <h2 className="md:text-md font-semibold break-words whitespace-normal">
+                          {county.name}
+                        </h2>
+                      </div>
+                    </div>
 
-                    <p className="md:text-sm text-xs text-gray-600 mt-3">
+                    <p className="md:text-sm text-xs text-gray-600 mt-2">
                       {isDisabled
                         ? "Applications not open"
                         : `Application Ends: ${
@@ -410,17 +470,19 @@ export default function RegisterPage() {
                 </select>
               </div>
 
-              <div className=" grid-cols-2 gap-4 hidden">
+              {/* {JSON.stringify(wards)} */}
+
+              <div className=" grid-cols-2 gap-4">
                 {/* Ward dropdown */}
                 <select
                   name="ward"
                   value={formData.ward}
                   onChange={handleChange}
                   className="w-full p-2 border rounded focus:border-green-500"
-                //   required
+                  //   required
                 >
                   <option value="">Select Ward</option>
-                  {wards.map((w) => (
+                  {wards?.map((w) => (
                     <option key={w.id} value={w.id}>
                       {w.name}
                     </option>

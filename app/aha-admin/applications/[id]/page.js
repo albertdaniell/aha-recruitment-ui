@@ -216,7 +216,7 @@ export default function ApplicationDetails({ params }) {
             label: "Professional Certificate",
             url: application.professional_certificate,
           },
-          { label: "Personal Insurance", url: application.personal_insurance },
+          // { label: "Personal Insurance", url: application.personal_insurance },
         ].map(
           (doc) =>
             doc.url && (
