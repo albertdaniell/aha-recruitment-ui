@@ -137,9 +137,11 @@ export default function ApplicationsPage() {
  const exportToExcel = () => {
   if (!applications) return;
 
- 
+  // filter shortlisted
+  const shortlisted = applications.filter((app) => app.is_shortlisted === true);
+
   // format for excel
-  const exportData = applications.map((app, index) => ({
+  const exportData = applications?.map((app, index) => ({
     "#": index + 1,
     "ApplicationID": app.id,
     Position:
@@ -179,19 +181,19 @@ export default function ApplicationsPage() {
   ws["!cols"] = colWidths;
 
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Applications");
+  XLSX.utils.book_append_sheet(wb, ws, "Shortlisted Applications");
 
   // save file
   const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   saveAs(
     new Blob([wbout], { type: "application/octet-stream" }),
-    "applications.xlsx"
+    "shortlisted_applications.xlsx"
   );
 };
   return (
     <div className="">
     
-      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
+      <h1 className="text-2xl font-bold mb-6">Shorlisted {user.county?.name ? `for ${user.county.name} county`:""}</h1>
       {/* Export button */}
         <button
           onClick={exportToExcel}
@@ -200,14 +202,16 @@ export default function ApplicationsPage() {
          Export to Excel
         </button>
       <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full border border-gray-200 text-md text-slate-800">
+        <table className="min-w-full border border-gray-200">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-4 py-2 text-left text-sm font-semibold">#</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold">
+                #
+              </th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
                 Application ID
               </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
+               <th className="px-4 py-2 text-left text-sm font-semibold">
                 Position
               </th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
@@ -222,8 +226,8 @@ export default function ApplicationsPage() {
               <th className="px-4 py-2 text-left text-sm font-semibold">
                 Date Created
               </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                Date Submitted
+               <th className="px-4 py-2 text-left text-sm font-semibold">
+                Date Updated
               </th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
                 Action
@@ -231,7 +235,7 @@ export default function ApplicationsPage() {
             </tr>
           </thead>
           <tbody>
-            {applications?.map((app, index) => (
+            {applications?.filter(app_1=>app_1?.is_shortlisted === true)?.map((app,index) => (
               <tr
                 key={app.id}
                 className={`${
@@ -240,42 +244,43 @@ export default function ApplicationsPage() {
                     : "bg-white"
                 } border-t`}
               >
-                <td className="px-4 py-2">{index + 1}</td>
+                <td className="px-4 py-2">{index+1}</td>
 
-                <td className="px-4 py-2 max-w-[150px] truncate">
-                  {app?.id || "—"}
-                </td>
+                <td className="px-4 py-2 max-w-[150px] truncate">{app?.id || "—"}</td>
                 <td className="px-4 py-2">{app?.position || "—"}</td>
 
                 <td className="px-4 py-2">{app?.first_name || "—"}</td>
                 <td className="px-4 py-2">{app.last_name || "—"}</td>
                 <td className="px-4 py-2 font-medium">{renderStatus(app)}</td>
                 <td className="px-4 py-2">
-                  {app.created_at ? FormatDate(app.created_at, false) : "—"}
+                  {app.created_at
+                    ? new Date(app.created_at).toLocaleDateString()
+                    : "—"}
                 </td>
-                <td className="px-4 py-2">
-                  {app.submission_date
-                    ? FormatDate(app.submission_date, false)
+                 <td className="px-4 py-2">
+                  {app.created_at
+                    ? new Date(app.updated_at).toLocaleDateString()
                     : "—"}
                 </td>
                 <td>
-                  {app.status === "draft" ? (
-                    <>
-                      <Link
-                        className="text-slate-400 hover:cursor-not-allowed"
-                        href={"#"}
-                      >
-                        View
-                      </Link>
-                    </>
-                  ) : (
-                    <Link
-                      className="text-blue-500 hover:underline"
-                      href={`applications/${app?.id}/`}
-                    >
-                      View
-                    </Link>
-                  )}
+                 {
+                  app.status === "draft"?
+                  <>
+                   <Link
+                    className="text-slate-400 hover:cursor-not-allowed"
+                    href={"#"}
+                  >
+                    View
+                  </Link>
+                  </>
+                  :
+                   <Link
+                    className="text-blue-500 hover:underline"
+                    href={`applications/${app?.id}/`}
+                  >
+                    View
+                  </Link>
+                 }
                 </td>
               </tr>
             ))}

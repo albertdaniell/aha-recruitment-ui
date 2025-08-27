@@ -1,5 +1,7 @@
 "use client";
 import AppModal from "@/app/components/AppModal/AppModal";
+import { FormatDate } from "@/app/constants/utils";
+import { Check, Cross } from "akar-icons";
 import { Spinner } from "flowbite-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -99,7 +101,6 @@ export default function ApplicationDetails({ params }) {
       setApplication((prev) => ({ ...prev, ...updated }));
       setLoading2(false);
       setShowDownShortlist(true);
-
     } catch (err) {
       setLoading(false);
 
@@ -114,83 +115,149 @@ export default function ApplicationDetails({ params }) {
 
   if (loading) return <p className="p-6">Loading...</p>;
   if (!application) return <p className="p-6">Application not found</p>;
-
   return (
     <div className="p-6 bg-white shadow-md rounded-2xl">
       <h1 className="text-2xl font-bold mb-4">Application Details</h1>
 
-      {/* Accordion */}
-      <div className="border rounded-lg">
-        <button
-          onClick={() => setAccordionOpen(!accordionOpen)}
-          className="w-full flex justify-between items-center px-4 py-3 text-left text-lg font-semibold bg-gray-100 hover:bg-gray-200 rounded-t-lg"
-        >
-          <span>
-            {application.first_name} {application.last_name} (
-            {application.email})
-          </span>
-          <span>{accordionOpen ? "▲" : "▼"}</span>
-        </button>
+     
+     <div className="border rounded-lg shadow-sm">
+  <button
+    onClick={() => setAccordionOpen(!accordionOpen)}
+    className="w-full flex justify-between items-center px-4 py-3 text-left text-lg font-semibold bg-gray-100 hover:bg-gray-200 rounded-t-lg"
+  >
+    <span className="text-green-400">
+      {application.first_name} {application.last_name} ({application.email})
+    </span>
+    <span>{accordionOpen ? "▲" : "▼"}</span>
+  </button>
 
-        {accordionOpen && (
-          <div className="px-4 py-3 space-y-2 border-t">
-            <p>
-              <span className="font-semibold">Status:</span>{" "}
-              <span className="ml-2 px-2 py-1 rounded bg-blue-100 text-blue-600">
-                {application.status}
-              </span>
-            </p>
-            <p>
-              <span className="font-semibold">Shortlisted:</span>{" "}
-              {application.is_shortlisted ? "✅ Yes" : "❌ No"}
-            </p>
-            <p>
-              <span className="font-semibold">Rejected:</span>{" "}
-              {application.is_not_shortlisted ? "✅ Yes" : "❌ No"}
-            </p>
-            <p>
-              <span className="font-semibold">Created At:</span>{" "}
-              {new Date(application.created_at).toLocaleString()}
-            </p>
-            <p>
-              <span className="font-semibold">Updated At:</span>{" "}
-              {new Date(application.updated_at).toLocaleString()}
-            </p>
-          </div>
-        )}
+ {accordionOpen && (
+  <div className="p-6 border-t grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    {/* ✅ Left Column */}
+    <div className="space-y-6">
+      {/* Applicant Info */}
+      <div className="bg-white p-4 rounded-lg shadow border">
+        <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
+          Applicant Info
+        </h3>
+        <p><span className="font-medium">Name:</span> {application.first_name} {application.last_name}</p>
+        <p><span className="font-medium">Email:</span> {application.email}</p>
+        <p><span className="font-medium">Phone:</span> {application.phone || "—"}</p>
+        <p><span className="font-medium">County:</span> {application.county || "—"}</p>
+        <p><span className="font-medium">Subcounty:</span> {application.subcounty || "—"}</p>
+        <p><span className="font-medium">Ward:</span> {application.ward || "—"}</p>
+        <p><span className="font-medium">FPO:</span> {application.fpo || "—"}</p>
       </div>
 
+      {/* Profile Info */}
+      {application.profile && (
+        <div className="bg-white p-4 rounded-lg shadow border">
+          <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
+            Profile Info
+          </h3>
+          {application.profile.profile_picture && (
+            <div className="mb-3">
+              <img
+                src={application.profile.profile_picture}
+                alt="Profile"
+                className="w-20 h-20 rounded-full border"
+              />
+            </div>
+          )}
+          <p><span className="font-medium">Bio:</span> {application.profile.bio || "—"}</p>
+          <p><span className="font-medium">Location:</span> {application.profile.location || "—"}</p>
+          <p><span className="font-medium">DOB:</span> {FormatDate(application.profile.date_of_birth,false) || "—"}</p>
+          <p><span className="font-medium">Gender:</span> {application.profile.gender || "—"}</p>
+          <p><span className="font-medium">PWD:</span> {application.profile.is_pwd ? "✅ Yes" : "❌ No"}</p>
+          {application.profile.is_pwd && (
+            <>
+              <p><span className="font-medium">Disability Type:</span> {application.profile.disability_type || "—"}</p>
+              <p>
+                <span className="font-medium">Certificate:</span>{" "}
+                {application.profile.disability_certificate ? (
+                  <a
+                    href={application.profile.disability_certificate}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    View
+                  </a>
+                ) : "—"}
+              </p>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+
+    {/* ✅ Right Column */}
+    <div className="space-y-6">
+      {/* Application Info */}
+      <div className="bg-white p-4 rounded-lg shadow border">
+        <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
+          Application Info
+        </h3>
+        <p>
+          <span className="font-medium">Position:</span>{" "}
+          {application.position === "VS"
+            ? "Veterinary Surgeon"
+            : "Veterinary Para-professional"}
+        </p>
+        <p>
+          <span className="font-medium">Status:</span>{" "}
+          <span className="ml-2 px-2 py-1 rounded bg-blue-100 text-blue-600">
+            {application.status}
+          </span>
+        </p>
+        <p><span className="font-medium">Shortlisted:</span> {application.is_shortlisted ? "✅ Yes" : "❌ No"}</p>
+        <p><span className="font-medium">Rejected:</span> {application.is_not_shortlisted ? "✅ Yes" : "❌ No"}</p>
+
+        {/* ✅ New date fields */}
+        <p><span className="font-medium">Submission Date:</span> {application.submission_date ? new Date(application.submission_date).toLocaleString() : "—"}</p>
+        <p><span className="font-medium">Date Shortlisted:</span> {application.date_shortlisted ? new Date(application.date_shortlisted).toLocaleString() : "—"}</p>
+        <p><span className="font-medium">Date Rejected:</span> {application.date_rejected ? new Date(application.date_rejected).toLocaleString() : "—"}</p>
+
+        {/* Existing timestamps */}
+        <p><span className="font-medium">Created At:</span> {new Date(application.created_at).toLocaleString()}</p>
+        <p><span className="font-medium">Updated At:</span> {new Date(application.updated_at).toLocaleString()}</p>
+      </div>
+    </div>
+  </div>
+)}
+</div>
       {/* Actions */}
       <div className="mt-6 flex gap-4">
         <button
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700  flex flex-row gap-5"
           onClick={() => {
             setShowModal(true);
             setActionType("shortlist");
           }}
         >
-          ✅ Shortlist
+         <Check/> Shortlist
         </button>
         <button
-          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex flex-row gap-5"
           onClick={() => {
             setShowModal(true);
             setActionType("reject");
           }}
         >
-          ❌ Reject
+          <Cross/> Reject
         </button>
       </div>
 
       {/* Modal */}
-       <AppModal
-                  isOpen={showDoneShortlist}
-                  setIsClose={() => {
-                    setShowDownShortlist(false);
-                  }}
-                  // title={"Cannot submit"}
-                  body={<p>Done shortlisting!</p>}
-                />
+      <AppModal
+        isOpen={showDoneShortlist}
+        setIsClose={() => {
+          setShowDownShortlist(false);
+        }}
+        // title={"Cannot submit"}
+        body={<p>Done shortlisting!</p>}
+      />
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

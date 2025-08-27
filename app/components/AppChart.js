@@ -9,12 +9,12 @@ let option2 = {
   title: {
     text: "Monthly Average Temperature",
   },
-  subtitle: {
-    text:
-      "Source: " +
-      '<a href="https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature" ' +
-      'target="_blank">Wikipedia.com</a>',
-  },
+  // subtitle: {
+  //   text:
+  //     "Source: " +
+  //     '<a href="https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature" ' +
+  //     'target="_blank">Wikipedia.com</a>',
+  // },
   xAxis: {
     categories: [
       "Jan",
@@ -61,6 +61,7 @@ let option2 = {
 };
 
 function AppChart({ options = option2 }) {
+  console.log({options})
   return (
     <div>
       <HighchartsReact

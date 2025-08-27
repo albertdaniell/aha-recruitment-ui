@@ -31,6 +31,8 @@ export default function DashboardLayout({ children }) {
 
   const sidebarLinks = [
     { name: "Home", href: "/aha-admin/home" },
+    { name: "Applications", href: "/aha-admin/applications" },
+    { name: "Shortlisted", href: "/aha-admin/shortlisted" },
     { name: "County Settings", href: "/aha-admin/county-setting" },
     { name: "Users", href: "/aha-admin/users" },
   ];

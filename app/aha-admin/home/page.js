@@ -1,9 +1,15 @@
 "use client";
 
-import { FormatDate } from "@/app/constants/utils";
+import { APP_FETCH } from "@/app/constants/FetchService";
+import {
+  FormatDate,
+  make_data_past_7_days_graph,
+  make_gender_pie,
+} from "@/app/constants/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import AppChart from "@/app/components/AppChart";
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState(null);
@@ -11,7 +17,14 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [counties, setCounties] = useState(null);
   const [userCounty, setUserCounty] = useState(null); // store user application
+  const [stats, set_stats] = useState(null); // store user application
+  const [showAll, setShowAll] = useState(false);
 
+  // Limit to 4 unless "showAll" is true
+const submittedApps = applications?.filter((app) => app.status === "submitted");
+
+// ✅ Show 4 first
+const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
   const router = useRouter();
 
   // Fetch counties on mount
@@ -30,6 +43,20 @@ export default function ApplicationsPage() {
     fetchCounties();
   }, []);
 
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await APP_FETCH(process.env.NEXT_PUBLIC_STATS_URL);
+        if (!res.ok) throw new Error("Failed to fetch stats");
+        const data = await res.json();
+        set_stats(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   useEffect(() => {
     if (counties && user) {
@@ -62,12 +89,15 @@ export default function ApplicationsPage() {
           return;
         }
 
-        const res = await fetch(process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
@@ -134,14 +164,12 @@ export default function ApplicationsPage() {
 
   return (
     <div className="">
-    
-       {userCounty && (
+      {userCounty && (
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-start justify-between">
           {/* LEFT SIDE */}
           <div className="col-span-2">
             <h1 className="text-3xl font-bold text-[#009639]">
-                Welcome, Admin - {user?.first_name}!
-
+              Welcome, Admin - {user?.first_name}!
             </h1>
             <p className="text-gray-600 mt-2">Email: {user.email}</p>
             {user.fpo?.name && (
@@ -161,118 +189,156 @@ export default function ApplicationsPage() {
                 {userCounty.name} County
               </h2>
               <p className="text-slate-500 text-xs">
-                Ends: {FormatDate(userCounty.end_of_application,false)  || "Not specified"}
+                Ends:{" "}
+                {FormatDate(userCounty.end_of_application, false) ||
+                  "Not specified"}
               </p>
             </div>
           </div>
         </div>
       )}
 
+      <div className="grid md:grid-cols-3  gap-6 my-4">
+        {/* School Year */}
+        <div className="bg-gradient-to-r from-sky-400 to-sky-500 rounded-2xl shadow-md px-6 py-4  text-center">
+          <p className="text-sm text-white opacity-80">Applications</p>
+          <p className="text-xl font-bold text-white">
+            {applications?.length || 0}
+          </p>
+        </div>
 
-    <div className="grid md:grid-cols-3  gap-6 my-4">
-      {/* School Year */}
-      <div className="bg-gradient-to-r from-sky-400 to-sky-500 rounded-2xl shadow-md px-6 py-4  text-center">
-        <p className="text-sm text-white opacity-80">Applications</p>
-        <p className="text-xl font-bold text-white">{applications?.length || 0}</p>
+        {/* Semester */}
+        <div className="bg-gradient-to-r from-pink-400 to-red-500 rounded-2xl shadow-md px-6 py-4  text-center">
+          <p className="text-sm text-white opacity-80">Submitted</p>
+          <p className="text-xl font-bold text-white">
+            {applications?.filter((app) => app?.status === "submitted")
+              ?.length || 0}
+          </p>
+        </div>
+
+        {/* Quarter */}
+        <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl shadow-md px-6 py-4  text-center">
+          <p className="text-sm text-white opacity-80">Drafts</p>
+          <p className="text-xl font-bold text-white">
+            {applications?.filter((app) => app?.status === "draft")?.length ||
+              0}
+          </p>
+        </div>
       </div>
 
-      {/* Semester */}
-      <div className="bg-gradient-to-r from-pink-400 to-red-500 rounded-2xl shadow-md px-6 py-4  text-center">
-        <p className="text-sm text-white opacity-80">Submitted</p>
-        <p className="text-xl font-bold text-white">{applications?.filter(app=>app?.status === "submitted")?.length || 0}</p>
-      </div>
+      <div className="grid grid-cols-3 gap-5">
+        <div className="shadow-lg rounded-xl p-3 bg-white col-span-1">
+          <p className="text-sm text-slate-600 mb-3">Submissions by Gender</p>
+          {/* {JSON.stringify(stats)} */}
+          {stats && (
+            <AppChart
+              options={make_gender_pie(
+                stats?.gender_stats,
+                "male",
+                "female",
+                "unspecified"
+              )}
+            />
+          )}
+        </div>
+        <div className="shadow-lg rounded-xl p-3 bg-white col-span-2">
+          <p className="text-sm text-slate-600 mb-3">Submissions by Date</p>
 
-      {/* Quarter */}
-      <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl shadow-md px-6 py-4  text-center">
-        <p className="text-sm text-white opacity-80">Drafts</p>
-               <p className="text-xl font-bold text-white">{applications?.filter(app=>app?.status === "draft")?.length || 0}</p>
-
+          {stats && (
+            <AppChart
+              options={make_data_past_7_days_graph(stats?.daily_stats)}
+            />
+          )}
+        </div>
       </div>
-    </div>
-      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
-      
-      <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full border border-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                #
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                Application ID
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                First name
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                Last name
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                Status
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                Date Created
-              </th>
-               <th className="px-4 py-2 text-left text-sm font-semibold">
-                Date Updated
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications?.map((app,index) => (
-              <tr
-                key={app.id}
-                className={`${
-                  app.status === "draft"
-                    ? "bg-gray-200 text-gray-500"
-                    : "bg-white"
-                } border-t`}
+      <h1 className="text-xl font-bold mb-5 mt-5">
+        Applications {user.county?.name ? `for ${user.county.name} county` : ""}
+      </h1>
+
+<div className="space-y-6">
+      {/* Grid of Applications */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {displayedApps?.map((app) => (
+          <div
+            key={app.id}
+            className="bg-white border rounded-xl shadow p-4 flex flex-col items-center text-center hover:shadow-lg"
+          >
+            {/* Profile Picture */}
+            {app.profile?.profile_picture ? (
+              <img
+                src={app.profile.profile_picture}
+                alt={`${app.first_name} ${app.last_name}`}
+                className="w-24 h-24 rounded-full border object-cover"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-full border flex items-center justify-center bg-gray-100 text-gray-500">
+                No Photo
+              </div>
+            )}
+
+            {/* Applicant Name */}
+            <h3 className="mt-3 font-semibold text-lg text-slate-800">
+              {app.first_name} {app.last_name}
+            </h3>
+
+            {/* Status */}
+            <p className="mt-1 text-sm">
+              <span
+                className={`px-2 py-1 rounded ${
+                  app.status === "submitted"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-gray-200 text-gray-500"
+                }`}
               >
-                <td className="px-4 py-2">{index+1}</td>
+                {app.status}
+              </span>
+            </p>
 
-                <td className="px-4 py-2">{app?.id || "—"}</td>
+            {/* Dates */}
+            <p className="mt-2 text-sm text-gray-600">
+              Submitted:{" "}
+              {app.submission_date
+                ? FormatDate(app.submission_date, false)
+                : "—"}
+            </p>
+            <p className="text-sm text-gray-600">
+              Created:{" "}
+              {app.created_at ? FormatDate(app.created_at, false) : "—"}
+            </p>
 
-                <td className="px-4 py-2">{app?.first_name || "—"}</td>
-                <td className="px-4 py-2">{app.last_name || "—"}</td>
-                <td className="px-4 py-2 font-medium">{renderStatus(app)}</td>
-                <td className="px-4 py-2">
-                  {app.created_at
-                    ? new Date(app.created_at).toLocaleDateString()
-                    : "—"}
-                </td>
-                 <td className="px-4 py-2">
-                  {app.created_at
-                    ? new Date(app.updated_at).toLocaleDateString()
-                    : "—"}
-                </td>
-                <td>
-                 {
-                  app.status === "draft"?
-                  <>
-                   <Link
-                    className="text-slate-400 hover:cursor-not-allowed"
-                    href={"#"}
-                  >
-                    View
-                  </Link>
-                  </>
-                  :
-                   <Link
-                    className="text-blue-500 hover:underline"
-                    href={`applications/${app?.id}/`}
-                  >
-                    View
-                  </Link>
-                 }
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            {/* View Button */}
+            {app.status === "draft" ? (
+              <button
+                disabled
+                className="mt-4 px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed"
+              >
+                View
+              </button>
+            ) : (
+              <Link
+                href={`applications/${app.id}/`}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              >
+                View
+              </Link>
+            )}
+          </div>
+        ))}
       </div>
+
+      {/* View More Button */}
+      {!showAll && applications?.length > 4 && (
+        <div className="flex justify-center">
+          <button
+            onClick={() => router.push("applications/")}
+            className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition"
+          >
+            View More Applications
+          </button>
+        </div>
+      )}
+    </div>
+     
     </div>
   );
 }

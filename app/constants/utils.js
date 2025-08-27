@@ -237,12 +237,18 @@ const make_WardApplicants_Enumerators = (data, COUNTY = null) => {
   }
 };
 
-const make_gender_pie = (data) => {
-  let male = data.male_applicants;
-  let female = data.female_applicants;
-  let others =
+const make_gender_pie = (data,male_key="male_applicants",female_key="female_applicants", other=null) => {
+  let male = data[male_key];
+  let female = data[female_key];
+   let others =null
+  if(other === null){
+  others =
     data.total_applicants - (data.male_applicants + data.female_applicants);
 
+  }else{
+    other = data[other]
+  }
+  
   return {
     chart: {
       type: "pie",
