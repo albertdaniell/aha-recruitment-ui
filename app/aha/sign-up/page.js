@@ -16,9 +16,10 @@ export default function RegisterPage() {
     password: "",
     password2: "",
     county: "",
-    subcounty: "",
+    // subcounty: "",
     ward: "",
     fpo: "",
+    sublocation:""
   });
 
   // Data lists
@@ -26,6 +27,7 @@ export default function RegisterPage() {
   const [subcounties, setSubcounties] = useState([]);
   const [wards, setWards] = useState([]);
   const [fpos, setFpos] = useState([]);
+  const [sublocations, setSublocations] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -82,9 +84,11 @@ export default function RegisterPage() {
 
   // Fetch wards when subcounty changes
   useEffect(() => {
-    console.log({selectedCounty})
+    console.log({ selectedCounty });
     if (!selectedCounty?.id) {
       setWards([]);
+      setFpos([])
+      setSublocations([])
       setFormData((prev) => ({ ...prev, ward: "", fpo: "" }));
       return;
     }
@@ -106,16 +110,18 @@ export default function RegisterPage() {
         if (!res.ok) throw new Error("Failed to fetch wards");
         const data = await res.json();
         setWards(data);
-
       } catch (err) {
         console.error(err);
       }
     };
-   selectedCounty && fetchWards();
+    selectedCounty && fetchWards();
   }, [selectedCounty]);
 
   useEffect(() => {
-    console.log({selectedCounty})
+    console.log({ selectedCounty });
+    setFormData((prev) => ({ ...prev, ward: "" }));
+    setWards([])
+
     if (!formData?.fpo) {
       setWards([]);
       setFormData((prev) => ({ ...prev, ward: "", fpo: "" }));
@@ -123,17 +129,16 @@ export default function RegisterPage() {
     }
     const fetchWards = async () => {
       try {
-        let wards_ = fpos?.filter((fpo)=>{
-            return parseInt(fpo.id) === parseInt(formData?.fpo)
-        })
-        console.log({wards_})
+        let wards_ = fpos?.filter((fpo) => {
+          return parseInt(fpo.id) === parseInt(formData?.fpo);
+        });
+        console.log({ wards_ });
         // console.log(fpos)
         // console.log(formData?.fpo)
-        if(wards_){
-        console.log(wards_[0]?.wards)
+        if (wards_) {
+          console.log(wards_[0]?.wards);
 
-        setWards(wards_[0]?.wards);
-
+          setWards(wards_[0]?.wards);
         }
         // const res = await fetch(
         //   `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?county=${selectedCounty?.id}`
@@ -141,47 +146,76 @@ export default function RegisterPage() {
         // if (!res.ok) throw new Error("Failed to fetch wards");
         // const data = await res.json();
         // setWards(data);
-
       } catch (err) {
         console.error(err);
       }
     };
-   fetchWards();
+    fetchWards();
   }, [formData?.fpo]);
 
   // Fetch FPOs when ward changes
   useEffect(() => {
+      setFormData((prev) => ({ ...prev, fpo: "",sublocation:"",ward:"" }));
+ setFpos([]);
+      setSublocations([])
+      setWards([])
     if (!selectedCounty?.id) {
+      
       setFpos([]);
-      setFormData((prev) => ({ ...prev, fpo: "" }));
+      setSublocations([])
+      setWards([])
+      setFormData((prev) => ({ ...prev, fpo: "",sublocation:"",ward:"" }));
       return;
     }
-  const fetchFpos = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FPO_LIST_URL}?county=${selectedCounty?.id}`
-    );
-    if (!res.ok) throw new Error("Failed to fetch fpos");
-    const data = await res.json();
+    const fetchFpos = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_FPO_LIST_URL}?county=${selectedCounty?.id}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch fpos");
+        const data = await res.json();
 
-    // ✅ Deduplicate FPOs by `id` (and fallback to name if needed)
-    const uniqueFpos = Object.values(
-      data.reduce((acc, fpo) => {
-        const key = `${fpo.id}-${fpo.name}`;
-        if (!acc[key]) {
-          acc[key] = fpo;
-        }
-        return acc;
-      }, {})
-    );
+        // ✅ Deduplicate FPOs by `id` (and fallback to name if needed)
+        const uniqueFpos = Object.values(
+          data.reduce((acc, fpo) => {
+            const key = `${fpo.id}-${fpo.name}`;
+            if (!acc[key]) {
+              acc[key] = fpo;
+            }
+            return acc;
+          }, {})
+        );
 
-    setFpos(uniqueFpos);
-  } catch (err) {
-    console.error(err);
-  }
-};
+        setFpos(uniqueFpos);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     fetchFpos();
   }, [selectedCounty?.id]);
+
+  useEffect(() => {
+    console.log({formData})
+    if (!formData?.ward) {
+      setSublocations([]);
+      setFormData((prev) => ({ ...prev, sublocation: "" }));
+      return;
+    }
+    const fetchSublocations = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SUBLOCATIONS_LIST_URL}?ward=${formData?.ward}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch fpos");
+        const data = await res.json();
+
+        setSublocations(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSublocations();
+  }, [formData?.ward]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -218,9 +252,8 @@ export default function RegisterPage() {
     let dataToPost = { ...formData };
     dataToPost.county = selectedCounty?.id;
 
-    if(dataToPost.ward){
-    // dataToPost.subcounty = selectedCounty?.id;
-
+    if (dataToPost.ward) {
+      // dataToPost.subcounty = selectedCounty?.id;
     }
 
     try {
@@ -242,9 +275,10 @@ export default function RegisterPage() {
         password: "",
         password2: "",
         county: "",
-        subcounty: "",
+        // subcounty: "",
         ward: "",
         fpo: "",
+        sublocation:""
       });
     } catch (err) {
       setMessage(err.message);
@@ -307,7 +341,8 @@ export default function RegisterPage() {
                       {isDisabled
                         ? "Applications not open"
                         : `Ends: ${
-                           FormatDate(county.end_of_application,false) || "Not specified"
+                            FormatDate(county.end_of_application, false) ||
+                            "Not specified"
                           }`}
                     </p>
                   </div>
@@ -473,7 +508,9 @@ export default function RegisterPage() {
 
               {/* {JSON.stringify(wards)} */}
 
-              <div className=" grid-cols-2 gap-4">
+               <div className="grid lg:grid-cols-2 gap-4">
+
+<div className=" grid-cols-2 gap-4">
                 {/* Ward dropdown */}
                 <select
                   name="ward"
@@ -490,6 +527,26 @@ export default function RegisterPage() {
                   ))}
                 </select>
               </div>
+              <div className=" grid-cols-2 gap-4">
+                {/* Ward dropdown */}
+                <select
+                  name="sublocation"
+                  value={formData.sublocation}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  //   required
+                >
+                  <option value="">Select Sublocation</option>
+                  {sublocations?.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+               </div>
+
+              
 
               {/* Passwords */}
               <div className="grid lg:grid-cols-2 gap-4">
