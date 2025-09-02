@@ -12,28 +12,28 @@ export default function LoginPage() {
   const router = useRouter();
 
   // Check localStorage on mount
-//   useEffect(() => {
-//     setLoadingUser(true);
-//     setTimeout(() => {
-//       const loginData = localStorage.getItem("login_response");
-//       if (loginData) {
-//         const parsed = JSON.parse(loginData);
-//         if (
-//           parsed?.user?.role?.toUpperCase() === "REVIEWER" ||
-//           parsed?.user?.role?.toUpperCase() === "ADMIN"
-//         ) {
-//           setLoadingUser(false);
+  //   useEffect(() => {
+  //     setLoadingUser(true);
+  //     setTimeout(() => {
+  //       const loginData = localStorage.getItem("login_response");
+  //       if (loginData) {
+  //         const parsed = JSON.parse(loginData);
+  //         if (
+  //           parsed?.user?.role?.toUpperCase() === "REVIEWER" ||
+  //           parsed?.user?.role?.toUpperCase() === "ADMIN"
+  //         ) {
+  //           setLoadingUser(false);
 
-//           router.push("/aha-admin/home");
-//         } else {
-//           setLoadingUser(false);
+  //           router.push("/aha-admin/home");
+  //         } else {
+  //           setLoadingUser(false);
 
-//           router.push("/applicant/home");
-//         }
-//       }
-//       setLoadingUser(false);
-//     }, 1000);
-//   }, [router]);
+  //           router.push("/applicant/home");
+  //         }
+  //       }
+  //       setLoadingUser(false);
+  //     }, 1000);
+  //   }, [router]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -85,35 +85,42 @@ export default function LoginPage() {
       {/* Right Form */}
       <div>
         <div className="flex items-center justify-between mb-6">
-            <Link
-              href="/"
-              className="text-blue-600 hover:underline text-sm font-medium"
-            >
-              ← Back to Home
-            </Link>
+          <Link
+            href="/"
+            className="text-blue-600 hover:underline text-sm font-medium"
+          >
+            ← Back to Home
+          </Link>
 
-            <h2 className="text-2xl font-bold">Login</h2>
-          </div>
+          <h2 className="text-2xl font-bold">Login</h2>
+        </div>
         {message && <p className="mb-4 text-red-600">{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
+          <div>
+            <label className="text-slate-900 text-sm">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email you used to register"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-slate-900 text-sm">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password ***"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full bg-[#009639] hover:bg-[#1a5a33f1] text-white py-2 rounded"

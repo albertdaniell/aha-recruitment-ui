@@ -79,12 +79,12 @@ export default function LandingPage() {
   const campaign = data[0];
 
   return (
-    <div className="min-h-screen  flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Main Section */}
-      <main className="flex flex-col md:flex-row items-center justify-between bg-slate-50 text-slate-800">
+      <main className="flex flex-col md:flex-row items-center justify-between bg-slate-50 text-slate-800 md:pt-0 pt-10">
         {/* Left Content */}
-        <section className="px-6 md:px-20 py-16 flex flex-col md:flex-row items-center gap-5">
-          <div className="md:w-1/2 mb-12 md:mb-0">
+        <section className="px-6 md:px-20 py-10 flex flex-col lg:flex-row lg:items-center gap-5">
+          <div className="lg:w-1/2 mb-12 md:mb-0">
             <h1 className="text-2xl md:text-4xl font-extrabold leading-snug text-slate-700">
               Ward Veterinary Surgeons and Veterinary Para Professionals for{" "}
               <span className="text-[#05a552]">
@@ -133,7 +133,7 @@ export default function LandingPage() {
           </div>
 
           {/* Right Illustration */}
-          <div className="md:w-1/2 flex justify-center">
+          <div className="lg:w-1/2 lg:flex lg:justify-center">
             <img
               src="/cow.jpg"
               alt="Agricultural Illustration"

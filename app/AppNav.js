@@ -48,10 +48,10 @@ function AppNav() {
   ];
 
   return (
-    <nav className="flex items-center justify-between px-10 md:px-20 py-4 shadow-sm bg-white w-full z-50 relative">
+    <nav className="flex items-center justify-between px-5 md:px-20 md:py-4 py-2 shadow-sm bg-white w-full z-50 md:relative fixed">
       <div className="flex items-center gap-2">
         <Link href={"/"}>
-          <img src="/emblem.png" alt="KALROAssist Logo" className="w-14 h-14" />
+          <img src={`/emblem.png`} alt="GOK" className="w-14 h-14" />
         </Link>
       </div>
 
@@ -72,7 +72,7 @@ function AppNav() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setOpenDropdown(!openDropdown)}
-                  className="bg-[#05a552] text-white md:px-4 md:py-2 px-6 py-2 md:text-lg text-sm rounded-full hover:bg-green-800 transition flex flex-row gap-2 items-center"
+                  className={`${openDropdown ? "bg-[#135231]":"bg-[#05a552]"}  text-white md:px-4 md:py-2 px-6 py-2 md:text-lg text-sm rounded-lg hover:bg-green-800 transition flex flex-row gap-2 items-center`}
                 >
                   <Person /> Account - {user?.user?.first_name}
                 </button>
@@ -82,7 +82,7 @@ function AppNav() {
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
                     <Link
                       href="/aha/login"
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 "
                       onClick={() => setOpenDropdown(false)}
                     >
                       My Account

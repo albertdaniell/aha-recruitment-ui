@@ -37,33 +37,39 @@ function Layout({ children }) {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Fixed Image */}
-      <div
-        className="hidden md:block fixed top-0 left-0 w-1/2 h-full bg-cover bg-center"
-        style={{ backgroundImage: "url('/cow.jpg')" }}
-      ></div>
+   <div className="min-h-screen flex">
+  {/* Left Fixed Image */}
+  <div
+    className="hidden md:block fixed top-0 left-0 w-2/5 h-full bg-cover bg-center"
+    style={{ backgroundImage: "url('/cow.jpg')" }}
+  ></div>
 
-      {/* Right Scrollable Content */}
-      <main className="md:ml-[50%] flex-1 flex items-center justify-center md:p-8 p-5">
-        <div className="w-full">
-          <div className="flex justify-between">
-            <img src="/emblem.png" className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]" />
-            <img src="/cog.png" className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]" />
-          </div>
+  {/* Right Scrollable Content */}
+  <main className="md:ml-[40%] flex-1 flex items-center justify-center md:p-8 p-5">
+    <div className="w-full">
+      <div className="flex justify-between">
+        <img
+          src="/emblem.png"
+          className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]"
+        />
+        <img
+          src="/cog.png"
+          className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]"
+        />
+      </div>
 
-          <h3 className="mt-5">
-            Ward Veterinary Surgeons and Veterinary Para Professionals for
-            County FMD & PPR Vaccination Campaign Application form
-          </h3>
-          <h3 className="mt-5">
-            By having an account you can track your application
-          </h3>
+      <h3 className="mt-5">
+        Ward Veterinary Surgeons and Veterinary Para Professionals for
+        County FMD & PPR Vaccination Campaign Application form
+      </h3>
+      <h3 className="mt-5">
+        By having an account you can track your application
+      </h3>
 
-          {children}
-        </div>
-      </main>
+      {children}
     </div>
+  </main>
+</div>
   );
 }
 

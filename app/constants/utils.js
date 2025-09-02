@@ -1,4 +1,7 @@
 function FormatDate(d,showTime=true) {
+  if(!d){
+    return d
+  }
   let date = new Date(d);
   var parts = date.toString().split(" ");
 

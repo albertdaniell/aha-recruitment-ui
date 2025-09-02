@@ -12,6 +12,7 @@ export default function RegisterPage() {
     first_name: "",
     last_name: "",
     email: "",
+    confirm_email_: "",
     phone: "",
     password: "",
     password2: "",
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     // subcounty: "",
     ward: "",
     fpo: "",
-    sublocation:""
+    sublocation: "",
   });
 
   // Data lists
@@ -87,8 +88,8 @@ export default function RegisterPage() {
     console.log({ selectedCounty });
     if (!selectedCounty?.id) {
       setWards([]);
-      setFpos([])
-      setSublocations([])
+      setFpos([]);
+      setSublocations([]);
       setFormData((prev) => ({ ...prev, ward: "", fpo: "" }));
       return;
     }
@@ -120,7 +121,7 @@ export default function RegisterPage() {
   useEffect(() => {
     console.log({ selectedCounty });
     setFormData((prev) => ({ ...prev, ward: "" }));
-    setWards([])
+    setWards([]);
 
     if (!formData?.fpo) {
       setWards([]);
@@ -155,16 +156,15 @@ export default function RegisterPage() {
 
   // Fetch FPOs when ward changes
   useEffect(() => {
-      setFormData((prev) => ({ ...prev, fpo: "",sublocation:"",ward:"" }));
- setFpos([]);
-      setSublocations([])
-      setWards([])
+    setFormData((prev) => ({ ...prev, fpo: "", sublocation: "", ward: "" }));
+    setFpos([]);
+    setSublocations([]);
+    setWards([]);
     if (!selectedCounty?.id) {
-      
       setFpos([]);
-      setSublocations([])
-      setWards([])
-      setFormData((prev) => ({ ...prev, fpo: "",sublocation:"",ward:"" }));
+      setSublocations([]);
+      setWards([]);
+      setFormData((prev) => ({ ...prev, fpo: "", sublocation: "", ward: "" }));
       return;
     }
     const fetchFpos = async () => {
@@ -195,7 +195,7 @@ export default function RegisterPage() {
   }, [selectedCounty?.id]);
 
   useEffect(() => {
-    console.log({formData})
+    console.log({ formData });
     if (!formData?.ward) {
       setSublocations([]);
       setFormData((prev) => ({ ...prev, sublocation: "" }));
@@ -229,6 +229,15 @@ export default function RegisterPage() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setMessage("Invalid email format");
+      return false;
+    }
+    if (!emailRegex.test(formData.confirm_email_)) {
+      setMessage("Invalid email format");
+      return false;
+    }
+
+    if (formData?.email !== formData?.confirm_email_) {
+      setMessage("Emails do not match");
       return false;
     }
     const phoneRegex = /^2547\d{8}$/;
@@ -278,7 +287,7 @@ export default function RegisterPage() {
         // subcounty: "",
         ward: "",
         fpo: "",
-        sublocation:""
+        sublocation: "",
       });
     } catch (err) {
       setMessage(err.message);
@@ -291,8 +300,8 @@ export default function RegisterPage() {
     <div>
       {countySelectionOpen ? (
         <>
-          <div className="bg-slate-100 p-2 max-h-[500px] overflow-auto mt-5">
-            <h1 className="text-xl font-bold mb-4">Select Your County</h1>
+          <div className="bg-slate-100 p-2 max-h-[450px] overflow-auto mt-5">
+            <h1 className="text-xl font-bold mb-2">Select Your County</h1>
 
             {/* Search */}
             <input
@@ -394,71 +403,116 @@ export default function RegisterPage() {
               </p>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4"
+              autoComplete="off" // Prevent browser autofill
+              onPaste={(e) => e.preventDefault()} // Prevent paste in all fields
+              onCopy={(e) => e.preventDefault()} // Optional: prevent copy
+              onCut={(e) => e.preventDefault()} // Optional: prevent cut
+            >
               {/* Names */}
               <div className="grid lg:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-slate-900 text-sm">First Name</label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    placeholder="First Name"
+                    value={formData.first_name}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-slate-900 text-sm">Last Name</label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    placeholder="Last Name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Email + Phone */}
+              <div className="grid lg:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-slate-900 text-sm">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    autoComplete="my-email" // Non-standard value to trick autofill
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    // autoComplete="off"
+                    onPaste={(e) => e.preventDefault()} // 👈 Prevent paste
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-900 text-sm">
+                    Confirm Email
+                  </label>
+                  <input
+                    type="email"
+                    name="confirm_email_"
+                    placeholder="Confirm Email"
+                    value={formData.confirm_email_}
+                    onChange={handleChange}
+                    autoComplete="new-email" // Non-standard value to trick autofill
+                    onPaste={(e) => e.preventDefault()} // 👈 Prevent paste
+                    className="w-full p-2 border border-slate-600 rounded focus:border-green-500"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-slate-900 text-sm">Phone</label>
                 <input
                   type="text"
-                  name="first_name"
-                  placeholder="First Name"
-                  value={formData.first_name}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  required
-                />
-                <input
-                  type="text"
-                  name="last_name"
-                  placeholder="Last Name"
-                  value={formData.last_name}
+                  name="phone"
+                  placeholder="Phone Number (e.g., 254712345678)"
+                  value={formData.phone}
                   onChange={handleChange}
                   className="w-full p-2 border rounded focus:border-green-500"
                   required
                 />
               </div>
 
-              {/* Email + Phone */}
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full p-2 border rounded focus:border-green-500"
-                required
-              />
-              <input
-                type="text"
-                name="phone"
-                placeholder="Phone Number (e.g., 254712345678)"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full p-2 border rounded focus:border-green-500"
-                required
-              />
-
               <div className="grid lg:grid-cols-2 gap-4">
                 {/* County dropdown */}
-                <div className="w-full border border-slate-500 rounded focus:border-green-500">
-                  <div className="flex items-center gap-4 px-2 py-1">
-                    <img
-                      src={selectedCounty.logo || "/cog.png"}
-                      alt={selectedCounty?.name}
-                      className="w-10 h-10 object-contain rounded-md"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h2 className="font-semibold truncate text-slate-600">
-                        {selectedCounty.name} County
-                      </h2>
+                <div>
+                  <label className="text-slate-900 text-sm">County</label>
+                  <div className="w-full border border-slate-500 rounded focus:border-green-500">
+                    <div className="flex items-center gap-4 px-2 py-1">
+                      <img
+                        src={selectedCounty.logo || "/cog.png"}
+                        alt={selectedCounty?.name}
+                        className="w-8 h-8 object-contain rounded-md"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h2 className="font-semibold truncate text-slate-600">
+                          {selectedCounty.name} County
+                        </h2>
+                      </div>
+                      <button
+                        onClick={() => setCountySelectionOpen(true)}
+                        className="text-blue-500 shrink-0"
+                      >
+                        Change
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setCountySelectionOpen(true)}
-                      className="text-blue-500 shrink-0"
-                    >
-                      Change
-                    </button>
                   </div>
                 </div>
+
                 {/* <select
                   name="county"
                   value={formData.county}
@@ -490,84 +544,102 @@ export default function RegisterPage() {
                 </select> */}
 
                 {/* FPO dropdown */}
-                <select
-                  name="fpo"
-                  value={formData.fpo}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  required
-                >
-                  <option value="">Select FPO</option>
-                  {fpos.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name}
-                    </option>
-                  ))}
-                </select>
+                <div>
+                  <label className="text-slate-900 text-sm">FPO</label>
+                  <select
+                    name="fpo"
+                    value={formData.fpo}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select FPO</option>
+                    {fpos.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* {JSON.stringify(wards)} */}
 
-               <div className="grid lg:grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-2 gap-4">
+                <div className=" grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-slate-900 text-sm">Ward</label>
+                    {/* Ward dropdown */}
+                    <select
+                      name="ward"
+                      value={formData.ward}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded focus:border-green-500"
+                      //   required
+                    >
+                      <option value="">Select Ward</option>
+                      {wards?.map((w) => (
+                        <option key={w.id} value={w.id}>
+                          {w.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-<div className=" grid-cols-2 gap-4">
-                {/* Ward dropdown */}
-                <select
-                  name="ward"
-                  value={formData.ward}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  //   required
-                >
-                  <option value="">Select Ward</option>
-                  {wards?.map((w) => (
-                    <option key={w.id} value={w.id}>
-                      {w.name}
-                    </option>
-                  ))}
-                </select>
+                <div className=" grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-slate-900 text-sm">
+                      Sublocation
+                    </label>
+                    {/* Sublocation dropdown */}
+                    <select
+                      name="sublocation"
+                      value={formData.sublocation}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded focus:border-green-500"
+                      //   required
+                    >
+                      <option value="">Select Sublocation</option>
+                      {sublocations?.map((w) => (
+                        <option key={w.id} value={w.id}>
+                          {w.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div className=" grid-cols-2 gap-4">
-                {/* Ward dropdown */}
-                <select
-                  name="sublocation"
-                  value={formData.sublocation}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  //   required
-                >
-                  <option value="">Select Sublocation</option>
-                  {sublocations?.map((w) => (
-                    <option key={w.id} value={w.id}>
-                      {w.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-               </div>
-
-              
 
               {/* Passwords */}
               <div className="grid lg:grid-cols-2 gap-4">
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  required
-                />
-                <input
-                  type="password"
-                  name="password2"
-                  placeholder="Confirm Password"
-                  value={formData.password2}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  required
-                />
+                <div>
+                  <label className="text-slate-900 text-sm">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-slate-900 text-sm">
+                    Confirm Password
+                  </label>
+                  <input
+                    type="password"
+                    name="password2"
+                    placeholder="Confirm Password"
+                    value={formData.password2}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  />
+                </div>
               </div>
 
               <button

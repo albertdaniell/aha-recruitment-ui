@@ -9,6 +9,8 @@ import axios from "axios";
 
 export default function ApplyPage() {
   const [profileExists, setProfileExists] = useState(false);
+  const [profile, setProfile] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [application, setApplication] = useState(null);
@@ -20,7 +22,7 @@ export default function ApplyPage() {
   const [showMessage, set_showMessage] = useState(null);
   const [Message, set_Message] = useState(null);
   const [uploadProgress, setUploadProgress] = useState({}); // { fieldName: 0-100 }
-
+ const [userData, setUserData] = useState(null);
   const openPdfModal = (url) => {
     setPdfUrl(url);
     setIsModalOpen(true);
@@ -31,6 +33,34 @@ export default function ApplyPage() {
     setPdfUrl(null);
   };
   const router = useRouter();
+
+  // ✅ Fetch user details
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await APP_FETCH(
+          `${process.env.NEXT_PUBLIC_USER_ME_URL}`,
+          "GET"
+        );
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        setUserData((prev) => ({
+          ...prev,
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          county: data.county || "",
+          subcounty: data.subcounty || "",
+          ward: data.ward || "",
+          fpo: data.fpo || "",
+        }));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchProfileAndApplication = async () => {
@@ -44,6 +74,11 @@ export default function ApplyPage() {
         let profileRes = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL)
 
         setProfileExists(profileRes.ok);
+        if(profileRes.ok){
+          let data = await profileRes.json();
+
+          setProfile(data)
+        }
 
         // const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
         //   headers: { Authorization: `Bearer ${token}` },
@@ -291,22 +326,29 @@ export default function ApplyPage() {
 
   if (loading) return <p className="p-8">Loading...</p>;
 
-  if (!profileExists)
-    return (
-      <div className="p-8 text-center">
-        <h1 className="text-5xl font-extrabold text-red-600 mb-4">Oops! 🚫</h1>
-        <p className="text-xl text-gray-700 mb-6">
-          You need to <span className="font-bold">update your profile</span>{" "}
-          before applying.
-        </p>
-        <button
-          onClick={() => router.push("/applicant/profile")}
-          className="bg-teal-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-teal-700 transition"
-        >
-          Update Profile Now
-        </button>
-      </div>
-    );
+ if (!profileExists || (profileExists && !profile.is_updated)) {
+  return (
+    <div className="p-8 text-center">
+      <h1 className="text-5xl font-extrabold text-red-600 mb-4">Oops! 🚫</h1>
+      <p className="text-xl text-gray-700 mb-6">
+      
+            You need to <span className="font-bold">update your profile</span>{" "}
+            before applying.
+          
+       
+      </p>
+      <button
+        onClick={() => router.push("/applicant/profile")}
+        className="bg-teal-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-teal-700 transition"
+      >
+      Update Profile Now
+      </button>
+    </div>
+  );
+}
+
+  
+
 
   return (
     <div className="">
@@ -338,6 +380,15 @@ export default function ApplyPage() {
       <p className="text-lg mb-2">
         <strong>Status:</strong> {draftStatus}
       </p>
+      <div className="flex shrink gap-3 items-center">
+        <img
+                src={profile.profile_picture}
+                alt="image"
+                // alt={`${app.first_name} ${app.last_name}`}
+                className="w-12 h-12 rounded-full border object-cover my-5"
+              />
+              <p className="text-slate-600">Applying as {userData?.first_name} {userData?.last_name} </p>
+      </div>
       {application?.id && (
         <p className="text-sm mb-4 text-slate-500">
           Application ID: {application?.id}

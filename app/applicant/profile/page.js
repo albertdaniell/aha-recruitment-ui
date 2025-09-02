@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import AppModal from "@/app/components/AppModal/AppModal";
 
 export default function UpdateProfilePage() {
   const [profile, setProfile] = useState({
@@ -23,6 +24,8 @@ export default function UpdateProfilePage() {
   const [hasProfile, setHasProfile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
+  let [showModal,setShowModal] = useState(null)
+  let [modalMsg,setModalMsg]=useState(null)
 
   const router = useRouter();
 
@@ -175,11 +178,14 @@ export default function UpdateProfilePage() {
         const data = await res.json();
         throw new Error(data.detail || "Failed to save profile");
       }
-
-      setMessage(
-        hasProfile
+let msg = hasProfile
           ? "Profile updated successfully!"
           : "Profile created successfully!"
+      setShowModal(true)
+      
+      setModalMsg(msg)
+      setMessage(
+        msg
       );
       setHasProfile(true);
     } catch (err) {
@@ -194,6 +200,16 @@ export default function UpdateProfilePage() {
   return (
    <div>
     <h1 className="text-4xl font-bold mb-6">Update Profile</h1>
+
+<AppModal
+        isOpen={showModal}
+        setIsClose={() => {
+          setShowModal(false);
+          setModalMsg(null);
+        }}
+        title={"Message"}
+        body={<p>{modalMsg}</p>}
+      />
 
      {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -214,7 +230,7 @@ export default function UpdateProfilePage() {
         
 
       
-      {message && <p className="mb-4 text-red-600">{message}</p>}
+      {message && <p className="mb-4 text-blue-500">{message}</p>}
 
       <form onSubmit={handleSubmit} className=" gap-6">
         {/* LEFT SIDE */}
