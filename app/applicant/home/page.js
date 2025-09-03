@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Clipboard, InfoFill, Person } from "akar-icons";
 import { FormatDate } from "@/app/constants/utils";
-
+import Stepper from "./Stepper";
 export default function HomePage() {
   const [user, setUser] = useState(null);
   const [hasProfile, setHasProfile] = useState(false);
@@ -13,6 +13,30 @@ export default function HomePage() {
   const [userCounty, setUserCounty] = useState(null); // store user application
   const [counties, setCounties] = useState(null);
   const router = useRouter();
+
+  let [currentStep, setCurrentStep] = useState(0);
+
+  let defineCurrentStep = () => {
+    if (hasProfile) {
+      setCurrentStep(1);
+      if (application) {
+        if (application?.status === "draft") {
+          setCurrentStep(2);
+        }
+        if (application?.status === "submitted") {
+          setCurrentStep(3);
+        }
+        if (application?.is_shortlisted === "submitted") {
+          setCurrentStep(4);
+        }
+        // application?.is_not_shortlisted
+      }
+    }
+  };
+
+  useEffect(() => {
+    defineCurrentStep();
+  }, [hasProfile, application]);
 
   // Fetch counties on mount
   useEffect(() => {
@@ -86,6 +110,9 @@ export default function HomePage() {
   const handleUpdateProfile = () => {
     router.push("/applicant/profile");
   };
+  const handleUpdateAccount = () => {
+    router.push("/applicant/user");
+  };
 
   if (loading) return <p className="p-8">Loading...</p>;
 
@@ -95,15 +122,17 @@ export default function HomePage() {
       {/* {JSON?.stringify(userCounty)} */}
 
       {userCounty && (
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-start justify-between">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 items-start justify-between">
           {/* LEFT SIDE */}
-          <div className="col-span-2">
+          <div className="lg:col-span-2">
             <h1 className="text-3xl font-bold text-[#009639]">
               Welcome, {user.first_name} {user.last_name}!
             </h1>
             <p className="text-gray-600 mt-2">Email: {user.email}</p>
             {user.fpo?.name && (
-              <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
+              <p className="text-slate-500 mt-2 text-sm">
+                FPO: {user.fpo?.name}
+              </p>
             )}
           </div>
 
@@ -119,7 +148,9 @@ export default function HomePage() {
                 {userCounty.name} County
               </h2>
               <p className="text-slate-500 text-xs">
-                Ends: {FormatDate(userCounty.end_of_application,false) || "Not specified"}
+                Ends:{" "}
+                {FormatDate(userCounty.end_of_application, false) ||
+                  "Not specified"}
               </p>
             </div>
           </div>
@@ -156,37 +187,62 @@ export default function HomePage() {
       </div>
 
       {/* Cards */}
+      <Stepper currentStep={currentStep} />
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Update Profile Card */}
         <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
-            <Person size={40} />
-            <h2 className="text-2xl font-bold mb-2 mt-5">Update Profile</h2>
+            <Person color="#009639" size={40} />
+            <h2 className="text-2xl font-bold mb-2 mt-3">Update Profile</h2>
             <p className="text-gray-600">
               Keep your personal information up to date before making an
               application
             </p>
           </div>
-          <button
-            onClick={handleUpdateProfile}
-            className="mt-6 bg-[#009639] text-white py-3 rounded-lg hover:bg-[#007a2f] text-lg font-bold transition"
-          >
-            Update Profile
-          </button>
+          <div className="grid sm:grid-cols-2 sm:gap-5">
+            <button
+              onClick={handleUpdateProfile}
+              className="w-full mt-6 bg-[#009639] text-white py-3 rounded-lg hover:bg-[#007a2f] text-lg font-bold transition"
+            >
+              Update Profile
+            </button>
+
+            <button
+              onClick={handleUpdateAccount}
+              className="w-full sm:mt-6 mt-3 border border-[#009639] text-[#009639] py-3 rounded-lg hover:bg-[#f4f4f4] text-lg  transition"
+            >
+              User Account
+            </button>
+          </div>
         </div>
 
         {/* Apply Now / Continue Application Card */}
         <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
-            <Clipboard size={40} />
-            <h2 className="text-xl font-bold mb-2 mt-5">
+            <Clipboard color="indigo" size={40} />
+            <h2 className="text-lg font-bold mb-2 mt-3">
               {application
-                ? application.status === "draft"
-                  ? `Continue Your Application ${userCounty?.end_of_application ? `Deadline - (${userCounty?.end_of_application})`: "- Deadline not specificied"}`
+                ? application?.status === "draft"
+                  ? `Continue Your Application ${
+                      userCounty?.end_of_application
+                        ? `(Deadline ${FormatDate(
+                            userCounty?.end_of_application,
+                            false
+                          )})`
+                        : "- Deadline Not Specificied"
+                    }`
                   : "Application Submitted"
-                : `Apply Now ${userCounty?.end_of_application ? `Deadline - (${userCounty?.end_of_application})`: "(Deadline not specificied)"} ${
+                : `Apply Now ${
+                    userCounty?.end_of_application
+                      ? `(Deadline ${FormatDate(
+                          userCounty?.end_of_application,
+                          false
+                        )})`
+                      : "(Deadline Not Specificied)"
+                  } ${
                     user.county?.name
-                      ? `for ${user.county.name} - ${user?.fpo?.name}`
+                      ? `for ${user?.county.name}`
                       : ""
                   } & Upload Certificates`}
             </h2>
@@ -226,9 +282,9 @@ export default function HomePage() {
         {/* Complaints / Help Card */}
         <div className="bg-white shadow-md rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl transition">
           <div>
-            <InfoFill size={40} />
+            <InfoFill color="#9e590b" size={40} />
 
-            <h2 className="text-2xl font-bold mb-2 mt-5">Complaints / Help</h2>
+            <h2 className="text-2xl font-bold mb-2 mt-3">Complaints / Help</h2>
             <p className="text-gray-600">
               Need assistance or want to submit a complaint? We are here to help
               you!

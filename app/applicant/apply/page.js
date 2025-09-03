@@ -108,6 +108,23 @@ export default function ApplyPage() {
     }
   };
 
+  let checkApplicationUnsaved=()=>{
+    if(application){
+      console.log({application})
+// let check = application?.find((app)=>{
+//       app?.saved === true
+//     })
+
+//     console.log(check)
+
+//     return check
+    }
+    
+  }
+  useEffect(()=>{
+    checkApplicationUnsaved()
+  },[application])
+
   const handleFileSave_Old = async (field) => {
     if (draftStatus === "submitted") return;
     if (!application || !application[field]) return; // <-- prevents null access
@@ -535,6 +552,7 @@ export default function ApplyPage() {
       </div>
 
       {/* Modal */}
+      
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white w-11/12 md:w-3/4 lg:w-2/3 h-[90vh] rounded-xl shadow-lg overflow-hidden relative">
@@ -546,7 +564,7 @@ export default function ApplyPage() {
               ✕
             </button>
             {/* PDF iframe */}
-            <iframe src={pdfUrl} title="PDF Viewer" className="w-full h-full m-2" />
+            <iframe src={pdfUrl} title="PDF Viewer" className="w-full h-full" />
           </div>
         </div>
       )}

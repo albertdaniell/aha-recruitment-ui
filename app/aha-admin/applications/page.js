@@ -193,13 +193,24 @@ export default function ApplicationsPage() {
     
       <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
       {/* Export button */}
-        <button
+      <button
+        disabled={applications?.length === 0}
           onClick={exportToExcel}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition mb-5 text-sm"
+          className={`${applications?.length === 0 ? "bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700"} px-4 py-2  text-white rounded  transition mb-5 text-sm`}
         >
          Export to Excel
         </button>
-      <div className="overflow-x-auto rounded-lg shadow">
+        {
+        applications?.length ===0
+        ?
+        <div className="bg-orange-300 p-5 rounded-md">
+            <p className="text-orange-800">
+              There seems to be no applications made.
+            </p>
+          </div>
+          :
+
+ <div className="overflow-x-auto rounded-lg shadow">
         <table className="min-w-full border border-gray-200 text-md text-slate-800">
           <thead className="bg-gray-100">
             <tr>
@@ -282,6 +293,8 @@ export default function ApplicationsPage() {
           </tbody>
         </table>
       </div>
+      }
+     
     </div>
   );
 }

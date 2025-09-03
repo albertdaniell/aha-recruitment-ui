@@ -7,13 +7,15 @@ import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 export default function ApplicationsPage() {
-  const [applications, setApplications] = useState(null);
+  const [applications, setApplications] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [counties, setCounties] = useState(null);
   const [userCounty, setUserCounty] = useState(null); // store user application
 
   const router = useRouter();
+
+  let shorlisted = applications?.filter(app_1=>app_1?.is_shortlisted === true)
 
   // Fetch counties on mount
   useEffect(() => {
@@ -195,13 +197,24 @@ export default function ApplicationsPage() {
     
       <h1 className="text-2xl font-bold mb-6">Shorlisted {user.county?.name ? `for ${user.county.name} county`:""}</h1>
       {/* Export button */}
+      {/* {JSON.stringify(applications)} */}
         <button
+        disabled={shorlisted?.length === 0}
           onClick={exportToExcel}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition mb-5 text-sm"
+          className={`${shorlisted?.length === 0 ? "bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700"} px-4 py-2  text-white rounded  transition mb-5 text-sm`}
         >
          Export to Excel
         </button>
-      <div className="overflow-x-auto rounded-lg shadow">
+
+        {
+          shorlisted?.length === 0 ?
+          <div className="bg-orange-300 p-5 rounded-md">
+            <p className="text-orange-800">
+              No shorlisted candidates
+            </p>
+          </div>
+          :
+           <div className="overflow-x-auto rounded-lg shadow">
         <table className="min-w-full border border-gray-200">
           <thead className="bg-gray-100">
             <tr>
@@ -235,7 +248,7 @@ export default function ApplicationsPage() {
             </tr>
           </thead>
           <tbody>
-            {applications?.filter(app_1=>app_1?.is_shortlisted === true)?.map((app,index) => (
+            {shorlisted?.map((app,index) => (
               <tr
                 key={app.id}
                 className={`${
@@ -287,6 +300,8 @@ export default function ApplicationsPage() {
           </tbody>
         </table>
       </div>
+        }
+    
     </div>
   );
 }

@@ -20,6 +20,7 @@ export default function ProfilePage() {
     previous_password: "",
     password: "",
     password2: "",
+    sublocation: "",
   });
 
   const [counties, setCounties] = useState([]);
@@ -29,8 +30,10 @@ export default function ProfilePage() {
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [modalBody, setModalBody] = useState("");
+  const [sublocations, setSublocations] = useState([]);
+  let [showPasswordFields, SetshowPasswordFields] = useState(null);
 
-   const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("login_response");
     router.push("/aha/login");
   };
@@ -44,6 +47,7 @@ export default function ProfilePage() {
         );
         if (!res.ok) throw new Error("Failed to fetch user");
         const data = await res.json();
+        console.log({ data });
         setFormData((prev) => ({
           ...prev,
           first_name: data.first_name || "",
@@ -53,6 +57,7 @@ export default function ProfilePage() {
           county: data.county || "",
           subcounty: data.subcounty || "",
           ward: data.ward || "",
+          sublocation: data.sublocation || "",
           fpo: data.fpo || "",
         }));
       } catch (err) {
@@ -71,6 +76,29 @@ export default function ProfilePage() {
     };
     fetchCounties();
   }, []);
+
+  useEffect(() => {
+    console.log({ formData });
+    if (!formData?.ward) {
+      setSublocations([]);
+      // setFormData((prev) => ({ ...prev, sublocation: "" }));
+      return;
+    }
+    const fetchSublocations = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SUBLOCATIONS_LIST_URL}?ward=${formData?.ward}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch fpos");
+        const data = await res.json();
+
+        setSublocations(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSublocations();
+  }, [formData?.ward]);
 
   // ✅ Fetch wards when county changes
   useEffect(() => {
@@ -131,7 +159,9 @@ export default function ProfilePage() {
         throw new Error("Update failed");
       }
 
-      setModalBody("✅ Profile updated successfully! You will be required to login again to refresh your changes.");
+      setModalBody(
+        "✅ Profile updated successfully! You will be required to login again to refresh your changes."
+      );
       setShowModal(true);
 
       setFormData((prev) => ({
@@ -154,231 +184,296 @@ export default function ProfilePage() {
         onSubmit={handleUpdate}
         className="space-y-4 shadow rounded-lg p-5 bg-white"
       >
-        {/* Names */}
-        <div className="grid lg:grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="first_name"
-              className="block text-sm font-medium text-slate-700"
+        {showPasswordFields && (
+          <>
+            {/* Passwords btn */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                SetshowPasswordFields(!showPasswordFields);
+              }}
+              className="text-blue-500 underline"
             >
-              First Name
-            </label>
-            <input
-              id="first_name"
-              type="text"
-              name="first_name"
-              value={formData.first_name}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-              required
-            />
-            {errors.first_name && (
-              <p className="text-red-500 text-sm">{errors.first_name}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="last_name"
-              className="block text-sm font-medium text-slate-700"
-            >
-              Last Name
-            </label>
-            <input
-              id="last_name"
-              type="text"
-              name="last_name"
-              value={formData.last_name}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-              required
-            />
-            {errors.last_name && (
-              <p className="text-red-500 text-sm">{errors.last_name}</p>
-            )}
-          </div>
-        </div>
+             Show my details
 
-        {/* Email */}
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-slate-700"
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            disabled
-            type="email"
-            name="email"
-            value={formData.email}
-            className="w-full p-2 border rounded bg-slate-300 cursor-not-allowed"
-            required
-          />
-        </div>
+            </button>
+          </>
+        )}
 
-        {/* Phone */}
-        <div>
-          <label
-            htmlFor="phone"
-            className="block text-sm font-medium text-slate-700"
-          >
-            Phone
-          </label>
-          <input
-            id="phone"
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:border-green-500"
-            required
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-sm">{errors.phone}</p>
-          )}
-        </div>
+        {showPasswordFields ? (
+          <>
+            <div className="grid lg:grid-cols-3 gap-4">
+              <div>
+                <label
+                  htmlFor="previous_password"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Previous Password
+                </label>
+                <input
+                  id="previous_password"
+                  type="password"
+                  name="previous_password"
+                  value={formData.previous_password}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                />
+                {errors.previous_password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.previous_password}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  New Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="password2"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  id="password2"
+                  type="password"
+                  name="password2"
+                  value={formData.password2}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                />
+                {errors.password2 && (
+                  <p className="text-red-500 text-sm">{errors.password2}</p>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Names */}
+            <div className="grid lg:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="first_name"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  First Name
+                </label>
+                <input
+                  id="first_name"
+                  type="text"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  required
+                />
+                {errors.first_name && (
+                  <p className="text-red-500 text-sm">{errors.first_name}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="last_name"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Last Name
+                </label>
+                <input
+                  id="last_name"
+                  type="text"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  required
+                />
+                {errors.last_name && (
+                  <p className="text-red-500 text-sm">{errors.last_name}</p>
+                )}
+              </div>
+            </div>
 
-        {/* County + FPO */}
-        <div className="grid lg:grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="county"
-              className="block text-sm font-medium text-slate-700"
-            >
-              County
-            </label>
-            <select
-              id="county"
-              name="county"
-              value={formData.county || ""}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-              required
-            >
-              <option value="">Select County</option>
-              {counties.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-            {errors.county && (
-              <p className="text-red-500 text-sm">{errors.county}</p>
-            )}
-          </div>
+            {/* Email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                disabled
+                type="email"
+                name="email"
+                value={formData.email}
+                className="w-full p-2 border border-slate-300 rounded bg-slate-200 text-slate-500 cursor-not-allowed"
+                required
+              />
+            </div>
 
-          <div>
-            <label
-              htmlFor="fpo"
-              className="block text-sm font-medium text-slate-700"
-            >
-              FPO
-            </label>
-            <select
-              id="fpo"
-              name="fpo"
-              value={formData.fpo || ""}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-              required
-            >
-              <option value="">Select FPO</option>
-              {fpos.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.name}
-                </option>
-              ))}
-            </select>
-            {errors.fpo && <p className="text-red-500 text-sm">{errors.fpo}</p>}
-          </div>
-        </div>
+            {/* Phone */}
+            <div>
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Phone
+              </label>
+              <input
+                id="phone"
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+                required
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone}</p>
+              )}
+            </div>
 
-        {/* Ward */}
-        <div>
-          <label
-            htmlFor="ward"
-            className="block text-sm font-medium text-slate-700"
-          >
-            Ward
-          </label>
-          <select
-            id="ward"
-            name="ward"
-            value={formData.ward || ""}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:border-green-500"
-          >
-            <option value="">Select Ward</option>
-            {wards.map((w) => (
-              <option key={w.id} value={w.id}>
-                {w.name}
-              </option>
-            ))}
-          </select>
-          {errors.ward && <p className="text-red-500 text-sm">{errors.ward}</p>}
-        </div>
+            {/* County + FPO */}
+            <div className="grid lg:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="county"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  County
+                </label>
+                <select
+                  id="county"
+                  name="county"
+                  value={formData.county || ""}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  required
+                >
+                  <option value="">Select County</option>
+                  {counties.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.county && (
+                  <p className="text-red-500 text-sm">{errors.county}</p>
+                )}
+              </div>
 
-        {/* Passwords */}
-        <div className="grid lg:grid-cols-3 gap-4">
-          <div>
-            <label
-              htmlFor="previous_password"
-              className="block text-sm font-medium text-slate-700"
+              <div>
+                <label
+                  htmlFor="fpo"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  FPO
+                </label>
+                <select
+                  id="fpo"
+                  name="fpo"
+                  value={formData.fpo || ""}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  required
+                >
+                  <option value="">Select FPO</option>
+                  {fpos.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.fpo && (
+                  <p className="text-red-500 text-sm">{errors.fpo}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Ward */}
+            <div>
+              <label
+                htmlFor="ward"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Ward
+              </label>
+              {/* {formData?.ward || ""} */}
+              <select
+                id="ward"
+                name="ward"
+                value={formData?.ward || ""}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+              >
+                <option value="">Select Ward</option>
+                {wards.map((w) => (
+                  <option key={w.id} value={w.id}>
+                    {w.name}
+                  </option>
+                ))}
+              </select>
+              {errors.ward && (
+                <p className="text-red-500 text-sm">{errors.ward}</p>
+              )}
+            </div>
+            <div>
+              <label
+                htmlFor="ward"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Sublocation
+              </label>
+              <select
+                name="sublocation"
+                value={formData?.sublocation}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:border-green-500"
+                //   required
+              >
+                <option value="">Select Sublocation</option>
+                {sublocations?.map((w) => (
+                  <option key={w.id} value={w.id}>
+                    {w.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
+
+        {!showPasswordFields && (
+          <>
+            {/* Passwords btn */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                SetshowPasswordFields(!showPasswordFields);
+              }}
+              className="text-blue-500 underline"
             >
-              Previous Password
-            </label>
-            <input
-              id="previous_password"
-              type="password"
-              name="previous_password"
-              value={formData.previous_password}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-            />
-            {errors.previous_password && (
-              <p className="text-red-500 text-sm">{errors.previous_password}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-slate-700"
-            >
-              New Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="password2"
-              className="block text-sm font-medium text-slate-700"
-            >
-              Confirm Password
-            </label>
-            <input
-              id="password2"
-              type="password"
-              name="password2"
-              value={formData.password2}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:border-green-500"
-            />
-            {errors.password2 && (
-              <p className="text-red-500 text-sm">{errors.password2}</p>
-            )}
-          </div>
-        </div>
+              Change password
+            </button>
+          </>
+        )}
 
         {/* Submit */}
         <button
@@ -395,7 +490,7 @@ export default function ProfilePage() {
         isOpen={showModal}
         setIsClose={() => {
           setShowModal(false);
-           handleLogout()
+          handleLogout();
         }}
         body={<p>{modalBody}</p>}
       />

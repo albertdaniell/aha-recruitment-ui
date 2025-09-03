@@ -21,7 +21,8 @@ export default function ApplicationsPage() {
   const [showAll, setShowAll] = useState(false);
 
   // Limit to 4 unless "showAll" is true
-const submittedApps = applications?.filter((app) => app.status === "submitted");
+// const submittedApps = applications?.filter((app) => app.status === "submitted");
+const submittedApps = applications
 
 // ✅ Show 4 first
 const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
@@ -198,6 +199,16 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
         </div>
       )}
 
+      {
+        applications?.length ===0
+        &&
+        <div className="bg-orange-300 p-5 rounded-md">
+            <p className="text-orange-800">
+              There seems to be no applications made.
+            </p>
+          </div>
+      }
+
       <div className="grid md:grid-cols-3  gap-6 my-4">
         {/* School Year */}
         <div className="bg-gradient-to-r from-sky-400 to-sky-500 rounded-2xl shadow-md px-6 py-4  text-center">
@@ -228,9 +239,12 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
 
       <div className="grid grid-cols-3 gap-5">
         <div className="shadow-lg rounded-xl p-3 bg-white col-span-1">
-          <p className="text-sm text-slate-600 mb-3">Submissions by Gender</p>
+          <p className="text-sm text-slate-600 mb-3">Submissions By Gender</p>
           {/* {JSON.stringify(stats)} */}
-          {stats && (
+          {
+            stats?.gender_stats?.male ?
+              <>
+               {stats && (
             <AppChart
               options={make_gender_pie(
                 stats?.gender_stats,
@@ -240,10 +254,17 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
               )}
             />
           )}
+              </>
+:
+<div className="flex items-center justify-center h-full text-slate-600">
+<p className="text-center">No stats to show</p>
+</div>
+          }
+         
         </div>
         <div className="shadow-lg rounded-xl p-3 bg-white col-span-2">
-          <p className="text-sm text-slate-600 mb-3">Submissions by Date</p>
-
+          <p className="text-sm text-slate-600 mb-3">Last 7 Days Submission</p>
+ {/* {JSON.stringify(stats)} */}
           {stats && (
             <AppChart
               options={make_data_past_7_days_graph(stats?.daily_stats)}

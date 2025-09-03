@@ -14,13 +14,38 @@ import {
   Pencil,
   ThreeLineHorizontal,
 } from "akar-icons";
+import { FormatDate } from "../constants/utils";
 export default function DashboardLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile sidebar toggle
+ const [userCounty, setUserCounty] = useState(null); // store user application
+  const [counties, setCounties] = useState(null);
 
+  // Fetch counties on mount
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_COUNTY_LIST_URL);
+        if (!res.ok) throw new Error("Failed to fetch counties");
+        const data = await res.json();
+        setCounties(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCounties();
+  }, []);
+
+    useEffect(() => {
+    if (counties && user) {
+      let county = counties?.find((c) => c?.id === user.county?.id);
+      setUserCounty(county);
+    }
+  }, [user, counties]);
   useEffect(() => {
     const loginData = JSON.parse(localStorage.getItem("login_response"));
     if (loginData && loginData.user) {
@@ -59,15 +84,17 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Mobile Menu Button */}
-      <div className="md:hidden absolute top-4 left-4 z-50">
+      <div className="md:hidden  top-2 left-4 z-50 fixed">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 bg-white rounded shadow"
         >
           {sidebarOpen ? (
-            <CircleX size={24} color="red" />
+            <CircleX size={30} color="red" />
           ) : (
-            <ThreeLineHorizontal color="green" size={24} />
+           <div className="flex flex-row gap-2 items-center">
+             <ThreeLineHorizontal color="green" size={30} /> MENU
+           </div>
           )}
         </button>
       </div>
@@ -78,8 +105,25 @@ export default function DashboardLayout({ children }) {
     ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <div className="mt-14 md:mt-0">
-          <h2 className="text-2xl font-bold mb-6 text-white">Dashboard</h2>
-          <nav className="flex flex-col space-y-3">
+          <h2 className="text-xl font-bold mb-6 text-white">Dashboard</h2>
+           <div className="inline-flex items-center gap-3 px-2 py-3 border-green-500 border rounded-lg  bg-white mb-5 w-full">
+              <img
+                src={userCounty?.logo || "/cog.png"}
+                alt={userCounty?.name}
+                className="w-9 h-9 object-contain rounded-md"
+              />
+              <div className="min-w-0">
+                <h2 className="font-semibold truncate text-slate-600 text-xs">
+                  {userCounty?.name} County
+                </h2>
+                <p className="text-slate-500 text-xs">
+                  Ends:{" "}
+                  {FormatDate(userCounty?.end_of_application, false) ||
+                    "Not specified"}
+                </p>
+              </div>
+            </div>
+          <nav className="flex flex-col space-y-1">
             {sidebarLinks.map((link) => {
               const isActive =
                 link.href === "/"

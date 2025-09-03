@@ -3,10 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import {
-  CircleX,
-  ThreeLineHorizontal,
-} from "akar-icons";
+import { CircleX, ThreeLineHorizontal } from "akar-icons";
+import { FormatDate } from "../constants/utils";
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
@@ -14,6 +12,24 @@ export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile sidebar toggle
+  const [userCounty, setUserCounty] = useState(null); // store user application
+  const [counties, setCounties] = useState(null);
+
+  // Fetch counties on mount
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_COUNTY_LIST_URL);
+        if (!res.ok) throw new Error("Failed to fetch counties");
+        const data = await res.json();
+        setCounties(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCounties();
+  }, []);
 
   useEffect(() => {
     const loginData = JSON.parse(localStorage.getItem("login_response"));
@@ -29,12 +45,22 @@ export default function DashboardLayout({ children }) {
     setLoading(false);
   }, [router]);
 
+  useEffect(() => {
+    if (counties && user) {
+      let county = counties?.find((c) => c?.id === user.county?.id);
+      setUserCounty(county);
+    }
+  }, [user, counties]);
+
   const sidebarLinks = [
     { name: "Home", href: "/aha-admin/home" },
     { name: "Applications", href: "/aha-admin/applications" },
     { name: "Shortlisted", href: "/aha-admin/shortlisted" },
     { name: "County Settings", href: "/aha-admin/county-setting" },
-    { name: "Users", href: "/aha-admin/users" },
+    // { name: "Advertisement", href: "/applicant/advertisement" },
+    { name: "Website Home", href: "/" },
+
+    // { name: "Users", href: "/aha-admin/users" },
   ];
 
   const handleLogout = () => {
@@ -82,9 +108,47 @@ export default function DashboardLayout({ children }) {
     ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <div className="mt-14 md:mt-0">
-          <h2 className="text-2xl font-bold mb-6 text-white">Dashboard</h2>
-          <nav className="flex flex-col space-y-3">
+          <h2 className="text-xl font-bold mb-4 text-white">Dashboard</h2>
+          <nav className="flex flex-col space-y-1">
+            <div className="inline-flex items-center gap-3 px-2 py-3 border-green-500 border rounded-lg  bg-white mb-5">
+              <img
+                src={userCounty?.logo || "/cog.png"}
+                alt={userCounty?.name}
+                className="w-9 h-9 object-contain rounded-md"
+              />
+              <div className="min-w-0">
+                <h2 className="font-semibold truncate text-slate-600 text-xs">
+                  {userCounty?.name} County
+                </h2>
+                <p className="text-slate-500 text-xs">
+                  Ends:{" "}
+                  {FormatDate(userCounty?.end_of_application, false) ||
+                    "Not specified"}
+                </p>
+              </div>
+            </div>
             {sidebarLinks.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(link.href);
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 py-2 rounded  hover:text-teal-600 hover:bg-gray-50 ${
+                    isActive
+                      ? "bg-white text-slate-700 font-semibold"
+                      : "text-white"
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+            {/* {sidebarLinks.map((link) => {
               const isActive = pathname?.includes(link.href);
               return (
                 <Link
@@ -98,7 +162,7 @@ export default function DashboardLayout({ children }) {
                   {link.name}
                 </Link>
               );
-            })}
+            })} */}
           </nav>
         </div>
 
