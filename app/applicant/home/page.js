@@ -77,7 +77,11 @@ export default function HomePage() {
         const profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log({profileRes})
+        if(profileRes.is_updated){
         setHasProfile(profileRes.ok);
+
+        }
 
         // Get application
         const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
@@ -244,7 +248,7 @@ export default function HomePage() {
                     user.county?.name
                       ? `for ${user?.county.name}`
                       : ""
-                  } & Upload Certificates`}
+                  } & Upload Documents`}
             </h2>
             <p className="text-gray-600">
               {hasProfile

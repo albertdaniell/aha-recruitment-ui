@@ -116,7 +116,7 @@ export default function LandingPage() {
               </Link>
 
               <a
-                href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
+                href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
                 download
                 className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
               >
@@ -242,7 +242,7 @@ export default function LandingPage() {
               </Link>
 
               <a
-                href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
+                href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
                 download
                 className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
               >

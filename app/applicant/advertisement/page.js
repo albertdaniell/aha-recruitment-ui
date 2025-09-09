@@ -115,7 +115,7 @@ export default function Page() {
 
             {/* Download PDF button */}
             <a
-              href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
+              href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
               download
               className="inline-block px-6 py-3 text-slate-700 font-semibold text-lg rounded-full shadow-lg border-[1px] border-[#009639] bg-[#0096396d]  transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
             >
@@ -219,7 +219,7 @@ export default function Page() {
 
             {/* Download PDF button */}
             <a
-              href="/advert_Vaccination_sample.pdf" // 👈 path to your PDF in /public
+              href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
               download
               className="inline-block px-6 py-3 text-slate-700 font-semibold text-lg rounded-full shadow-lg border-[1px] border-[#009639] bg-[#0096396d]  transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
             >
