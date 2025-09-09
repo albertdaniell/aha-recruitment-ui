@@ -74,12 +74,17 @@ export default function HomePage() {
 
       try {
         // Check profile
-        const profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
+        let profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log({profileRes})
+        
+        profileRes = await profileRes.json()
+
+        console.log(profileRes)
         if(profileRes.is_updated){
-        setHasProfile(profileRes.ok);
+        setHasProfile(true);
+        }else{
+        setHasProfile(false);
 
         }
 
@@ -251,6 +256,7 @@ export default function HomePage() {
                   } & Upload Documents`}
             </h2>
             <p className="text-gray-600">
+              {/* {JSON.stringify(hasProfile)} */}
               {hasProfile
                 ? application
                   ? application.status === "draft"
