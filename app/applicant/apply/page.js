@@ -152,7 +152,7 @@ export default function ApplyPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.detail || "Failed to save document");
+        throw new Error(data.detail || "Failed to save the document. If you’ve already uploaded it, you can safely ignore this message. Click ‘View current document’ above the Save button to confirm your upload.");
       }
 
       const updated = await res.json();
