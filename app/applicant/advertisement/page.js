@@ -69,7 +69,7 @@ const data = [
         "National ID and contact details",
       ],
       submission_format:
-        "All the above documents should be compiled as one PDF document for ease of upload and download.",
+        "All the above documents should be in PDF document for ease of upload and download.",
         submission_format2:
       "• Successful applicants will be required to have personal Insurance against any incidents or accidents that may occur during this exercise.",
       submission_deadline: "………… 2025",
