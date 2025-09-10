@@ -116,7 +116,7 @@ export default function LandingPage() {
               </Link>
 
               <a
-                href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
+                href="/Advert_Vaccination.docx" // 👈 path to your PDF in /public
                 download
                 className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
               >
@@ -181,7 +181,7 @@ export default function LandingPage() {
           </section>
 
           {/* Remuneration */}
-          <section className="bg-[#00963927] rounded-2xl shadow-md p-5">
+          {/* <section className="bg-[#00963927] rounded-2xl shadow-md p-5">
             <h2 className="text-lg font-semibold text-emerald-700 mb-2 flex items-center gap-2">
               <DollarSign className="w-5 h-5" /> Remuneration
             </h2>
@@ -204,7 +204,7 @@ export default function LandingPage() {
             <p className="mt-2 text-gray-600">
               Target animals: {campaign.remuneration.target_animals.join(", ")}
             </p>
-          </section>
+          </section> */}
 
           {/* Application Process */}
           <section className="bg-white rounded-2xl shadow-md p-5">
@@ -242,7 +242,7 @@ export default function LandingPage() {
               </Link>
 
               <a
-                href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
+                href="/Advert_Vaccination.docx" // 👈 path to your PDF in /public
                 download
                 className="border border-[#05a552] text-[#05a552] px-6 py-3 rounded-lg hover:bg-green-50 transition-all duration-300"
               >

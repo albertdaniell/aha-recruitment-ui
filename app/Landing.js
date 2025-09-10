@@ -89,7 +89,7 @@ export default function Page() {
         {/* LEFT SIDE - PDF Viewer */}
         <div className="md:col-span-1 bg-white rounded-2xl shadow-md overflow-hidden md:h-[95vh] ">
           {/* <iframe
-            src="/Advert_Vaccination.pdf" // 👈 replace with your PDF path (e.g., /public/sample.pdf)
+            src="/Advert_Vaccination.docx" // 👈 replace with your PDF path (e.g., /public/sample.pdf)
             className="w-full h-full"
           /> */}
           <div className="md:w-full md:h-full  md:flex items- justify-center  hidden">
@@ -129,7 +129,7 @@ export default function Page() {
 
             {/* Download PDF button */}
             <a
-              href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
+              href="/Advert_Vaccination.docx" // 👈 path to your PDF in /public
               download
               className="inline-block px-6 py-3 text-slate-700 font-semibold text-lg rounded-full shadow-lg border-[1px] border-[#009639] bg-[#0096396d]  transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
             >
@@ -174,7 +174,7 @@ export default function Page() {
           </section>
 
           {/* Remuneration */}
-          <section className="bg-[#00963927] rounded-2xl shadow-md p-5">
+          {/* <section className="bg-[#00963927] rounded-2xl shadow-md p-5">
             <h2 className="text-lg font-semibold text-emerald-700 mb-2 flex items-center gap-2">
               <DollarSign className="w-5 h-5" /> Remuneration
             </h2>
@@ -197,7 +197,7 @@ export default function Page() {
             <p className="mt-2 text-gray-600">
               Target animals: {campaign.remuneration.target_animals.join(", ")}
             </p>
-          </section>
+          </section> */}
 
           {/* Application Process */}
           <section className="bg-white rounded-2xl shadow-md p-5">
@@ -230,7 +230,7 @@ export default function Page() {
 
               {/* Download PDF button */}
               <a
-                href="/Advert_Vaccination.pdf" // 👈 path to your PDF in /public
+                href="/Advert_Vaccination.docx" // 👈 path to your PDF in /public
                 download
                 className="inline-block px-6 py-3 text-slate-700 font-semibold text-lg rounded-full shadow-lg border-[1px] border-[#009639] bg-[#0096396d]  transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
               >
