@@ -633,15 +633,15 @@ export default function RegisterPage() {
               </div>
 
 
-            {message && (
-              <p
-                className={`mb-4 ${
-                  message.startsWith("✅") ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {message}
-              </p>
-            )}
+           {message && (
+  <p
+    className={`mb-4 ${
+      message.startsWith("✅") ? "text-green-600" : "text-red-600"
+    }`}
+  >
+    {message.replace(/^detail:\s*/, "")}
+  </p>
+)}
 
 
               <button
