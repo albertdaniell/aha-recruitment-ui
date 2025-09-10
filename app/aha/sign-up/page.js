@@ -393,16 +393,6 @@ export default function RegisterPage() {
               <h2 className="text-2xl font-bold">Create Account</h2>
             </div>
 
-            {message && (
-              <p
-                className={`mb-4 ${
-                  message.startsWith("✅") ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {message}
-              </p>
-            )}
-
             <form
               onSubmit={handleSubmit}
               className="space-y-4"
@@ -641,6 +631,18 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
+
+
+            {message && (
+              <p
+                className={`mb-4 ${
+                  message.startsWith("✅") ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {message}
+              </p>
+            )}
+
 
               <button
                 type="submit"
