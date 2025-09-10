@@ -5,7 +5,6 @@ import Main from "./components/Main/Main";
 import Landing from "./LandingNew"
 import AppNav from "./AppNav"
 
-
 export default function Home() {
 
   return (

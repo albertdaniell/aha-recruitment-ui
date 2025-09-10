@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { Calendar, FileText, ClipboardList, DollarSign } from "lucide-react";
 import Image from "next/image";
+import Complaints from "./Complaints"
 
 const data = [
   {
@@ -252,6 +253,14 @@ export default function LandingPage() {
           </section>
         </section>
       </div>
+                 <section className="px-6 md:px-20 py-16 flex flex-col  gap-4">
+
+      <Complaints/>
+
+</section>
+
+
+      
 
       <div className="bg-white border-t-2 border-t-slate-100" id="logos">
         {/* logos */}
@@ -307,8 +316,12 @@ export default function LandingPage() {
               className="rounded-2xl md:w-[120px] md:h-[120px] w-[75px] h-[75px] my-5"
             ></Image>
           </div>
+          
         </section>
+        
       </div>
+
+
 
       <div className="bg-gray-800 p-8 text-white text-center">
         <p>Developed by KALRO ICT</p>
