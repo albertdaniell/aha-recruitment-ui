@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ComplaintsPage() {
   const [user, setUser] = useState(null);
@@ -12,8 +13,6 @@ export default function ComplaintsPage() {
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
-
-  
 
   useEffect(() => {
     const fetchUserAndComplaints = async () => {
@@ -98,7 +97,9 @@ export default function ComplaintsPage() {
       {/* Post Complaint Form */}
       <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Submit a New Complaint</h2>
-        <p className="text-slate-500 mb-5 text-sm">Relies will be sent via email to {user?.email}</p>
+        <p className="text-slate-500 mb-5 text-sm">
+          Relies will be sent via email to {user?.email}
+        </p>
         {error && <p className="text-red-600 mb-2">{error}</p>}
         <form onSubmit={handlePostComplaint} className="space-y-4">
           <input
@@ -152,6 +153,17 @@ export default function ComplaintsPage() {
               <p className="text-gray-400 text-sm mt-2">
                 Submitted at: {new Date(c.created_at).toLocaleString()}
               </p>
+
+              {c?.reply_count > 0 && (
+                <div className="mt-4">
+                  <Link
+                    href={`help/${c.id}`}
+                    className="text-green-500 underline"
+                  >
+                    View {c?.reply_count} Replies
+                  </Link>
+                </div>
+              )}
             </div>
           ))
         )}
