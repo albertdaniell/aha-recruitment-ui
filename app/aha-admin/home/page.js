@@ -300,7 +300,7 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
         {
           user?.role !== "FPO" &&
 
-          <div className="rounded-xl bg-white ">
+          <div className="rounded-xl bg-white mt-3">
              <p className="text-sm text-slate-600 mb-3 px-2 pt-2">FPO Submission</p>
 <div className="overflow-auto mt-2 rounded-sm h-[300px]">
             
