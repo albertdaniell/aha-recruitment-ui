@@ -15,7 +15,9 @@ function Layout({ children }) {
         const parsed = JSON.parse(loginData);
         if (
           parsed?.user?.role?.toUpperCase() === "REVIEWER" ||
-          parsed?.user?.role?.toUpperCase() === "ADMIN"
+          parsed?.user?.role?.toUpperCase() === "ADMIN" ||
+          parsed?.user?.role?.toUpperCase() === "FPO"
+
         ) {
           setLoadingUser(false);
           router.push("/aha-admin/home");

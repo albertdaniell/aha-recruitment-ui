@@ -60,7 +60,7 @@ export default function LoginPage() {
 
       // Redirect by role
       const role = data?.user?.role?.toUpperCase();
-      if (role === "REVIEWER" || role === "ADMIN") {
+      if (role === "REVIEWER" || role === "ADMIN" || role === "FPO") {
         router.push("/aha-admin/home");
       } else {
         router.push("/applicant/home");

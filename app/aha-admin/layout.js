@@ -36,8 +36,10 @@ export default function DashboardLayout({ children }) {
     if (loginData && loginData.user) {
       setUser(loginData.user);
       // 🚨 If role is NOT REVIEWER, redirect away
-      if (loginData.user.role !== "REVIEWER") {
-        router.push("/aha/login"); // or maybe "/not-authorized"
+      let role = loginData.user.role
+      if (role === "REVIEWER" || role === "ADMIN") {
+        console.log({role})
+        // router.push("/aha/login"); // or maybe "/not-authorized"
       }
     } else {
       router.push("/aha/login");
@@ -76,15 +78,21 @@ export default function DashboardLayout({ children }) {
     );
   }
 
-  if (!user || user.role !== "REVIEWER") {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-600 text-xl font-semibold">
-          Access Denied — Reviewer role required.
-        </p>
-      </div>
-    );
-  }
+ if (
+  !user ||
+  (user.role !== "REVIEWER" &&
+    user.role !== "ADMIN" &&
+    user.role !== "FPO" &&
+    user.role !== "SUPERADMIN")
+) {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-red-600 text-xl font-semibold">
+        Access Denied — Reviewer role required.
+      </p>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen flex bg-gray-100">

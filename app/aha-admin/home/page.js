@@ -170,7 +170,7 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
           {/* LEFT SIDE */}
           <div className="col-span-2">
             <h1 className="text-3xl font-bold text-[#009639]">
-              Welcome, Admin - {user?.first_name}!
+              Welcome, {user?.role} - {user?.first_name}!
             </h1>
             <p className="text-gray-600 mt-2">Email: {user.email}</p>
             {user.fpo?.name && (
@@ -179,7 +179,10 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
           </div>
 
           {/* RIGHT SIDE */}
-          <div className="inline-flex items-center gap-4 px-2 py-3 border-green-500 border rounded-2xl mb-4 bg-white">
+          {
+            user?.role !== "ADMIN" 
+            &&
+<div className="inline-flex items-center gap-4 px-2 py-3 border-green-500 border rounded-2xl mb-4 bg-white">
             <img
               src={userCounty.logo || "/cog.png"}
               alt={userCounty?.name}
@@ -196,6 +199,8 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
               </p>
             </div>
           </div>
+          }
+          
         </div>
       )}
 
@@ -271,9 +276,72 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
             />
           )}
         </div>
+
+        
+      </div>
+      <div className={`mt-2 ${user?.role !=="FPO" ? "grid grid-cols-3 gap-3":"" }`}>
+         <div className="shadow-lg rounded-xl p-3 bg-white col-span-2">
+          <p className="text-sm text-slate-600 mb-3">County Submission</p>
+ {/* {JSON.stringify(stats)} */}
+          {stats && (
+            <AppChart
+              options={make_data_past_7_days_graph(stats?.county_stats,"user__county__name","count")}
+            />
+          )}
+        </div>
+
+        {/* show stats for fpo is user is not FPO */}
+
+        {
+          user?.role !== "FPO" &&
+
+          <div className="rounded-xl bg-white ">
+             <p className="text-sm text-slate-600 mb-3 px-2 pt-2">FPO Submission</p>
+<div className="overflow-auto mt-2 rounded-sm">
+            
+        <table className="table-auto border-collapse border border-gray-200 w-full shadow-md rounded-lg text-sm">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th className="border border-gray-200 px-4 py-2 text-gray-700 font-semibold">
+                County
+              </th>
+              <th className="border border-gray-200 px-4 py-2 text-gray-700 font-semibold">
+                FPO
+              </th>
+              <th className="border border-gray-200 px-4 py-2 text-gray-700 font-semibold">
+                Submitted Count
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {stats?.fpo_stats?.map((item, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              >
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__county__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__fpo__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2 text-center font-medium">
+                  {item.count}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+            </div>
+
+          
+          
+        }
       </div>
       <h1 className="text-xl font-bold mb-5 mt-5">
-        Applications {user.county?.name ? `for ${user.county.name} county` : ""}
+        Applications 
+        {/* {user.county?.name ? `for ${user.county.name} county` : ""} */}
       </h1>
 
 <div className="space-y-6">

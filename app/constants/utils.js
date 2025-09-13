@@ -315,9 +315,9 @@ const make_gender_pie = (data,male_key="male_applicants",female_key="female_appl
   };
 };
 
-const make_data_past_7_days_graph = (data, COUNTY = null) => {
-  let x_axis = data.map((d) => d.date);
-  let y_axis = data.map((d) => d.count);
+const make_data_past_7_days_graph = (data, x_name = "date", y_name = "count") => {
+  let x_axis = data.map((d) => d[x_name]);
+  let y_axis = data.map((d) => d[y_name]);
 
   let options = {
     chart: {
