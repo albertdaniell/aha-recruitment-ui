@@ -362,6 +362,28 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
             ))}
               </>
             }
+
+              {
+              user?.role === "ADMIN" &&
+              <>
+              {stats?.fpo_stats?.map((item, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              >
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__county__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__fpo__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2 text-center font-medium">
+                  {item.count}
+                </td>
+              </tr>
+            ))}
+              </>
+            }
             {/* {stats?.fpo_stats?.map((item, index) => (
               <tr
                 key={index}
