@@ -279,8 +279,11 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
 
         
       </div>
-      <div className={`mt-2 ${user?.role !=="FPO" ? "grid grid-cols-3 gap-3":"" }`}>
-         <div className="shadow-lg rounded-xl p-3 bg-white col-span-2">
+      {/* <div className={`mt-2 ${user?.role !=="FPO" ? "grid grid-cols-3 gap-3":"grid-cols-1" }`}> */}
+<div className="mt-2">
+        {
+          user?.role ==="ADMIN" &&
+ <div className="shadow-lg rounded-xl p-3 bg-white col-span-2">
           <p className="text-sm text-slate-600 mb-3">County Submission</p>
  {/* {JSON.stringify(stats)} */}
           {stats && (
@@ -289,6 +292,8 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
             />
           )}
         </div>
+        }
+        
 
         {/* show stats for fpo is user is not FPO */}
 
@@ -297,9 +302,9 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
 
           <div className="rounded-xl bg-white ">
              <p className="text-sm text-slate-600 mb-3 px-2 pt-2">FPO Submission</p>
-<div className="overflow-auto mt-2 rounded-sm">
+<div className="overflow-auto mt-2 rounded-sm h-[300px]">
             
-        <table className="table-auto border-collapse border border-gray-200 w-full shadow-md rounded-lg text-sm">
+        <table className="table-auto border-collapse border border-gray-200 w-full shadow-md rounded-lg text-xs">
           <thead>
             <tr className="bg-gray-100 text-left">
               <th className="border border-gray-200 px-4 py-2 text-gray-700 font-semibold">
@@ -314,7 +319,10 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
             </tr>
           </thead>
           <tbody>
-            {stats?.fpo_stats?.map((item, index) => (
+            {
+              user?.role === "REVIEWER" &&
+              <>
+              {stats?.fpo_stats?.filter(i=>i?.user__county__name === user?.county?.name)?.map((item, index) => (
               <tr
                 key={index}
                 className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
@@ -330,6 +338,46 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
                 </td>
               </tr>
             ))}
+              </>
+            }
+
+            {
+              user?.role === "FPO" &&
+              <>
+              {stats?.fpo_stats?.filter(i=>i?.user__fpo__name === user?.fpo?.name)?.map((item, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              >
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__county__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__fpo__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2 text-center font-medium">
+                  {item.count}
+                </td>
+              </tr>
+            ))}
+              </>
+            }
+            {/* {stats?.fpo_stats?.map((item, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              >
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__county__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {item.user__fpo__name}
+                </td>
+                <td className="border border-gray-200 px-4 py-2 text-center font-medium">
+                  {item.count}
+                </td>
+              </tr>
+            ))} */}
           </tbody>
         </table>
       </div>
