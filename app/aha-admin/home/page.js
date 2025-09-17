@@ -173,9 +173,9 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
               Welcome, {user?.role} - {user?.first_name}!
             </h1>
             <p className="text-gray-600 mt-2">Email: {user.email}</p>
-            {user.fpo?.name && (
+            {/* {user.fpo?.name && (
               <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
-            )}
+            )} */}
           </div>
 
           {/* RIGHT SIDE */}
@@ -214,7 +214,7 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
           </div>
       }
 
-      <div className="grid md:grid-cols-3  gap-6 my-4">
+      <div className="grid md:grid-cols-3 grid-cols-2 md:gap-6 gap-2 my-4">
         {/* School Year */}
         <div className="bg-gradient-to-r from-sky-400 to-sky-500 rounded-2xl shadow-md px-6 py-4  text-center">
           <p className="text-sm text-white opacity-80">Applications</p>
@@ -242,8 +242,8 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
-        <div className="shadow-lg rounded-xl p-3 bg-white col-span-1">
+      <div className="grid md:grid-cols-3 gap-5">
+        <div className="shadow-lg rounded-xl p-3 bg-white md:col-span-1">
           <p className="text-sm text-slate-600 mb-3">Submissions By Gender</p>
           {/* {JSON.stringify(stats)} */}
           {
@@ -267,7 +267,7 @@ const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
           }
          
         </div>
-        <div className="shadow-lg rounded-xl p-3 bg-white col-span-2">
+        <div className="shadow-lg rounded-xl p-3 bg-white md:col-span-2">
           <p className="text-sm text-slate-600 mb-3">Last 7 Days Submission</p>
  {/* {JSON.stringify(stats)} */}
           {stats && (
