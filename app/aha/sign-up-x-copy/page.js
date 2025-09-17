@@ -397,9 +397,7 @@ export default function RegisterPage() {
               onSubmit={handleSubmit}
               className="space-y-4"
               autoComplete="off" // Prevent browser autofill
-              onPaste={(e) => e.preventDefault()} // Prevent paste in all fields
-              onCopy={(e) => e.preventDefault()} // Optional: prevent copy
-              onCut={(e) => e.preventDefault()} // Optional: prevent cut
+         
             >
               {/* Names */}
               <div className="grid lg:grid-cols-2 gap-4">
@@ -442,7 +440,6 @@ export default function RegisterPage() {
                     value={formData.email}
                     onChange={handleChange}
                     // autoComplete="off"
-                    onPaste={(e) => e.preventDefault()} // 👈 Prevent paste
                     className="w-full p-2 border rounded focus:border-green-500"
                     required
                   />
@@ -458,7 +455,6 @@ export default function RegisterPage() {
                     value={formData.confirm_email_}
                     onChange={handleChange}
                     autoComplete="new-email" // Non-standard value to trick autofill
-                    onPaste={(e) => e.preventDefault()} // 👈 Prevent paste
                     className="w-full p-2 border border-slate-600 rounded focus:border-green-500"
                     required
                   />
