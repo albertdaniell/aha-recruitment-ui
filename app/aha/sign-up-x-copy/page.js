@@ -240,9 +240,9 @@ export default function RegisterPage() {
       setMessage("Emails do not match");
       return false;
     }
-    const phoneRegex = /^2547\d{9}$/;
+    const phoneRegex = /^254\d{9}$/;
     if (!phoneRegex.test(formData.phone)) {
-      setMessage("Phone number must be in format 2547XXXXXXXX");
+      setMessage("Phone number must be in format 254XXXXXXXXX");
       return false;
     }
     if (!selectedCounty || !formData.fpo) {
