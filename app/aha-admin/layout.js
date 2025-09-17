@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }) {
     }
   }, [user, counties]);
 
-  const sidebarLinks = [
+  let links_1  = [
     { name: "Home", href: "/aha-admin/home" },
     { name: "Applications", href: "/aha-admin/applications" },
     { name: "Shortlisted", href: "/aha-admin/shortlisted" },
@@ -63,7 +63,29 @@ export default function DashboardLayout({ children }) {
     { name: "Website Home", href: "/" },
 
     // { name: "Users", href: "/aha-admin/users" },
+  ]
+
+  const links_2 = [
+    { name: "Home", href: "/aha-admin/home" },
+    { name: "Applications", href: "/aha-admin/applications" },
+    { name: "Shortlisted", href: "/aha-admin/shortlisted" },
+    // { name: "Advertisement", href: "/applicant/advertisement" },
+    { name: "Website Home", href: "/" },
+
+    // { name: "Users", href: "/aha-admin/users" },
   ];
+  const links_3 = [
+    { name: "Home", href: "/aha-admin/home" },
+    { name: "Applications", href: "/aha-admin/applications" },
+    { name: "Shortlisted", href: "/aha-admin/shortlisted" },
+    // { name: "Advertisement", href: "/applicant/advertisement" },
+    { name: "Website Home", href: "/" },
+
+    // { name: "Users", href: "/aha-admin/users" },
+  ];
+
+
+  const sidebarLinks = user?.role === "REVIEWER" ? user?.role === "ADMIN" ? links_3 : links_1 : links_2
 
   const handleLogout = () => {
     localStorage.removeItem("login_response");
@@ -118,7 +140,10 @@ export default function DashboardLayout({ children }) {
         <div className="mt-14 md:mt-0">
           <h2 className="text-xl font-bold mb-4 text-white">Dashboard</h2>
           <nav className="flex flex-col space-y-1">
-            <div className="inline-flex items-center gap-3 px-2 py-3 border-green-500 border rounded-lg  bg-white mb-5">
+            {
+              (user?.role === "REVIEWER" ||  user?.role === "FPO")
+              &&
+ <div className="inline-flex items-center gap-3 px-2 py-3 border-green-500 border rounded-lg  bg-white mb-5">
               <img
                 src={userCounty?.logo || "/cog.png"}
                 alt={userCounty?.name}
@@ -135,6 +160,8 @@ export default function DashboardLayout({ children }) {
                 </p>
               </div>
             </div>
+            }
+           
             {sidebarLinks.map((link) => {
               const isActive =
                 link.href === "/"

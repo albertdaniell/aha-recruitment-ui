@@ -191,7 +191,7 @@ export default function ApplicationsPage() {
   return (
     <div className="">
     
-      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `for ${user.county.name} county`:""}</h1>
+      <h1 className="text-2xl font-bold mb-6">Applications {user.county?.name ? `${user?.role === "REVIEWER" ? `for ${user.county.name} county`:""}`:""}</h1>
       {/* Export button */}
       <button
         disabled={applications?.length === 0}
