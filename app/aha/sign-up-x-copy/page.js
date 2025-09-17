@@ -283,7 +283,7 @@ export default function RegisterPage() {
         phone: "",
         password: "",
         password2: "",
-        county: "",
+        // county: "",
         // subcounty: "",
         ward: "",
         fpo: "",
