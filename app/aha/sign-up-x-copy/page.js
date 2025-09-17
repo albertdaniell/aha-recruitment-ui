@@ -377,7 +377,7 @@ export default function RegisterPage() {
             isOpen={showSuccess}
             setIsClose={() => {
               SetShowSuccess(false);
-              router.push("/aha/login");
+              // router.push("/aha/login");
             }}
             // title={"Cannot submit"}
             body={<p>Account created successfully!</p>}
