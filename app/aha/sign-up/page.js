@@ -17,6 +17,7 @@ export default function RegisterPage() {
     password: "",
     password2: "",
     county: "",
+    role: "APPLICANT",
     // subcounty: "",
     ward: "",
     fpo: "",
