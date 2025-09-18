@@ -1,7 +1,10 @@
 import React from 'react'
 
 
-export default function AppModal({isOpen=false,setIsOpen,setIsClose,title="Message",body}) {
+export default function AppModal({showClose = true,isOpen=false,setIsOpen,closeText="Close",closeBtnClass="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition mt-3",setIsClose,title="Message",body,className="absolute inset-0 bg-black bg-opacity-50 transition-opacity",
+  className1="fixed inset-0 flex items-center justify-center z-50",
+  className2="bg-white rounded-lg shadow-lg max-w-md w-full z-10 p-6 transform transition-all duration-300 ease-out scale-95 opacity-0 animate-modal-in"
+}) {
 //   const [isOpen, setIsOpen] = useState(false);
 
 
@@ -11,26 +14,26 @@ export default function AppModal({isOpen=false,setIsOpen,setIsClose,title="Messa
      
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className={className1}>
           {/* Overlay */}
           <div
-            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+            className={className}
             onClick={() => setIsClose()}
           ></div>
 
           {/* Modal content */}
-          <div className="bg-white rounded-lg shadow-lg max-w-md w-full z-10 p-6
-                          transform transition-all duration-300 ease-out
-                          scale-95 opacity-0 animate-modal-in">
+          <div className={className2}>
             <h2 className="text-xl font-bold mb-4">{title}</h2>
             {body}
             {/* <p className="mb-4">This is a modal with small fade/scale animations using Tailwind CSS.</p> */}
-            <div className="flex justify-end space-x-2">
+            {
+              showClose &&
+               <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setIsClose()}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition mt-3"
+                className={closeBtnClass}
               >
-                Close
+                {closeText}
               </button>
               {/* <button
                 onClick={() => alert("Action!")}
@@ -39,6 +42,8 @@ export default function AppModal({isOpen=false,setIsOpen,setIsClose,title="Messa
                 Confirm
               </button> */}
             </div>
+            }
+           
           </div>
         </div>
       )}
