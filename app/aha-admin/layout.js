@@ -395,7 +395,8 @@ export default function DashboardLayout({ children }) {
                   expect you to logback in so as to refresh your changes.
                 </p>
 
-                <button
+                <div className="flex flex-row gap-3">
+                  <button
                   disabled={loading2}
                   type="button"
                   onClick={(e) => {
@@ -405,6 +406,18 @@ export default function DashboardLayout({ children }) {
                 >
                   {loading2 ? "Please wait ...." : "Agree to terms"}
                 </button>
+
+                <button
+                  disabled={loading2}
+                  type="button"
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  className="px-4 py-2 bg-red-300 text-red-600 rounded hover:bg-red-300 transition mt-3"
+                >
+                  Exit
+                </button>
+                </div>
               </>
             }
           ></AppModal>
