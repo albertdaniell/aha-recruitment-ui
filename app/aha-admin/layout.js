@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }) {
   const pathname = usePathname();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loading2, setLoading2] = useState(true);
+  const [loading2, setLoading2] = useState(false);
 
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile sidebar toggle
   const [userCounty, setUserCounty] = useState(null); // store user application
