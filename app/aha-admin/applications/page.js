@@ -139,19 +139,31 @@ export default function ApplicationsPage() {
 
  
   // format for excel
-  const exportData = applications.map((app, index) => ({
+  const exportData = applications?.filter((app1)=>{
+    return app1?.status === "submitted"
+  })?.map((app, index) => ({
     "#": index + 1,
-    "ApplicationID": app.id,
+    "APPLICATION_ID": app.id,
     Position:
       app.position === "VS"
         ? "Veterinary Surgeon"
         : app.position === "VPP"
         ? "Veterinary Para-professional"
         : "—",
-    "FirstName": app.first_name || "—",
-    "LastName": app.last_name || "—",
-    Email: app.email || app.user?.email || "—",
-    Status: app.is_shortlisted
+    "FIRST_NAME": app.first_name || "—",
+    "LAST_NAME": app.last_name || "—",
+    "GENDER": app?.profile?.gender || "—",
+    "PHONE": app?.phone || "—",
+    "COUNTY": app?.county || "—",
+    "WARD": app?.ward || "—",
+    "FPO": app?.fpo || "—",
+    "LOCATION": app?.profile.location || "—",
+    "IS_PWD": app?.profile.fpo || "—",
+    "DISABILITY_TYPE": app?.profile.disability_type || "—",
+    "PWD_CERTIFICATE": app?.profile.disability_certificate || "—",
+    "BIO": app?.bio || "—",
+    "EMAIL": app.email || app.user?.email || "—",
+    "STATUS": app.is_shortlisted
       ? "Shortlisted"
       : app.is_not_shortlisted
       ? "Rejected"
@@ -196,10 +208,13 @@ export default function ApplicationsPage() {
       <button
         disabled={applications?.length === 0}
           onClick={exportToExcel}
-          className={`${applications?.length === 0 ? "bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700"} px-4 py-2  text-white rounded  transition mb-5 text-sm`}
+          className={`${applications?.length === 0 ? "bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700"} px-4 py-2  text-white rounded  transition mb-2 text-sm`}
         >
          Export to Excel
         </button>
+        <p className="text-slate-500 text-sm mb-5">
+          This will export only submitetd records
+        </p>
         {
         applications?.length ===0
         ?
@@ -211,12 +226,15 @@ export default function ApplicationsPage() {
           :
 
  <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full border border-gray-200 text-md text-slate-800">
+        <table className="min-w-full border border-gray-200 text-md text-slate-800 text-sm">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 text-left text-sm font-semibold">#</th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
                 Application ID
+              </th>
+              <th className="px-4 py-2 text-left text-sm font-semibold">
+                FPO
               </th>
               <th className="px-4 py-2 text-left text-sm font-semibold">
                 Position
@@ -253,9 +271,43 @@ export default function ApplicationsPage() {
               >
                 <td className="px-4 py-2">{index + 1}</td>
 
-                <td className="px-4 py-2 max-w-[150px] truncate">
+                {app.status === "submitted" ? (
+                    <td className="max-w-[150px] px-4 py-2  truncate">
+                      <Link
+                        className="text-blue-500 hover:underline underline"
+                      href={`applications/${app?.id}/`}
+                      >
+                        <span className="">
                   {app?.id || "—"}
+                </span>
+                      </Link>
+                     
+                    </td>
+                  ) : (
+                   
+                  <td className="px-4 py-2 max-w-[150px] truncate">
+                     <Link
+                        className="text-slate-400 hover:cursor-not-allowed"
+                        href={"#"}
+                      >
+                        <span>
+                  {app?.id || "—"}
+                </span>
+                      </Link>
+                  </td>
+                  )}
+
+
+                
+                <td className="px-4 py-2 max-w-[150px]   truncate">
+                  <p>
+                    {app?.fpo || "—"}
+                  </p>
+                  <span className="text-slate-400">
+                    {app?.profile?.location}
+                  </span>
                 </td>
+
                 <td className="px-4 py-2">{app?.position || "—"}</td>
 
                 <td className="px-4 py-2">{app?.first_name || "—"}</td>

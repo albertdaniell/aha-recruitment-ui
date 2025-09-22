@@ -136,7 +136,119 @@ export default function ApplicationsPage() {
   }
 
     // 🔑 Export function
- const exportToExcel = () => {
+
+     const exportToExcel = () => {
+  if (!applications) return;
+
+  // filter shortlisted
+  const shortlisted = applications.filter((app) => app.is_shortlisted === true);
+
+  const exportData = shortlisted?.filter((app1)=>{
+    return app1?.status === "submitted"
+  })?.map((app, index) => ({
+    "#": index + 1,
+    "APPLICATION_ID": app.id,
+    Position:
+      app.position === "VS"
+        ? "Veterinary Surgeon"
+        : app.position === "VPP"
+        ? "Veterinary Para-professional"
+        : "—",
+    "FIRST_NAME": app.first_name || "—",
+    "LAST_NAME": app.last_name || "—",
+    "GENDER": app?.profile?.gender || "—",
+    "PHONE": app?.phone || "—",
+    "COUNTY": app?.county || "—",
+    "WARD": app?.ward || "—",
+    "FPO": app?.fpo || "—",
+    "LOCATION": app?.profile.location || "—",
+    "IS_PWD": app?.profile.fpo || "—",
+    "DISABILITY_TYPE": app?.profile.disability_type || "—",
+    "PWD_CERTIFICATE": app?.profile.disability_certificate || "—",
+    "BIO": app?.bio || "—",
+    "EMAIL": app.email || app.user?.email || "—",
+    "STATUS": app.is_shortlisted
+      ? "Shortlisted"
+      : app.is_not_shortlisted
+      ? "Rejected"
+      : app.status,
+    "CVUploaded": app.cv ? app.cv : "No",
+    "CoverLetterUploaded": app.cover_letter ? app.cover_letter : "No",
+    "KVBCertificateUploaded": app.kvb_certificate ? app.kvb_certificate: "No",
+    "ProfessionalCertificateUploaded": app.professional_certificate ? app.professional_certificate  : "No",
+    "NationalIDUploaded": app.national_id_document ? app.national_id_document : "No",
+    "DateCreated": app.created_at
+      ? new Date(app.created_at).toLocaleDateString()
+      : "—",
+    "DateUpdated": app.updated_at
+      ? new Date(app.updated_at).toLocaleDateString()
+      : "—",
+  }));
+
+  // create worksheet
+  const ws = XLSX.utils.json_to_sheet(exportData);
+
+  // autosize columns
+  const colWidths = Object.keys(exportData[0] || {}).map((key) => ({
+    wch: Math.max(key.length + 2, 15), // min 15 width
+  }));
+  ws["!cols"] = colWidths;
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Shortlisted Applications");
+
+  // save file
+  const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  saveAs(
+    new Blob([wbout], { type: "application/octet-stream" }),
+    "shortlisted_applications.xlsx"
+  );
+};
+
+    // format for excel
+  const exportData = applications?.filter((app1)=>{
+    return app1?.status === "submitted"
+  })?.map((app, index) => ({
+    "#": index + 1,
+    "APPLICATION_ID": app.id,
+    Position:
+      app.position === "VS"
+        ? "Veterinary Surgeon"
+        : app.position === "VPP"
+        ? "Veterinary Para-professional"
+        : "—",
+    "FIRST_NAME": app.first_name || "—",
+    "LAST_NAME": app.last_name || "—",
+    "GENDER": app?.profile?.gender || "—",
+    "PHONE": app?.phone || "—",
+    "COUNTY": app?.county || "—",
+    "WARD": app?.ward || "—",
+    "FPO": app?.fpo || "—",
+    "LOCATION": app?.profile.location || "—",
+    "IS_PWD": app?.profile.fpo || "—",
+    "DISABILITY_TYPE": app?.profile.disability_type || "—",
+    "PWD_CERTIFICATE": app?.profile.disability_certificate || "—",
+    "BIO": app?.bio || "—",
+    "EMAIL": app.email || app.user?.email || "—",
+    "STATUS": app.is_shortlisted
+      ? "Shortlisted"
+      : app.is_not_shortlisted
+      ? "Rejected"
+      : app.status,
+    "CVUploaded": app.cv ? app.cv : "No",
+    "CoverLetterUploaded": app.cover_letter ? app.cover_letter : "No",
+    "KVBCertificateUploaded": app.kvb_certificate ? app.kvb_certificate: "No",
+    "ProfessionalCertificateUploaded": app.professional_certificate ? app.professional_certificate  : "No",
+    "NationalIDUploaded": app.national_id_document ? app.national_id_document : "No",
+    "DateCreated": app.created_at
+      ? new Date(app.created_at).toLocaleDateString()
+      : "—",
+    "DateUpdated": app.updated_at
+      ? new Date(app.updated_at).toLocaleDateString()
+      : "—",
+  }));
+
+ const exportToExcel_OLD = () => {
   if (!applications) return;
 
   // filter shortlisted
@@ -195,7 +307,9 @@ export default function ApplicationsPage() {
   return (
     <div className="">
     
-      <h1 className="text-2xl font-bold mb-6">Shorlisted {user.county?.name ? `for ${user.county.name} county`:""}</h1>
+      {/* <h1 className="text-2xl font-bold mb-6">Shorlisted {user.county?.name ? `for ${user.county.name} county`:""}</h1> */}
+      <h1 className="text-2xl font-bold mb-6">Shorlisted candidates</h1>
+
       {/* Export button */}
       {/* {JSON.stringify(applications)} */}
         <button
