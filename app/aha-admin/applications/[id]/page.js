@@ -18,6 +18,7 @@ export default function ApplicationDetails({ params }) {
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(null);
   const [accordionOpen, setAccordionOpen] = useState(false);
+  let [msg,set_msg] = useState("Done shortlisting!")
 
   async function fetchApplicationDetail() {
     try {
@@ -90,11 +91,19 @@ export default function ApplicationDetails({ params }) {
           body: JSON.stringify(body),
         }
       );
+      // console.log(await res.json())
 
       if (!res.ok) {
+        let res_json = await res.json();
+        console.log(res_json);
         setLoading2(false);
 
-        throw new Error("Failed to update shortlist status");
+        if (res_json?.detail) {
+          // alert(0)
+          throw new Error(res_json?.detail);
+        } else {
+          throw new Error("Failed to update shortlist status");
+        }
       }
 
       const updated = await res.json();
@@ -102,10 +111,13 @@ export default function ApplicationDetails({ params }) {
       setLoading2(false);
       setShowDownShortlist(true);
     } catch (err) {
+      set_msg(`${err}`)
+          setShowDownShortlist(true);
+      // console.log(`Error : ${err}`)
       setLoading(false);
-
-      console.error(err);
-      alert("Something went wrong while updating status.");
+      // console.error(err);
+      // alert(err);
+      // alert("Something went wrong while updating status.");
     } finally {
       setLoading2(false);
       setShowModal(false);
@@ -119,114 +131,182 @@ export default function ApplicationDetails({ params }) {
     <div className="p-6 bg-white shadow-md rounded-2xl">
       <h1 className="text-2xl font-bold mb-4">Application Details</h1>
 
-     
-     <div className="border rounded-lg shadow-sm">
-  <button
-    onClick={() => setAccordionOpen(!accordionOpen)}
-    className="w-full flex justify-between items-center px-4 py-3 text-left text-lg font-semibold bg-gray-100 hover:bg-gray-200 rounded-t-lg"
-  >
-    <span className="text-green-400">
-      {application.first_name} {application.last_name} ({application.email})
-    </span>
-    <span>{accordionOpen ? "▲" : "▼"}</span>
-  </button>
-
- {accordionOpen && (
-  <div className="p-6 border-t grid grid-cols-1 md:grid-cols-2 gap-6">
-    
-    {/* ✅ Left Column */}
-    <div className="space-y-6">
-      {/* Applicant Info */}
-      <div className="bg-white p-4 rounded-lg shadow border">
-        <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
-          Applicant Info
-        </h3>
-        <p><span className="font-medium">Name:</span> {application.first_name} {application.last_name}</p>
-        <p><span className="font-medium">Email:</span> {application.email}</p>
-        <p><span className="font-medium">Phone:</span> {application.phone || "—"}</p>
-        <p><span className="font-medium">County:</span> {application.county || "—"}</p>
-        <p><span className="font-medium">Subcounty:</span> {application.subcounty || "—"}</p>
-        <p><span className="font-medium">Ward:</span> {application.ward || "—"}</p>
-        <p><span className="font-medium">FPO:</span> {application.fpo || "—"}</p>
-      </div>
-
-      {/* Profile Info */}
-      {application.profile && (
-        <div className="bg-white p-4 rounded-lg shadow border">
-          <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
-            Profile Info
-          </h3>
-          {application.profile.profile_picture && (
-            <div className="mb-3">
-              <img
-                src={application.profile.profile_picture}
-                alt="Profile"
-                className="w-20 h-20 rounded-full border"
-              />
-            </div>
-          )}
-          <p><span className="font-medium">Bio:</span> {application.profile.bio || "—"}</p>
-          <p><span className="font-medium">Location:</span> {application.profile.location || "—"}</p>
-          <p><span className="font-medium">DOB:</span> {FormatDate(application.profile.date_of_birth,false) || "—"}</p>
-          <p><span className="font-medium">Gender:</span> {application.profile.gender || "—"}</p>
-          <p><span className="font-medium">PWD:</span> {application.profile.is_pwd ? "✅ Yes" : "❌ No"}</p>
-          {application.profile.is_pwd && (
-            <>
-              <p><span className="font-medium">Disability Type:</span> {application.profile.disability_type || "—"}</p>
-              <p>
-                <span className="font-medium">Certificate:</span>{" "}
-                {application.profile.disability_certificate ? (
-                  <a
-                    href={application.profile.disability_certificate}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    View
-                  </a>
-                ) : "—"}
-              </p>
-            </>
-          )}
-        </div>
-      )}
-    </div>
-
-    {/* ✅ Right Column */}
-    <div className="space-y-6">
-      {/* Application Info */}
-      <div className="bg-white p-4 rounded-lg shadow border">
-        <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
-          Application Info
-        </h3>
-        <p>
-          <span className="font-medium">Position:</span>{" "}
-          {application.position === "VS"
-            ? "Veterinary Surgeon"
-            : "Veterinary Para-professional"}
-        </p>
-        <p>
-          <span className="font-medium">Status:</span>{" "}
-          <span className="ml-2 px-2 py-1 rounded bg-blue-100 text-blue-600">
-            {application.status}
+      <div className="border rounded-lg shadow-sm">
+        <button
+          onClick={() => setAccordionOpen(!accordionOpen)}
+          className="w-full flex justify-between items-center px-4 py-3 text-left text-lg font-semibold bg-gray-100 hover:bg-gray-200 rounded-t-lg"
+        >
+          <span className="text-green-400">
+            {application.first_name} {application.last_name} (
+            {application.email})
           </span>
-        </p>
-        <p><span className="font-medium">Shortlisted:</span> {application.is_shortlisted ? "✅ Yes" : "❌ No"}</p>
-        <p><span className="font-medium">Rejected:</span> {application.is_not_shortlisted ? "✅ Yes" : "❌ No"}</p>
+          <span>{accordionOpen ? "▲" : "▼"}</span>
+        </button>
 
-        {/* ✅ New date fields */}
-        <p><span className="font-medium">Submission Date:</span> {application.submission_date ? new Date(application.submission_date).toLocaleString() : "—"}</p>
-        <p><span className="font-medium">Date Shortlisted:</span> {application.date_shortlisted ? new Date(application.date_shortlisted).toLocaleString() : "—"}</p>
-        <p><span className="font-medium">Date Rejected:</span> {application.date_rejected ? new Date(application.date_rejected).toLocaleString() : "—"}</p>
+        {accordionOpen && (
+          <div className="p-6 border-t grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* ✅ Left Column */}
+            <div className="space-y-6">
+              {/* Applicant Info */}
+              <div className="bg-white p-4 rounded-lg shadow border">
+                <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
+                  Applicant Info
+                </h3>
+                <p>
+                  <span className="font-medium">Name:</span>{" "}
+                  {application.first_name} {application.last_name}
+                </p>
+                <p>
+                  <span className="font-medium">Email:</span>{" "}
+                  {application.email}
+                </p>
+                <p>
+                  <span className="font-medium">Phone:</span>{" "}
+                  {application.phone || "—"}
+                </p>
+                <p>
+                  <span className="font-medium">County:</span>{" "}
+                  {application.county || "—"}
+                </p>
+                <p>
+                  <span className="font-medium">Subcounty:</span>{" "}
+                  {application.subcounty || "—"}
+                </p>
+                <p>
+                  <span className="font-medium">Ward:</span>{" "}
+                  {application.ward || "—"}
+                </p>
+                <p>
+                  <span className="font-medium">FPO:</span>{" "}
+                  {application.fpo || "—"}
+                </p>
+              </div>
 
-        {/* Existing timestamps */}
-        <p><span className="font-medium">Created At:</span> {new Date(application.created_at).toLocaleString()}</p>
-        <p><span className="font-medium">Updated At:</span> {new Date(application.updated_at).toLocaleString()}</p>
+              {/* Profile Info */}
+              {application.profile && (
+                <div className="bg-white p-4 rounded-lg shadow border">
+                  <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
+                    Profile Info
+                  </h3>
+                  {application.profile.profile_picture && (
+                    <div className="mb-3">
+                      <img
+                        src={application.profile.profile_picture}
+                        alt="Profile"
+                        className="w-20 h-20 rounded-full border"
+                      />
+                    </div>
+                  )}
+                  <p>
+                    <span className="font-medium">Bio:</span>{" "}
+                    {application.profile.bio || "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium">Location:</span>{" "}
+                    {application.profile.location || "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium">DOB:</span>{" "}
+                    {FormatDate(application.profile.date_of_birth, false) ||
+                      "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium">Gender:</span>{" "}
+                    {application.profile.gender || "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium">PWD:</span>{" "}
+                    {application.profile.is_pwd ? "✅ Yes" : "❌ No"}
+                  </p>
+                  {application.profile.is_pwd && (
+                    <>
+                      <p>
+                        <span className="font-medium">Disability Type:</span>{" "}
+                        {application.profile.disability_type || "—"}
+                      </p>
+                      <p>
+                        <span className="font-medium">Certificate:</span>{" "}
+                        {application.profile.disability_certificate ? (
+                          <a
+                            href={application.profile.disability_certificate}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            View
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* ✅ Right Column */}
+            <div className="space-y-6">
+              {/* Application Info */}
+              <div className="bg-white p-4 rounded-lg shadow border">
+                <h3 className="font-semibold text-gray-700 border-b pb-2 mb-3">
+                  Application Info
+                </h3>
+                <p>
+                  <span className="font-medium">Position:</span>{" "}
+                  {application.position === "VS"
+                    ? "Veterinary Surgeon"
+                    : "Veterinary Para-professional"}
+                </p>
+                <p>
+                  <span className="font-medium">Status:</span>{" "}
+                  <span className="ml-2 px-2 py-1 rounded bg-blue-100 text-blue-600">
+                    {application.status}
+                  </span>
+                </p>
+                <p>
+                  <span className="font-medium">Shortlisted:</span>{" "}
+                  {application.is_shortlisted ? "✅ Yes" : "❌ No"}
+                </p>
+                <p>
+                  <span className="font-medium">Rejected:</span>{" "}
+                  {application.is_not_shortlisted ? "✅ Yes" : "❌ No"}
+                </p>
+
+                {/* ✅ New date fields */}
+                <p>
+                  <span className="font-medium">Submission Date:</span>{" "}
+                  {application.submission_date
+                    ? new Date(application.submission_date).toLocaleString()
+                    : "—"}
+                </p>
+                <p>
+                  <span className="font-medium">Date Shortlisted:</span>{" "}
+                  {application.date_shortlisted
+                    ? new Date(application.date_shortlisted).toLocaleString()
+                    : "—"}
+                </p>
+                <p>
+                  <span className="font-medium">Date Rejected:</span>{" "}
+                  {application.date_rejected
+                    ? new Date(application.date_rejected).toLocaleString()
+                    : "—"}
+                </p>
+
+                {/* Existing timestamps */}
+                <p>
+                  <span className="font-medium">Created At:</span>{" "}
+                  {new Date(application.created_at).toLocaleString()}
+                </p>
+                <p>
+                  <span className="font-medium">Updated At:</span>{" "}
+                  {new Date(application.updated_at).toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  </div>
-)}
-</div>
       {/* Actions */}
       <div className="mt-6 flex gap-4">
         <button
@@ -236,7 +316,7 @@ export default function ApplicationDetails({ params }) {
             setActionType("shortlist");
           }}
         >
-         <Check/> Shortlist
+          <Check /> Shortlist
         </button>
         <button
           className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex flex-row gap-5"
@@ -245,7 +325,7 @@ export default function ApplicationDetails({ params }) {
             setActionType("reject");
           }}
         >
-          <Cross/> Reject
+          <Cross /> Reject
         </button>
       </div>
 
@@ -256,7 +336,7 @@ export default function ApplicationDetails({ params }) {
           setShowDownShortlist(false);
         }}
         // title={"Cannot submit"}
-        body={<p>Done shortlisting!</p>}
+        body={<p>{msg}</p>}
       />
 
       {showModal && (
