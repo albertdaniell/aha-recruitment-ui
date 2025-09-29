@@ -162,10 +162,10 @@ const exportToExcel = () => {
     COUNTY: app?.county || "—",
     WARD: app?.ward || "—",
     FPO: app?.fpo || "—",
-    LOCATION: app?.profile.location || "—",
+    LOCATION: app?.profile?.location || "—",
     IS_PWD: app?.profile.fpo || "—",
-    DISABILITY_TYPE: app?.profile.disability_type || "—",
-    PWD_CERTIFICATE: app?.profile.disability_certificate || "—",
+    DISABILITY_TYPE: app?.profile?.disability_type || "—",
+    PWD_CERTIFICATE: app?.profile?.disability_certificate || "—",
     BIO: app?.bio || "—",
     EMAIL: app.email || app.user?.email || "—",
     STATUS: app.is_shortlisted
