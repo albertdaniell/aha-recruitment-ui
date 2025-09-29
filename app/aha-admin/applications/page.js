@@ -14,6 +14,7 @@ export default function ApplicationsPage() {
   const [counties, setCounties] = useState(null);
   const [userCounty, setUserCounty] = useState(null); // store user application
   const [filter, setFilter] = useState("all"); // 🔑 new filter state
+  const [search, setSearch] = useState(""); // 🔎 new search state
 
   const router = useRouter();
 
@@ -209,11 +210,29 @@ export default function ApplicationsPage() {
     );
   };
 
-  // 🔑 Apply filter before rendering
-  const filteredApplications =
-    filter === "all"
-      ? applications
-      : applications?.filter((app) => app?.status === filter);
+  // // 🔑 Apply filter before rendering
+  // const filteredApplications =
+  //   filter === "all"
+  //     ? applications
+  //     : applications?.filter((app) => app?.status === filter);
+ // 🔑 Filter and search
+  const filteredApplications = (applications || [])
+    .filter((app) => {
+      if (filter === "all") return true;
+      return app?.status === filter;
+    })
+    .filter((app) => {
+      if (!search.trim()) return true;
+
+      const query = search.toLowerCase();
+      return (
+        String(app?.id).toLowerCase().includes(query) ||
+        app?.email?.toLowerCase().includes(query) ||
+        app?.user?.email?.toLowerCase().includes(query) ||
+        app?.first_name?.toLowerCase().includes(query) ||
+        app?.last_name?.toLowerCase().includes(query)
+      );
+    });
 
   return (
     <div className="">
@@ -224,21 +243,32 @@ export default function ApplicationsPage() {
           : ""}
       </h1>
 
-      {/* Filter dropdown */}
-      <div className="flex items-center gap-3 mb-4">
-        <label htmlFor="filter" className="text-sm text-slate-600">
-          Filter:
-        </label>
-        <select
-          id="filter"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="border rounded px-2 py-1 text-sm"
-        >
-          <option value="all">All Applications</option>
-          <option value="submitted">Submitted</option>
-          <option value="draft">Drafts</option>
-        </select>
+           {/* Filters + Search row */}
+      <div className="flex items-center gap-3 mb-4 flex-wrap">
+        <div className="flex items-center gap-2">
+          <label htmlFor="filter" className="text-sm text-slate-600">
+            Filter:
+          </label>
+          <select
+            id="filter"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="border rounded px-2 py-1 text-sm"
+          >
+            <option value="all">All Applications</option>
+            <option value="submitted">Submitted</option>
+            <option value="draft">Drafts</option>
+          </select>
+        </div>
+
+        {/* 🔎 Search input */}
+        <input
+          type="text"
+          placeholder="Search by ID, Email, First or Last Name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border rounded px-3 py-1 text-sm flex-1 min-w-[250px]"
+        />
       </div>
 
       {/* Export button */}
@@ -265,7 +295,7 @@ export default function ApplicationsPage() {
         </div>
       ) : (
         <div className="overflow-x-auto rounded-lg shadow">
-          <table className="min-w-full border border-gray-200 text-md text-slate-800 text-sm">
+          <table className="min-w-full border border-gray-200 text-md text-slate-800 text-xs">
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-2 text-left text-sm font-semibold">#</th>
@@ -293,88 +323,100 @@ export default function ApplicationsPage() {
                 <th className="px-4 py-2 text-left text-sm font-semibold">
                   Date Submitted
                 </th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold">Missing Docs</th>
+
                 <th className="px-4 py-2 text-left text-sm font-semibold">
                   Action
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {filteredApplications?.map((app, index) => (
-                <tr
-                  key={app.id}
-                  className={`${
-                    app.status === "draft"
-                      ? "bg-gray-200 text-gray-500"
-                      : "bg-white"
-                  } border-t`}
-                >
-                  <td className="px-4 py-2">{index + 1}</td>
+           <tbody>
+  {filteredApplications?.map((app, index) => {
+    // ✅ Figure out missing documents if draft
+    let missingDocs = [];
+    if (app.status === "draft") {
+      if (!app.cv) missingDocs.push("CV");
+      if (!app.cover_letter) missingDocs.push("Cover Letter");
+      if (!app.kvb_certificate) missingDocs.push("KVB Certificate");
+      if (!app.professional_certificate) missingDocs.push("Professional Certificate");
+      if (!app.national_id_document) missingDocs.push("National ID");
+    }
 
-                  {app.status === "submitted" ? (
-                    <td className="max-w-[150px] px-4 py-2  truncate">
-                      <Link
-                        className="text-blue-500 hover:underline underline"
-                        href={`applications/${app?.id}/`}
-                      >
-                        <span className="">{app?.id || "—"}</span>
-                      </Link>
-                    </td>
-                  ) : (
-                    <td className="px-4 py-2 max-w-[150px] truncate">
-                      <Link
-                        className="text-slate-400 hover:cursor-not-allowed"
-                        href={"#"}
-                      >
-                        <span>{app?.id || "—"}</span>
-                      </Link>
-                    </td>
-                  )}
+    return (
+      <tr
+        key={app.id}
+        className={`${
+          app.status === "draft" ? "bg-gray-200 text-gray-500" : "bg-white"
+        } border-t`}
+      >
+        <td className="px-4 py-2">{index + 1}</td>
 
-                  <td className="px-4 py-2 max-w-[150px]   truncate">
-                    <p>{app?.fpo || "—"}</p>
-                    <span className="text-slate-400">
-                      {app?.profile?.location}
-                    </span>
-                  </td>
+        {/* Application ID */}
+        {app.status === "submitted" ? (
+          <td className="max-w-[150px] px-4 py-2 truncate">
+            <Link
+              className="text-blue-500 hover:underline"
+              href={`applications/${app?.id}/`}
+            >
+              {app?.id || "—"}
+            </Link>
+          </td>
+        ) : (
+          <td className="px-4 py-2 max-w-[150px] truncate">
+            <span className="text-slate-400">{app?.id || "—"}</span>
+          </td>
+        )}
 
-                  <td className="px-4 py-2">{app?.position || "—"}</td>
+        <td className="px-4 py-2 max-w-[150px] truncate">
+          <p>{app?.fpo || "—"}</p>
+          <span className="text-slate-400">{app?.profile?.location}</span>
+        </td>
 
-                  <td className="px-4 py-2">{app?.first_name || "—"}</td>
-                  <td className="px-4 py-2">{app.last_name || "—"}</td>
-                  <td className="px-4 py-2 font-medium">{renderStatus(app)}</td>
-                  <td className="px-4 py-2">
-                    {app.created_at ? FormatDate(app.created_at, false) : "—"}
-                  </td>
-                  <td className="px-4 py-2">
-                    {app.submission_date
-                      ? FormatDate(app.submission_date, false)
-                      : "—"}
-                  </td>
-                  <td>
-                    {app.status === "draft" ? (
-                      <>
-                        <Link
-                          // className="text-slate-400 hover:cursor-not-allowed"
-                        className="text-blue-500 hover:underline"
+        <td className="px-4 py-2">{app?.position || "—"}</td>
+        <td className="px-4 py-2">{app?.first_name || "—"}</td>
+        <td className="px-4 py-2">{app?.last_name || "—"}</td>
+        <td className="px-4 py-2 font-medium">{renderStatus(app)}</td>
+        <td className="px-4 py-2">
+          {app.created_at ? FormatDate(app.created_at, false) : "—"}
+        </td>
+        <td className="px-4 py-2">
+          {app.submission_date ? FormatDate(app.submission_date, false) : "—"}
+        </td>
 
-                        href={`applications/${app?.id}/`}
+       {/* ✅ Missing docs column */}
+<td className="px-4 py-2">
+  {app.status === "draft" ? (
+    missingDocs.length > 0 ? (
+      missingDocs.length > 2 ? (
+        <span className="text-red-500 text-sm">
+          {missingDocs?.length === 5 ? "all" : missingDocs?.length} documents missing
+        </span>
+      ) : (
+        <span className="text-red-500 text-sm">
+          {missingDocs.join(", ")}
+        </span>
+      )
+    ) : (
+      <span className="text-green-600 text-sm">All uploaded</span>
+    )
+  ) : (
+    "—"
+  )}
+</td>
 
-                        >
-                          View
-                        </Link>
-                      </>
-                    ) : (
-                      <Link
-                        className="text-blue-500 hover:underline"
-                        href={`applications/${app?.id}/`}
-                      >
-                        View
-                      </Link>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+        {/* Action */}
+        <td className="px-4 py-2">
+          <Link
+            className="text-blue-500 hover:underline"
+            href={`applications/${app?.id}/`}
+          >
+            View
+          </Link>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
           </table>
         </div>
       )}
