@@ -166,7 +166,7 @@ const exportToExcel = () => {
     IS_PWD: app?.profile?.fpo || "—",
     DISABILITY_TYPE: app?.profile?.disability_type || "—",
     PWD_CERTIFICATE: app?.profile?.disability_certificate || "—",
-    BIO: app?.bio || "—",
+    BIO: app?.profile?.bio || "—",
     EMAIL: app.email || app.user?.email || "—",
     STATUS: app.is_shortlisted
       ? "Shortlisted"
