@@ -213,7 +213,7 @@ export default function ApplicationsPage() {
   const filteredApplications =
     filter === "all"
       ? applications
-      : applications?.filter((app) => app.status === filter);
+      : applications?.filter((app) => app?.status === filter);
 
   return (
     <div className="">
