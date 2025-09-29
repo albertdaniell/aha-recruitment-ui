@@ -287,14 +287,23 @@ export default function ApplicationsPage() {
         This will export only submitetd records
       </p>
 
-      {filteredApplications?.length === 0 ? (
-        <div className="bg-orange-300 p-5 rounded-md">
-          <p className="text-orange-800">
-            There seems to be no applications made.
-          </p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto rounded-lg shadow">
+      {applications === null ? (
+  <div className="flex justify-center items-center py-16">
+    <div className="flex flex-col items-center">
+      {/* Spinner */}
+      <div className="h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <p className="mt-3 text-sm text-slate-600">Loading applications...</p>
+    </div>
+  </div>
+) : filteredApplications?.length === 0 ? (
+  <div className="bg-orange-300 p-5 rounded-md">
+    <p className="text-orange-800">
+      There seems to be no applications made.
+    </p>
+  </div>
+) : (
+  <div className="overflow-x-auto rounded-lg shadow">
+  <div className="overflow-x-auto rounded-lg shadow">
           <table className="min-w-full border border-gray-200 text-md text-slate-800 text-xs">
             <thead className="bg-gray-100">
               <tr>
@@ -419,7 +428,10 @@ export default function ApplicationsPage() {
 </tbody>
           </table>
         </div>
-      )}
+  </div>
+)}
+
+      
     </div>
   );
 }
