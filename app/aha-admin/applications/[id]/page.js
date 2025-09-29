@@ -17,7 +17,7 @@ export default function ApplicationDetails({ params }) {
   const [showDoneShortlist, setShowDownShortlist] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(null);
-  const [accordionOpen, setAccordionOpen] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(true);
   let [msg,set_msg] = useState("Done shortlisting!")
 
   async function fetchApplicationDetail() {
@@ -129,7 +129,7 @@ export default function ApplicationDetails({ params }) {
   if (!application) return <p className="p-6">Application not found</p>;
   return (
     <div className="p-6 bg-white shadow-md rounded-2xl">
-      <h1 className="text-2xl font-bold mb-4">Application Details</h1>
+      <h1 className="text-md  mb-4"><Link className="text-blue-500 hover:underline" href={"/aha-admin/applications/"}>Back to Applications</Link> / <Link href={"#"}>Application Details</Link></h1>
 
       <div className="border rounded-lg shadow-sm">
         <button
@@ -378,6 +378,44 @@ export default function ApplicationDetails({ params }) {
 
       {/* Documents */}
       {/* {JSON.stringify(application)} */}
+      {/* ⚠️ Draft Warning */}
+{application?.status === "draft" && (
+  <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded">
+    <p>
+      This application is still in <strong>Draft</strong> mode and has not been submitted yet.
+    </p>
+  </div>
+)}
+
+
+{/* ⚠️ Missing Documents Warning */}
+{(() => {
+  const requiredDocs = [
+    { label: "Cover Letter", key: "cover_letter" },
+    { label: "CV", key: "cv" },
+    { label: "KVB Certificate", key: "kvb_certificate" },
+    { label: "National ID", key: "national_id_document" },
+    { label: "Professional Certificate", key: "professional_certificate" },
+  ];
+
+  const missingDocs = requiredDocs.filter((doc) => !application[doc.key]);
+
+  if (missingDocs.length > 0) {
+    return (
+      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-4 rounded">
+        <p className="font-semibold mb-2">
+          Some required documents are missing:
+        </p>
+        <ul className="list-disc list-inside">
+          {missingDocs.map((doc) => (
+            <li key={doc.key}>{doc.label}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  return null;
+})()}
       <h2 className="text-xl font-semibold mt-6 mb-4">Documents</h2>
       <div className="grid md:grid-cols-2 gap-6">
         {[
