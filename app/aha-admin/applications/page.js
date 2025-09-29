@@ -15,6 +15,7 @@ export default function ApplicationsPage() {
   const [userCounty, setUserCounty] = useState(null); // store user application
   const [filter, setFilter] = useState("all"); // 🔑 new filter state
   const [search, setSearch] = useState(""); // 🔎 new search state
+  const [exportAll, setExportAll] = useState(false);
 
   const router = useRouter();
 
@@ -210,6 +211,78 @@ export default function ApplicationsPage() {
     );
   };
 
+   const exportToExcel_All = () => {
+    if (!applications) return;
+
+    // format for excel
+    const exportData = applications
+      
+      ?.map((app, index) => ({
+        "#": index + 1,
+        APPLICATION_ID: app.id,
+        Position:
+          app.position === "VS"
+            ? "Veterinary Surgeon"
+            : app.position === "VPP"
+            ? "Veterinary Para-professional"
+            : "—",
+        FIRST_NAME: app.first_name || "—",
+        LAST_NAME: app.last_name || "—",
+        GENDER: app?.profile?.gender || "—",
+        PHONE: app?.phone || "—",
+        COUNTY: app?.county || "—",
+        WARD: app?.ward || "—",
+        FPO: app?.fpo || "—",
+        LOCATION: app?.profile.location || "—",
+        IS_PWD: app?.profile.fpo || "—",
+        DISABILITY_TYPE: app?.profile.disability_type || "—",
+        PWD_CERTIFICATE: app?.profile.disability_certificate || "—",
+        BIO: app?.bio || "—",
+        EMAIL: app.email || app.user?.email || "—",
+        STATUS: app.is_shortlisted
+          ? "Shortlisted"
+          : app.is_not_shortlisted
+          ? "Rejected"
+          : app.status,
+        CVUploaded: app.cv ? app.cv : "No",
+        CoverLetterUploaded: app.cover_letter ? app.cover_letter : "No",
+        KVBCertificateUploaded: app.kvb_certificate
+          ? app.kvb_certificate
+          : "No",
+        ProfessionalCertificateUploaded: app.professional_certificate
+          ? app.professional_certificate
+          : "No",
+        NationalIDUploaded: app.national_id_document
+          ? app.national_id_document
+          : "No",
+        DateCreated: app.created_at
+          ? new Date(app.created_at).toLocaleDateString()
+          : "—",
+        DateUpdated: app.updated_at
+          ? new Date(app.updated_at).toLocaleDateString()
+          : "—",
+      }));
+
+    // create worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData);
+
+    // autosize columns
+    const colWidths = Object.keys(exportData[0] || {}).map((key) => ({
+      wch: Math.max(key.length + 2, 15), // min 15 width
+    }));
+    ws["!cols"] = colWidths;
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Applications");
+
+    // save file
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(
+      new Blob([wbout], { type: "application/octet-stream" }),
+      "applications.xlsx"
+    );
+  };
+
   // // 🔑 Apply filter before rendering
   // const filteredApplications =
   //   filter === "all"
@@ -271,21 +344,37 @@ export default function ApplicationsPage() {
         />
       </div>
 
+     <div>
+      {/* Toggle */}
+      <label className="flex items-center mb-2 gap-2 text-sm text-slate-600">
+        <input
+          type="checkbox"
+          checked={exportAll}
+          onChange={(e) => setExportAll(e.target.checked)}
+          className="rounded border-gray-300"
+        />
+        Export all applications
+      </label>
+
       {/* Export button */}
       <button
         disabled={applications?.length === 0}
-        onClick={exportToExcel}
+        onClick={exportAll ? exportToExcel_All :  exportToExcel}
         className={`${
           applications?.length === 0
             ? "bg-slate-300 cursor-not-allowed"
             : "bg-green-600 hover:bg-green-700"
-        } px-4 py-2  text-white rounded  transition mb-2 text-sm`}
+        } px-4 py-2 text-white rounded transition mb-2 text-sm`}
       >
         Export to Excel
       </button>
+
       <p className="text-slate-500 text-sm mb-5">
-        This will export only submitetd records
+        {exportAll
+          ? "This will export all records"
+          : "This will export only submitted records"}
       </p>
+    </div>
 
       {applications === null ? (
   <div className="flex justify-center items-center py-16">

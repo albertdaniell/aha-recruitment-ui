@@ -80,6 +80,10 @@ export default function ApplicationDetails({ params }) {
           ? { is_shortlisted: true, is_not_shortlisted: false }
           : { is_shortlisted: false, is_not_shortlisted: true };
 
+          console.log({body})
+
+          // return 0
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL}${id}/shortlist/`,
         {
@@ -91,10 +95,12 @@ export default function ApplicationDetails({ params }) {
           body: JSON.stringify(body),
         }
       );
-      // console.log(await res.json())
+      // console.log(await re))
+      console.log({res})
 
       if (!res.ok) {
         let res_json = await res.json();
+        console.log({res_json})
         console.log(res_json);
         setLoading2(false);
 
@@ -106,7 +112,12 @@ export default function ApplicationDetails({ params }) {
         }
       }
 
+
       const updated = await res.json();
+      console.log({updated})
+      if(updated?.detail){
+        set_msg(updated?.detail)
+      }
       setApplication((prev) => ({ ...prev, ...updated }));
       setLoading2(false);
       setShowDownShortlist(true);
