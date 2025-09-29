@@ -137,79 +137,78 @@ export default function ApplicationsPage() {
   }
 
   // 🔑 Export function
-  const exportToExcel = () => {
-    if (!applications) return;
+const exportToExcel = () => {
+  if (!applications) return;
 
-    // format for excel
-    const exportData = applications
-      ?.filter((app1) => {
-        return app1?.status === "submitted";
-      })
-      ?.map((app, index) => ({
-        "#": index + 1,
-        APPLICATION_ID: app.id,
-        Position:
-          app.position === "VS"
-            ? "Veterinary Surgeon"
-            : app.position === "VPP"
-            ? "Veterinary Para-professional"
-            : "—",
-        FIRST_NAME: app.first_name || "—",
-        LAST_NAME: app.last_name || "—",
-        GENDER: app?.profile?.gender || "—",
-        PHONE: app?.phone || "—",
-        COUNTY: app?.county || "—",
-        WARD: app?.ward || "—",
-        FPO: app?.fpo || "—",
-        LOCATION: app?.profile.location || "—",
-        IS_PWD: app?.profile.fpo || "—",
-        DISABILITY_TYPE: app?.profile.disability_type || "—",
-        PWD_CERTIFICATE: app?.profile.disability_certificate || "—",
-        BIO: app?.bio || "—",
-        EMAIL: app.email || app.user?.email || "—",
-        STATUS: app.is_shortlisted
-          ? "Shortlisted"
-          : app.is_not_shortlisted
-          ? "Rejected"
-          : app.status,
-        CVUploaded: app.cv ? app.cv : "No",
-        CoverLetterUploaded: app.cover_letter ? app.cover_letter : "No",
-        KVBCertificateUploaded: app.kvb_certificate
-          ? app.kvb_certificate
-          : "No",
-        ProfessionalCertificateUploaded: app.professional_certificate
-          ? app.professional_certificate
-          : "No",
-        NationalIDUploaded: app.national_id_document
-          ? app.national_id_document
-          : "No",
-        DateCreated: app.created_at
-          ? new Date(app.created_at).toLocaleDateString()
-          : "—",
-        DateUpdated: app.updated_at
-          ? new Date(app.updated_at).toLocaleDateString()
-          : "—",
-      }));
+  // ✅ Choose filter based on toggle
+  const filteredApps = exportAll
+    ? applications
+    : applications.filter((app1) => app1?.status === "submitted");
 
-    // create worksheet
-    const ws = XLSX.utils.json_to_sheet(exportData);
+  // format for excel
+  const exportData = filteredApps?.map((app, index) => ({
+    "#": index + 1,
+    APPLICATION_ID: app.id,
+    Position:
+      app.position === "VS"
+        ? "Veterinary Surgeon"
+        : app.position === "VPP"
+        ? "Veterinary Para-professional"
+        : "—",
+    FIRST_NAME: app.first_name || "—",
+    LAST_NAME: app.last_name || "—",
+    GENDER: app?.profile?.gender || "—",
+    PHONE: app?.phone || "—",
+    COUNTY: app?.county || "—",
+    WARD: app?.ward || "—",
+    FPO: app?.fpo || "—",
+    LOCATION: app?.profile.location || "—",
+    IS_PWD: app?.profile.fpo || "—",
+    DISABILITY_TYPE: app?.profile.disability_type || "—",
+    PWD_CERTIFICATE: app?.profile.disability_certificate || "—",
+    BIO: app?.bio || "—",
+    EMAIL: app.email || app.user?.email || "—",
+    STATUS: app.is_shortlisted
+      ? "Shortlisted"
+      : app.is_not_shortlisted
+      ? "Rejected"
+      : app.status,
+    CVUploaded: app.cv ? app.cv : "No",
+    CoverLetterUploaded: app.cover_letter ? app.cover_letter : "No",
+    KVBCertificateUploaded: app.kvb_certificate ? app.kvb_certificate : "No",
+    ProfessionalCertificateUploaded: app.professional_certificate
+      ? app.professional_certificate
+      : "No",
+    NationalIDUploaded: app.national_id_document
+      ? app.national_id_document
+      : "No",
+    DateCreated: app.created_at
+      ? new Date(app.created_at).toLocaleDateString()
+      : "—",
+    DateUpdated: app.updated_at
+      ? new Date(app.updated_at).toLocaleDateString()
+      : "—",
+  }));
 
-    // autosize columns
-    const colWidths = Object.keys(exportData[0] || {}).map((key) => ({
-      wch: Math.max(key.length + 2, 15), // min 15 width
-    }));
-    ws["!cols"] = colWidths;
+  // create worksheet
+  const ws = XLSX.utils.json_to_sheet(exportData);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Applications");
+  // autosize columns
+  const colWidths = Object.keys(exportData[0] || {}).map((key) => ({
+    wch: Math.max(key.length + 2, 15), // min 15 width
+  }));
+  ws["!cols"] = colWidths;
 
-    // save file
-    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    saveAs(
-      new Blob([wbout], { type: "application/octet-stream" }),
-      "applications.xlsx"
-    );
-  };
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Applications");
+
+  // save file
+  const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  saveAs(
+    new Blob([wbout], { type: "application/octet-stream" }),
+    "applications.xlsx"
+  );
+};
 
    const exportToExcel_All = () => {
     if (!applications) return;
@@ -357,7 +356,7 @@ export default function ApplicationsPage() {
       {/* Export button */}
       <button
         disabled={applications?.length === 0}
-        onClick={exportAll ? exportToExcel_All :  exportToExcel}
+        onClick={exportToExcel}
         className={`${
           applications?.length === 0
             ? "bg-slate-300 cursor-not-allowed"
