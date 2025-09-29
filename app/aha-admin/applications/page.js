@@ -215,9 +215,7 @@ export default function ApplicationsPage() {
     if (!applications) return;
 
     // format for excel
-    const exportData = applications
-      
-      ?.map((app, index) => ({
+    const exportData = applications?.map((app, index) => ({
         "#": index + 1,
         APPLICATION_ID: app.id,
         Position:
