@@ -107,6 +107,8 @@ export default function DashboardLayout({ children }) {
     { name: "Home", href: "/aha-admin/home" },
     { name: "Applications", href: "/aha-admin/applications" },
     { name: "Shortlisted", href: "/aha-admin/shortlisted" },
+    { name: "Help", href: "/aha-admin/help" },
+
     { name: "County Settings", href: "/aha-admin/county-setting" },
     // { name: "Advertisement", href: "/applicant/advertisement" },
     { name: "Website Home", href: "/" },
@@ -118,6 +120,8 @@ export default function DashboardLayout({ children }) {
     { name: "Home", href: "/aha-admin/home" },
     { name: "Applications", href: "/aha-admin/applications" },
     { name: "Shortlisted", href: "/aha-admin/shortlisted" },
+    { name: "Help", href: "/aha-admin/help" },
+
     // { name: "Advertisement", href: "/applicant/advertisement" },
     { name: "Website Home", href: "/" },
 
@@ -127,6 +131,8 @@ export default function DashboardLayout({ children }) {
     { name: "Home", href: "/aha-admin/home" },
     { name: "Applications", href: "/aha-admin/applications" },
     { name: "Shortlisted", href: "/aha-admin/shortlisted" },
+    { name: "Help", href: "/aha-admin/help" },
+
     // { name: "Advertisement", href: "/applicant/advertisement" },
     { name: "Website Home", href: "/" },
 
@@ -142,6 +148,8 @@ export default function DashboardLayout({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem("login_response");
+    localStorage.removeItem("@applications_url");
+
     router.push("/aha/login");
   };
 
