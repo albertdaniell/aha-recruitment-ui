@@ -221,7 +221,8 @@ export default function ApplyPage() {
       setUploadProgress((prev) => ({ ...prev, [field]: 0 }));
     } catch (err) {
       console.log({ err });
-      const msg = `❌ Failed to upload ${field.replace("_", " ")}`;
+      const msg = `❌ Failed to upload ${field.replace(/_/g, " ")}. Please click on "View ${field.replace(/_/g, " ")}" below to confirm your documents were uploaded.`;
+      // const msg = `❌ Failed to upload ${field.replace("_", " ")} . kindly click on the view   ${field.replace("_", " ")} below to confirm that you have uploaded the documents`;
       setMessages((prev) => ({ ...prev, [field]: msg }));
       set_Message(msg);
       set_showMessage(true);
