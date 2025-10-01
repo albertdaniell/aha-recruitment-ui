@@ -527,7 +527,7 @@ export default function ApplyPage() {
                     onClick={() => openPdfModal(application[field])}
                     className="py-2  text-blue-600  transition text-sm"
                   >
-                    View Current {label}
+                    View Current uploaded {label}
                   </button>
                 </div>
               )}
