@@ -101,6 +101,17 @@ export default function ApplicationsPage() {
     // fetchApplications
   };
 
+  useEffect(()=>{
+    if(counties && userCounty){
+      let app_counties = counties
+      app_counties = app_counties?.filter((county)=>{
+        return county?.project === userCounty?.project
+      })
+      setCounties(app_counties)
+    }
+
+  },counties,userCounty)
+
   useEffect(() => {
     if (counties && user) {
       let county = counties?.find((c) => c?.id === user.county?.id);
@@ -477,7 +488,7 @@ export default function ApplicationsPage() {
         <>
           <div className="overflow-x-auto rounded-lg shadow bg-green-400  max-h-[500px]">
             <div className="overflow-x-auto rounded-lg shadow">
-              <table className="min-w-full border border-gray-200 text-md text-slate-800 text-xs">
+              <table className="min-w-full border border-gray-200 text-md text-slate-800 text-sm">
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="px-4 py-2 text-left text-sm font-semibold">
@@ -487,7 +498,20 @@ export default function ApplicationsPage() {
                       Application ID
                     </th>
                     <th className="px-4 py-2 text-left text-sm font-semibold">
+                      County
+                    </th>
+                    {
+                      userCounty?.project === "NAVCDP"
+                      ?
+ <th className="px-4 py-2 text-left text-sm font-semibold">
                       FPO
+                    </th>:
+                     <th className="px-4 py-2 text-left text-sm font-semibold">
+                      Subcounty
+                    </th>
+                    }
+                        <th className="px-4 py-2 text-left text-sm font-semibold">
+                      Ward
                     </th>
                     <th className="px-4 py-2 text-left text-sm font-semibold">
                       Position
@@ -533,11 +557,14 @@ export default function ApplicationsPage() {
 
                     return (
                       <tr
+                      onClick={()=>{
+                        router.push(`applications/${app?.id}/`)
+                      }}
                         key={app.id}
                         className={`${
                           app.status === "draft"
-                            ? "bg-gray-200 text-gray-500"
-                            : "bg-white"
+                            ? "bg-gray-200 text-gray-500 hover:bg-green-100 hover:text-black hover:shadow-xl hover:cursor-pointer"
+                            : "bg-white hover:bg-green-100 hover:text-black hover:shadow-xl hover:cursor-pointer"
                         } border-t`}
                       >
                         <td className="px-4 py-2">{index + 1}</td>
@@ -559,13 +586,34 @@ export default function ApplicationsPage() {
                             </span>
                           </td>
                         )}
+                         <td className="px-4 py-2 max-w-[150px] truncate">
+                            <span className="text-slate-400">
+                              {app?.county || "—"}
+                            </span>
+                          </td>
 
-                        <td className="px-4 py-2 max-w-[150px] truncate">
+                        {
+                      userCounty?.project === "NAVCDP"
+                      ?
+<td className="px-4 py-2 max-w-[150px] truncate">
                           <p>{app?.fpo || "—"}</p>
                           <span className="text-slate-400">
                             {app?.profile?.location}
                           </span>
-                        </td>
+                        </td>:
+
+                         <td className="px-4 py-2 max-w-[150px] truncate">
+                            <span className="text-slate-400">
+                              {app?.subcounty || "—"}
+                            </span>
+                          </td>
+                    }
+
+                         <td className="px-4 py-2 max-w-[150px] truncate">
+                            <span className="text-slate-400">
+                              {app?.ward || "—"}
+                            </span>
+                          </td> 
 
                         <td className="px-4 py-2">{app?.position || "—"}</td>
                         <td className="px-4 py-2">{app?.first_name || "—"}</td>

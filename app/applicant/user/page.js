@@ -45,6 +45,17 @@ export default function ProfilePage() {
     }
   }, [user, counties]);
 
+  useEffect(()=>{
+      if(counties && userCounty){
+        let app_counties = counties
+        app_counties = app_counties?.filter((county)=>{
+          return county?.project === userCounty?.project
+        })
+        setCounties(app_counties)
+      }
+  
+    },counties,userCounty)
+
   useEffect(() => {
     const fetchUserData = async () => {
       const loginData = JSON.parse(localStorage.getItem("login_response"));
