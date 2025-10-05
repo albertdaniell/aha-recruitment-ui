@@ -98,7 +98,7 @@ export default function ComplaintsPage() {
       <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Submit a New Complaint</h2>
         <p className="text-slate-500 mb-5 text-sm">
-          Relies will be sent via email to {user?.email}
+          Replies will be sent via email to {user?.email}
         </p>
         {error && <p className="text-red-600 mb-2">{error}</p>}
         <form onSubmit={handlePostComplaint} className="space-y-4">

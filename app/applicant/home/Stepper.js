@@ -4,6 +4,8 @@ const steps = [
   { id: 2, name: "Draft Application" },
   { id: 3, name: "Application Submitted" },
   { id: 4, name: "Shortlisted" },
+  { id: 5, name: "Recruited" },
+
 ];
 
 export default function Stepper({ currentStep }) {

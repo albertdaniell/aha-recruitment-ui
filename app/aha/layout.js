@@ -49,10 +49,10 @@ function Layout({ children }) {
   {/* Right Scrollable Content */}
   <main className="md:ml-[40%] flex-1 flex items-center justify-center md:p-8 p-5">
     <div className="w-full">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <img
           src="/emblem.png"
-          className="md:w-[80px] md:h-[80px] w-[50px] h-[50px]"
+          className="md:w-[80px] md:h-[100px] w-[50px] h-[50px]"
         />
         <img
           src="/cog.png"
@@ -64,7 +64,7 @@ function Layout({ children }) {
         Ward Veterinary Surgeons and Veterinary Para Professionals for
         County FMD & PPR Vaccination Campaign Application form
       </h3>
-      <h3 className="mt-5">
+      <h3 className="mt-5 text-slate-600">
         By having an account you can track your application
       </h3>
 

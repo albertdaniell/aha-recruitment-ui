@@ -77,15 +77,14 @@ export default function HomePage() {
         let profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        
-        profileRes = await profileRes.json()
 
-        console.log(profileRes)
-        if(profileRes.is_updated){
-        setHasProfile(true);
-        }else{
-        setHasProfile(false);
+        profileRes = await profileRes.json();
 
+        console.log(profileRes);
+        if (profileRes.is_updated) {
+          setHasProfile(true);
+        } else {
+          setHasProfile(false);
         }
 
         // Get application
@@ -157,9 +156,20 @@ export default function HomePage() {
                 {userCounty.name} County
               </h2>
               <p className="text-slate-500 text-xs">
-                Ends:{" "}
-                {FormatDate(userCounty.end_of_application, false) ||
-                  "Not specified"}
+                {userCounty?.project}
+              </p>
+              <p className="text-slate-500 text-xs">
+                {userCounty?.is_open ? (
+                  <>
+                    Ends:{" "}
+                    {FormatDate(userCounty.end_of_application, false) ||
+                      "Not specified"}
+                  </>
+                ) : (
+                  <span className="text-orange-500">
+                    🚫 Applications closed
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -231,59 +241,84 @@ export default function HomePage() {
           <div>
             <Clipboard color="indigo" size={40} />
             <h2 className="text-lg font-bold mb-2 mt-3">
-              {application
-                ? application?.status === "draft"
-                  ? `Continue Your Application ${
-                      userCounty?.end_of_application
-                        ? `(Deadline ${FormatDate(
-                            userCounty?.end_of_application,
-                            false
-                          )})`
-                        : "- Deadline Not Specificied"
-                    }`
-                  : "Application Submitted"
-                : `Apply Now ${
-                    userCounty?.end_of_application
-                      ? `(Deadline ${FormatDate(
-                          userCounty?.end_of_application,
-                          false
-                        )})`
-                      : "(Deadline Not Specificied)"
-                  } ${
-                    user.county?.name
-                      ? `for ${user?.county.name}`
-                      : ""
-                  } & Upload Documents`}
-            </h2>
-            <p className="text-gray-600">
-              {/* {JSON.stringify(hasProfile)} */}
-              {hasProfile
-                ? application
-                  ? application.status === "draft"
-                    ? "You have a draft application. Continue uploading your documents and submit."
-                    : application.is_shortlisted
-                    ? "🎉 Congratulations! Your application has been shortlisted."
-                    : application.is_not_shortlisted
-                    ? "❌ Unfortunately, your application was not shortlisted."
-                    : "Your application has been submitted and is under review."
-                  : "Apply to available programs and submit your certificates for review."
-                : "Please update your profile before applying."}
-            </p>
+  {!userCounty?.is_open ? (
+    // 🔴 When county is closed
+    `🚫 Applications Closed${
+      userCounty?.end_of_application
+        ? ` — Deadline was ${FormatDate(userCounty.end_of_application, false)}`
+        : ""
+    }`
+  ) : application ? (
+    // 🟡 When application exists
+    application.status === "draft" ? (
+      `Continue Your Application${
+        userCounty?.end_of_application
+          ? ` (Deadline: ${FormatDate(userCounty.end_of_application, false)})`
+          : " — Deadline Not Specified"
+      }`
+    ) : (
+      // ✅ Submitted application
+      "✅ Application Submitted"
+    )
+  ) : (
+    // 🟢 No application yet
+    `Apply Now${
+      userCounty?.end_of_application
+        ? ` (Deadline: ${FormatDate(userCounty.end_of_application, false)})`
+        : " — Deadline Not Specified"
+    }${
+      user?.county?.name ? ` for ${user.county.name}` : ""
+    } & Upload Documents`
+  )}
+</h2>
+           <p className="text-gray-600">
+  {!userCounty?.is_open ? (
+    // 🔴 County closed
+    `Applications for ${user?.county?.name || "your county"} are now closed.${
+      userCounty?.end_of_application
+        ? ``
+        : ""
+    }`
+  ) : !hasProfile ? (
+    // 🟡 No profile yet
+    "👤 Please complete your profile before applying."
+  ) : application ? (
+    // 🟢 Has an application
+    application.status === "draft" ? (
+      "📝 You have a draft application. Continue uploading your documents and submit before the deadline."
+    ) : application.is_shortlisted ? (
+      "🎉 Congratulations! Your application has been shortlisted."
+    ) : application.is_not_shortlisted ? (
+      "❌ Unfortunately, your application was not shortlisted."
+    ) : (
+      "✅ Your application has been submitted and is under review."
+    )
+  ) : (
+    // 🟢 No application yet
+    "Apply to available programs and submit your certificates for review."
+  )}
+</p>
           </div>
           <button
             onClick={handleApply}
             disabled={
-              !hasProfile || (application && application.status === "submitted")
+              !hasProfile ||
+              application?.status === "submitted" ||
+              !userCounty?.is_open
             }
-            className={`mt-6 py-3 rounded-lg text-lg font-bold transition ${
-              !hasProfile || (application && application.status === "submitted")
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            }`}
+            className={`mt-6 w-full py-3 rounded-lg text-lg font-semibold transition-colors duration-200
+    ${
+      !hasProfile || application?.status === "submitted" || !userCounty?.is_open
+        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+        : "bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800"
+    }
+  `}
           >
-            {application
+            {!userCounty?.is_open
+              ? "Applications Closed"
+              : application
               ? application.status === "draft"
-                ? "Continue Application"
+                ? "Continue Your Application"
                 : "Application Submitted"
               : "Apply Now"}
           </button>

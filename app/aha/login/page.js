@@ -1,39 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { EyeClosed, EyeClosedIcon, EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeOpen } from "akar-icons";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
-  // Check localStorage on mount
-  //   useEffect(() => {
-  //     setLoadingUser(true);
-  //     setTimeout(() => {
-  //       const loginData = localStorage.getItem("login_response");
-  //       if (loginData) {
-  //         const parsed = JSON.parse(loginData);
-  //         if (
-  //           parsed?.user?.role?.toUpperCase() === "REVIEWER" ||
-  //           parsed?.user?.role?.toUpperCase() === "ADMIN"
-  //         ) {
-  //           setLoadingUser(false);
-
-  //           router.push("/aha-admin/home");
-  //         } else {
-  //           setLoadingUser(false);
-
-  //           router.push("/applicant/home");
-  //         }
-  //       }
-  //       setLoadingUser(false);
-  //     }, 1000);
-  //   }, [router]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -55,12 +34,10 @@ export default function LoginPage() {
 
       if (!res.ok) throw new Error(data.detail || "Login failed");
 
-      // Store login response in localStorage
       localStorage.setItem("login_response", JSON.stringify(data));
 
-      // Redirect by role
       const role = data?.user?.role?.toUpperCase();
-      if (role === "REVIEWER" || role === "ADMIN" || role === "FPO") {
+      if (["REVIEWER", "ADMIN", "FPO"].includes(role)) {
         router.push("/aha-admin/home");
       } else {
         router.push("/applicant/home");
@@ -82,7 +59,6 @@ export default function LoginPage() {
 
   return (
     <div>
-      {/* Right Form */}
       <div>
         <div className="flex items-center justify-between mb-6">
           <Link
@@ -94,8 +70,11 @@ export default function LoginPage() {
 
           <h2 className="text-2xl font-bold">Login</h2>
         </div>
+
         {message && <p className="mb-4 text-red-600">{message}</p>}
+
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
           <div>
             <label className="text-slate-900 text-sm">Email</label>
             <input
@@ -108,17 +87,34 @@ export default function LoginPage() {
               required
             />
           </div>
+
+          {/* Password with show/hide toggle */}
           <div>
             <label className="text-slate-900 text-sm">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password ***"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password ***"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-2 border rounded pr-10"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700 text-sm"
+              >
+                {
+                  showPassword ? 
+                  <EyeOffIcon>
+                  </EyeOffIcon>:
+                  <EyeIcon/>
+                }
+                {/* {showPassword ? "🙈" : "👁️"} */}
+              </button>
+            </div>
           </div>
 
           <button

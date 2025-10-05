@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Send } from "akar-icons";
 import AppModal from "@/app/components/AppModal/AppModal";
-import {APP_FETCH} from "@/app/constants/FetchService"
+import { APP_FETCH } from "@/app/constants/FetchService";
 import axios from "axios";
 
 export default function ApplyPage() {
@@ -22,7 +22,7 @@ export default function ApplyPage() {
   const [showMessage, set_showMessage] = useState(null);
   const [Message, set_Message] = useState(null);
   const [uploadProgress, setUploadProgress] = useState({}); // { fieldName: 0-100 }
- const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const openPdfModal = (url) => {
     setPdfUrl(url);
     setIsModalOpen(true);
@@ -70,21 +70,20 @@ export default function ApplyPage() {
       const token = loginData.access;
 
       try {
-        
-        let profileRes = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL)
+        let profileRes = await APP_FETCH(process.env.NEXT_PUBLIC_PROFILE_URL);
 
         setProfileExists(profileRes.ok);
-        if(profileRes.ok){
+        if (profileRes.ok) {
           let data = await profileRes.json();
 
-          setProfile(data)
+          setProfile(data);
         }
 
         // const appRes = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
         //   headers: { Authorization: `Bearer ${token}` },
         // });
 
-        let appRes = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL)
+        let appRes = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL);
 
         if (appRes.ok) {
           const data = await appRes.json();
@@ -108,22 +107,21 @@ export default function ApplyPage() {
     }
   };
 
-  let checkApplicationUnsaved=()=>{
-    if(application){
-      console.log({application})
-// let check = application?.find((app)=>{
-//       app?.saved === true
-//     })
+  let checkApplicationUnsaved = () => {
+    if (application) {
+      console.log({ application });
+      // let check = application?.find((app)=>{
+      //       app?.saved === true
+      //     })
 
-//     console.log(check)
+      //     console.log(check)
 
-//     return check
+      //     return check
     }
-    
-  }
-  useEffect(()=>{
-    checkApplicationUnsaved()
-  },[application])
+  };
+  useEffect(() => {
+    checkApplicationUnsaved();
+  }, [application]);
 
   const handleFileSave_Old = async (field) => {
     if (draftStatus === "submitted") return;
@@ -141,18 +139,25 @@ export default function ApplyPage() {
     body.append(field, application[field]);
 
     try {
-    //   const res = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
-    //     method: "POST",
-    //     headers: { Authorization: `Bearer ${token}` },
-    //     body,
-    //   });
+      //   const res = await fetch(process.env.NEXT_PUBLIC_APPLICATION_URL, {
+      //     method: "POST",
+      //     headers: { Authorization: `Bearer ${token}` },
+      //     body,
+      //   });
 
-        let res = await APP_FETCH(process.env.NEXT_PUBLIC_APPLICATION_URL,"POST",body)
-      
+      let res = await APP_FETCH(
+        process.env.NEXT_PUBLIC_APPLICATION_URL,
+        "POST",
+        body
+      );
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.detail || "Failed to save the document. If you’ve already uploaded it, you can safely ignore this message. Click ‘View current document’ above the Save button to confirm your upload.");
+        console.log(data);
+        throw new Error(
+          data?.detail ||
+            "Failed to save the document. If you’ve already uploaded it, you can safely ignore this message. Click ‘View current document’ above the Save button to confirm your upload."
+        );
       }
 
       const updated = await res.json();
@@ -221,7 +226,18 @@ export default function ApplyPage() {
       setUploadProgress((prev) => ({ ...prev, [field]: 0 }));
     } catch (err) {
       console.log({ err });
-      const msg = `❌ Failed to upload ${field.replace(/_/g, " ")}. Please click on "View current uploaded ${field.replace(/_/g, " ")}" below to confirm your documents were uploaded.`;
+      let msg =
+        err?.response?.data?.detail ||
+        `❌ Failed to upload ${field.replace(
+          /_/g,
+          " "
+        )}. Please click on "View current uploaded ${field.replace(
+          /_/g,
+          " "
+        )}" below to confirm your documents were uploaded.`;
+      // if(err?.response?.data?.detail){
+      //   msg=""
+      // }
       // const msg = `❌ Failed to upload ${field.replace("_", " ")} . kindly click on the view   ${field.replace("_", " ")} below to confirm that you have uploaded the documents`;
       setMessages((prev) => ({ ...prev, [field]: msg }));
       set_Message(msg);
@@ -237,7 +253,6 @@ export default function ApplyPage() {
       "professional_certificate",
       "national_id_document",
       "personal_insurance",
-
     ];
 
     let allSaved = true;
@@ -268,32 +283,31 @@ export default function ApplyPage() {
   };
 
   function hasAllCertificates(application) {
-  const requiredFields = [
-    "cv",
-    "cover_letter",
-    "kvb_certificate",
-    "professional_certificate",
-    "national_id_document",
-  ];
+    const requiredFields = [
+      "cv",
+      "cover_letter",
+      "kvb_certificate",
+      "professional_certificate",
+      "national_id_document",
+    ];
 
-  return requiredFields.every((field) => application[field] !== null);
-}
+    return requiredFields.every((field) => application[field] !== null);
+  }
 
   const handleSubmitApplication = () => {
     console.log({ application });
-      if (application === null) {
+    if (application === null) {
       set_Message("Cannot submit. Some required information are missing");
       set_showMessage(true);
       return false;
     }
 
-     if (!hasAllCertificates(application)) {
-    set_Message("❌ Cannot submit. Some required certificates are missing.");
+    if (!hasAllCertificates(application)) {
+      set_Message("❌ Cannot submit. Some required certificates are missing.");
       set_showMessage(true);
       return false;
-  }
+    }
 
-  
     if (!isAllDocumentsSaved()) {
       set_Message(
         "🛑 You have uploaded documents that are not saved. Please save all documents before final submission."
@@ -317,12 +331,14 @@ export default function ApplyPage() {
     const token = loginData.access;
 
     try {
-    //   const res = await fetch(process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL, {
-    //     method: "POST",
-    //     headers: { Authorization: `Bearer ${token}` },
-    //   });
-        let res = await APP_FETCH(process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL,"POST")
-
+      //   const res = await fetch(process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL, {
+      //     method: "POST",
+      //     headers: { Authorization: `Bearer ${token}` },
+      //   });
+      let res = await APP_FETCH(
+        process.env.NEXT_PUBLIC_SUBMIT_APPLICATION_URL,
+        "POST"
+      );
 
       if (!res.ok) {
         const data = await res.json();
@@ -344,29 +360,23 @@ export default function ApplyPage() {
 
   if (loading) return <p className="p-8">Loading...</p>;
 
- if (!profileExists || (profileExists && !profile.is_updated)) {
-  return (
-    <div className="p-8 text-center">
-      <h1 className="text-5xl font-extrabold text-red-600 mb-4">Oops! 🚫</h1>
-      <p className="text-xl text-gray-700 mb-6">
-      
-            You need to <span className="font-bold">update your profile</span>{" "}
-            before applying.
-          
-       
-      </p>
-      <button
-        onClick={() => router.push("/applicant/profile")}
-        className="bg-teal-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-teal-700 transition"
-      >
-      Update Profile Now
-      </button>
-    </div>
-  );
-}
-
-  
-
+  if (!profileExists || (profileExists && !profile.is_updated)) {
+    return (
+      <div className="p-8 text-center">
+        <h1 className="text-5xl font-extrabold text-red-600 mb-4">Oops! 🚫</h1>
+        <p className="text-xl text-gray-700 mb-6">
+          You need to <span className="font-bold">update your profile</span>{" "}
+          before applying.
+        </p>
+        <button
+          onClick={() => router.push("/applicant/profile")}
+          className="bg-teal-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-teal-700 transition"
+        >
+          Update Profile Now
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="">
@@ -400,12 +410,14 @@ export default function ApplyPage() {
       </p>
       <div className="flex shrink gap-3 items-center">
         <img
-                src={profile.profile_picture}
-                alt="image"
-                // alt={`${app.first_name} ${app.last_name}`}
-                className="w-12 h-12 rounded-full border object-cover my-5"
-              />
-              <p className="text-slate-600">Applying as {userData?.first_name} {userData?.last_name} </p>
+          src={profile.profile_picture}
+          alt="image"
+          // alt={`${app.first_name} ${app.last_name}`}
+          className="w-12 h-12 rounded-full border object-cover my-5"
+        />
+        <p className="text-slate-600">
+          Applying as {userData?.first_name} {userData?.last_name}{" "}
+        </p>
       </div>
       {application?.id && (
         <p className="text-sm mb-4 text-slate-500">
@@ -414,66 +426,137 @@ export default function ApplyPage() {
       )}
 
       {/* 🔑 Position Field */}
-<div className="bg-white p-6 shadow-md rounded-2xl mb-6">
-  <label className="block font-semibold mb-2">Position</label>
-  <select
-    name="position"
-    value={application?.position || ""}
-    onChange={async (e) => {
-      const selected = e.target.value;
-      setApplication((prev) => ({ ...prev, position: selected }));
+      <div className="bg-white p-6 shadow-md rounded-2xl mb-6">
+        <label className="block font-semibold mb-2">Position</label>
+        <select
+          name="position"
+          value={application?.position || ""}
+          onChange={async (e) => {
+            const selected = e.target.value;
+            setApplication((prev) => ({ ...prev, position: selected }));
 
-      // ✅ Save immediately to backend using axios
-      const loginData = JSON.parse(localStorage.getItem("login_response"));
-      if (!loginData) return router.push("/aha/login");
-      const token = loginData.access;
+            // ✅ Save immediately to backend using axios
+            const loginData = JSON.parse(
+              localStorage.getItem("login_response")
+            );
+            if (!loginData) return router.push("/aha/login");
+            const token = loginData.access;
 
-      const body = new FormData();
-      body.append("position", selected);
+            const body = new FormData();
+            body.append("position", selected);
 
-      try {
-        const res = await axios.post(
-          process.env.NEXT_PUBLIC_APPLICATION_URL,
-          body,
+            try {
+              const res = await axios.post(
+                process.env.NEXT_PUBLIC_APPLICATION_URL,
+                body,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              );
+
+              const updated = res.data; // ✅ axios already parses JSON
+              setApplication(updated);
+              set_Message("✅ Position saved successfully");
+              set_showMessage(true);
+            } catch (err) {
+              console.error(
+                err?.response?.data?.detail || "❌ Failed to save position",
+                err
+              );
+              set_Message(
+                err?.response?.data?.detail || "❌ Failed to save position"
+              );
+              set_showMessage(true);
+            }
+          }}
+          disabled={draftStatus === "submitted"}
+          className={`w-full p-2 border rounded ${
+            draftStatus === "submitted" ? "cursor-not-allowed opacity-50" : ""
+          }`}
+        >
+          <option value="" disabled>
+            -- Select Position --
+          </option>
+          <option value="VS">Veterinary Surgeon (VS)</option>
+          <option value="VPP">Veterinary Para-professional (VPP)</option>
+        </select>
+
+        {application?.position && (
+          <p className="mt-2 text-sm text-gray-600">
+            Current selection:{" "}
+            <strong>
+              {application?.position === "VS"
+                ? "Veterinary Surgeon"
+                : "Veterinary Para-professional"}
+            </strong>
+          </p>
+        )}
+      </div>
+
+      {
+        application?.status === "draft"
+        &&
+        <>
+          {(() => {
+        const requiredDocs = [
+          { label: "Cover Letter", key: "cover_letter" },
+          { label: "CV", key: "cv" },
+          { label: "KVB Certificate", key: "kvb_certificate" },
+          { label: "National ID", key: "national_id_document" },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+            label: "Professional Certificate",
+            key: "professional_certificate",
+          },
+        ];
 
-        const updated = res.data; // ✅ axios already parses JSON
-        setApplication(updated);
-        set_Message("✅ Position saved successfully");
-        set_showMessage(true);
-      } catch (err) {
-        console.error("❌ Failed to save position", err);
-        set_Message("❌ Failed to save position");
-        set_showMessage(true);
+        const missingDocs = requiredDocs.filter((doc) => !application[doc.key]);
+
+        // alert(missingDocs)
+
+        if (missingDocs.length > 0) {
+          return (
+            <div className="bg-blue-100 border-l-4 border-blue-400 text-blue-600 p-4 my-4 rounded">
+              <p className="font-semibold mb-2">
+                Some required documents need to be attached:
+              </p>
+              <p className="text-sm">
+                Please ensure you have a stable internet connection while
+                uploading your documents. If you experience any issues, consider
+                visiting a nearby cyber café for assistance.{" "} 
+              </p>
+              <p className="text-sm">
+                Still stuck? 
+                
+                <button onClick={()=>router.push("/applicant/help")} className="ml-3 bg-orange-700 text-white p-2 rounded-lg text-sm">Get Help</button>
+              
+              </p>
+              <ul className="list-disc list-inside mt-4">
+                {missingDocs.map((doc) => (
+                  <li key={doc.key}>{doc.label}</li>
+                ))}
+              </ul>
+            </div>
+          );
+        } else {
+          return (
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 my-4 rounded">
+              <p>
+                All documents have been attached. Please ensure you click the{" "}
+                <span className="font-bold">Save</span> button before submitting
+                your application.
+              </p>
+            </div>
+          );
+        }
+        // return null;
+      })()}
+        </>
       }
-    }}
-    disabled={draftStatus === "submitted"}
-    className={`w-full p-2 border rounded ${
-      draftStatus === "submitted" ? "cursor-not-allowed opacity-50" : ""
-    }`}
-  >
-    <option value="" disabled>-- Select Position --</option>
-    <option value="VS">Veterinary Surgeon (VS)</option>
-    <option value="VPP">Veterinary Para-professional (VPP)</option>
-  </select>
 
-  {application?.position && (
-    <p className="mt-2 text-sm text-gray-600">
-      Current selection:{" "}
-      <strong>
-        {application?.position === "VS"
-          ? "Veterinary Surgeon"
-          : "Veterinary Para-professional"}
-      </strong>
-    </p>
-  )}
-</div>
+    
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
@@ -485,8 +568,7 @@ export default function ApplyPage() {
             field: "professional_certificate",
           },
           { label: "National ID Document", field: "national_id_document" },
-        //   { label: "Personal Insurance", field: "personal_insurance" },
-
+          //   { label: "Personal Insurance", field: "personal_insurance" },
         ].map(({ label, field }) => (
           <div key={field} className="bg-white p-6 shadow-md rounded-2xl">
             <label className="block font-semibold mb-2">{label}</label>
@@ -553,7 +635,7 @@ export default function ApplyPage() {
       </div>
 
       {/* Modal */}
-      
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white w-11/12 md:w-3/4 lg:w-2/3 h-[90vh] rounded-xl shadow-lg overflow-hidden relative">

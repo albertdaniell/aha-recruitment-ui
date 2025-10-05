@@ -18,10 +18,11 @@ export default function RegisterPage() {
     password2: "",
     county: "",
     role: "APPLICANT",
-    // subcounty: "",
+    subcounty: "",
     ward: "",
     fpo: "",
     sublocation: "",
+    is_agripreneur:"no"
   });
 
   // Data lists
@@ -64,7 +65,8 @@ export default function RegisterPage() {
 
   // Fetch subcounties when county changes
   useEffect(() => {
-    if (!formData.county) {
+    console.log("0000")
+    if (selectedCounty?.project === "NAVCDP") {
       setSubcounties([]);
       setFormData((prev) => ({ ...prev, subcounty: "", ward: "", fpo: "" }));
       return;
@@ -72,17 +74,18 @@ export default function RegisterPage() {
     const fetchSubcounties = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SUBCOUNTY_LIST_URL}?county_id=${formData.county}`
+          `${process.env.NEXT_PUBLIC_SUBCOUNTY_LIST_URL}?county_id=${selectedCounty?.id}`
         );
         if (!res.ok) throw new Error("Failed to fetch subcounties");
         const data = await res.json();
+        console.log({data})
         setSubcounties(data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchSubcounties();
-  }, [formData.county]);
+  }, [selectedCounty]);
 
   // Fetch wards when subcounty changes
   useEffect(() => {
@@ -118,6 +121,35 @@ export default function RegisterPage() {
     };
     selectedCounty && fetchWards();
   }, [selectedCounty]);
+
+
+  useEffect(() => {
+    console.log({ selectedCounty });
+
+    if (selectedCounty?.project === "NAVCDP") {
+      return;
+    }
+    if (!formData?.subcounty) {
+      setWards([]);
+      setFpos([]);
+      setSublocations([]);
+      setFormData((prev) => ({ ...prev, ward: "", fpo: "" }));
+      return;
+    }
+    const fetchWards = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?subcounty=${formData?.subcounty}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch wards");
+        const data = await res.json();
+        setWards(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    formData?.subcounty && fetchWards();
+  }, [formData?.subcounty]);
 
   useEffect(() => {
     console.log({ selectedCounty });
@@ -222,6 +254,11 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  useEffect(()=>{
+    setLoading(false);
+
+  },[])
+
   const validateForm = () => {
     if (formData.password !== formData.password2) {
       setMessage("Passwords do not match");
@@ -246,10 +283,24 @@ export default function RegisterPage() {
       setMessage("Phone number must be in format 254XXXXXXXXX");
       return false;
     }
-    if (!selectedCounty || !formData.fpo) {
+    if(selectedCounty?.project === "NAVCDP"){
+if (!selectedCounty || !formData.fpo) {
       setMessage("Please select county, subcounty, ward and FPO");
       return false;
     }
+    }
+
+    console.log({formData})
+    console.log({selectedCounty})
+
+
+    if(selectedCounty?.project === "FSRP"){
+if (!selectedCounty || !formData.subcounty || !formData.ward) {
+      setMessage("Please select county, subcounty, ward");
+      return false;
+    }
+    }
+    
     return true;
   };
 
@@ -257,14 +308,28 @@ export default function RegisterPage() {
     e.preventDefault();
     setMessage("");
     if (!validateForm()) return;
-    setLoading(true);
+    // setLoading(true);
 
     let dataToPost = { ...formData };
+
+    if(selectedCounty?.project === "NAVCDP"){
+      delete dataToPost.subcounty;
+      // delete dataToPost.is_agripreneur
+    }else{
+      delete dataToPost.sublocation;
+      delete dataToPost.fpo;
+
+    }
     dataToPost.county = selectedCounty?.id;
+    console.log({dataToPost})
 
     if (dataToPost.ward) {
       // dataToPost.subcounty = selectedCounty?.id;
     }
+
+
+
+    // return 0
 
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_REGISTER_URL, {
@@ -535,7 +600,9 @@ export default function RegisterPage() {
                 </select> */}
 
                 {/* FPO dropdown */}
-                <div>
+                {
+                  selectedCounty?.project === "NAVCDP" ?
+  <div>
                   <label className="text-slate-900 text-sm">FPO</label>
                   <select
                     name="fpo"
@@ -551,7 +618,27 @@ export default function RegisterPage() {
                       </option>
                     ))}
                   </select>
+                </div>:
+
+                  <div>
+                  <label className="text-slate-900 text-sm">Subcounty</label>
+                  <select
+                  name="subcounty"
+                  value={formData?.subcounty}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  required
+                >
+                  <option value="">Select SubCounty</option>
+                  {subcounties.map((sc) => (
+                    <option key={sc.id} value={sc.id}>
+                      {sc.name}
+                    </option>
+                  ))}
+                </select> 
                 </div>
+                }
+              
               </div>
 
               {/* {JSON.stringify(wards)} */}
@@ -578,7 +665,9 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className=" grid-cols-2 gap-4">
+                {
+                  selectedCounty?.project === "NAVCDP"  ?
+  <div className=" grid-cols-2 gap-4">
                   <div>
                     <label className="text-slate-900 text-sm">
                       Sublocation
@@ -599,7 +688,34 @@ export default function RegisterPage() {
                       ))}
                     </select>
                   </div>
-                </div>
+                  
+                </div>:
+
+                <>
+                 <div>
+                    <label className="text-slate-900 text-sm">
+                      Are you an agripreneur
+                    </label>
+                    {/* Sublocation dropdown */}
+                    <select
+                      name="sublocation"
+                      value={formData.is_agripreneur}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded focus:border-green-500"
+                      //   required
+                    >
+                      <option value="">Select</option>
+                      {[{"name":"Yes",id:"yes"},{"name":"No",id:"no"}]?.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+                }
+
+              
               </div>
 
               {/* Passwords */}
@@ -616,6 +732,8 @@ export default function RegisterPage() {
                     required
                   />
                 </div>
+
+                {/* {JSON.stringify(selectedCounty)} */}
 
                 <div>
                   <label className="text-slate-900 text-sm">

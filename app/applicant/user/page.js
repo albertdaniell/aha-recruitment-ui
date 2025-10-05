@@ -21,9 +21,9 @@ export default function ProfilePage() {
     password: "",
     password2: "",
     sublocation: "",
+    is_agripreneur: "no",
   });
 
-  const [counties, setCounties] = useState([]);
   const [wards, setWards] = useState([]);
   const [fpos, setFpos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,6 +32,52 @@ export default function ProfilePage() {
   const [modalBody, setModalBody] = useState("");
   const [sublocations, setSublocations] = useState([]);
   let [showPasswordFields, SetshowPasswordFields] = useState(null);
+  const [userCounty, setUserCounty] = useState(null); // store user application
+  const [counties, setCounties] = useState(null);
+  const [user, setUser] = useState(null);
+  const [hasProfile, setHasProfile] = useState(false);
+  const [subcounties, setSubcounties] = useState([]);
+
+  useEffect(() => {
+    if (counties && user) {
+      let county = counties?.find((c) => c?.id === user.county?.id);
+      setUserCounty(county);
+    }
+  }, [user, counties]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const loginData = JSON.parse(localStorage.getItem("login_response"));
+      if (!loginData) {
+        router.push("/aha/login");
+        return;
+      }
+      setUser(loginData.user);
+
+      const token = loginData.access;
+
+      try {
+        // Check profile
+        let profileRes = await fetch(process.env.NEXT_PUBLIC_PROFILE_URL, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        profileRes = await profileRes.json();
+
+        if (profileRes.is_updated) {
+          setHasProfile(true);
+        } else {
+          setHasProfile(false);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem("login_response");
@@ -178,7 +224,10 @@ export default function ProfilePage() {
   };
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-6">Update Account</h1>
+      <h1 className="text-4xl font-bold mb-2">Update Account</h1>
+       <p className="text-slate-500 text-sm mb-5">
+              Updating your account will log you out to refresh your details
+            </p>
 
       <form
         onSubmit={handleUpdate}
@@ -194,9 +243,10 @@ export default function ProfilePage() {
               }}
               className="text-blue-500 underline"
             >
-             Show my details
-
+              Show my details
             </button>
+
+           
           </>
         )}
 
@@ -369,7 +419,7 @@ export default function ProfilePage() {
                   required
                 >
                   <option value="">Select County</option>
-                  {counties.map((c) => (
+                  {counties?.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
                     </option>
@@ -380,32 +430,52 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              <div>
-                <label
-                  htmlFor="fpo"
-                  className="block text-sm font-medium text-slate-700"
-                >
-                  FPO
-                </label>
-                <select
-                  id="fpo"
-                  name="fpo"
-                  value={formData.fpo || ""}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  required
-                >
-                  <option value="">Select FPO</option>
-                  {fpos.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.fpo && (
-                  <p className="text-red-500 text-sm">{errors.fpo}</p>
-                )}
-              </div>
+              {userCounty?.project === "NAVDCP" ? (
+                <div>
+                  <label
+                    htmlFor="fpo"
+                    className="block text-sm font-medium text-slate-700"
+                  >
+                    FPO
+                  </label>
+                  <select
+                    id="fpo"
+                    name="fpo"
+                    value={formData.fpo || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select FPO</option>
+                    {fpos.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.fpo && (
+                    <p className="text-red-500 text-sm">{errors.fpo}</p>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <label className="text-slate-900 text-sm">Subcounty</label>
+                  <select
+                    name="subcounty"
+                    value={formData?.subcounty}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select SubCounty</option>
+                    {subcounties?.map((sc) => (
+                      <option key={sc.id} value={sc.id}>
+                        {sc.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Ward */}
@@ -435,28 +505,52 @@ export default function ProfilePage() {
                 <p className="text-red-500 text-sm">{errors.ward}</p>
               )}
             </div>
-            <div>
-              <label
-                htmlFor="ward"
-                className="block text-sm font-medium text-slate-700"
-              >
-                Sublocation
-              </label>
-              <select
-                name="sublocation"
-                value={formData?.sublocation}
-                onChange={handleChange}
-                className="w-full p-2 border rounded focus:border-green-500"
-                //   required
-              >
-                <option value="">Select Sublocation</option>
-                {sublocations?.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+
+            {userCounty?.project === "NAVCDP" ? 
+              <div>
+                <label
+                  htmlFor="ward"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Sublocation
+                </label>
+                <select
+                  name="sublocation"
+                  value={formData?.sublocation}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:border-green-500"
+                  //   required
+                >
+                  <option value="">Select Sublocation</option>
+                  {sublocations?.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            :
+             <div>
+                    <label className="text-slate-900 text-sm">
+                      Are you an agripreneur
+                    </label>
+                    {/* Sublocation dropdown */}
+                    <select
+                      name="sublocation"
+                      value={formData.is_agripreneur}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded focus:border-green-500"
+                      //   required
+                    >
+                      <option value="">Select</option>
+                      {[{"name":"Yes",id:"yes"},{"name":"No",id:"no"}]?.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+            }
           </>
         )}
 
@@ -481,7 +575,7 @@ export default function ProfilePage() {
           className="w-full bg-[#009639] hover:bg-[#1a5a33f1] text-white py-2 rounded"
           disabled={loading}
         >
-          {loading ? "Updating..." : "Update Profile"}
+          {loading ? "Updating..." : "Update Account"}
         </button>
       </form>
 

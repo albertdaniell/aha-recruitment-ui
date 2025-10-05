@@ -6,6 +6,7 @@ import AppModal from "@/app/components/AppModal/AppModal";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import DatePicker from "react-date-picker";
+import Link from "next/link";
 export default function UpdateProfilePage() {
   const [profile, setProfile] = useState({
     bio: "",
@@ -28,6 +29,8 @@ export default function UpdateProfilePage() {
   const [pdfUrl, setPdfUrl] = useState(null);
   let [showModal, setShowModal] = useState(null);
   let [modalMsg, setModalMsg] = useState(null);
+  let [updateHasError, Set_updateHasError] = useState(null);
+
 
   const router = useRouter();
 
@@ -131,6 +134,8 @@ export default function UpdateProfilePage() {
   };
 
   const handleSubmit = async (e) => {
+        Set_updateHasError(false)
+
     e.preventDefault();
     
     
@@ -180,7 +185,11 @@ export default function UpdateProfilePage() {
       });
 
       if (!res.ok) {
+        Set_updateHasError(true)
         const data = await res.json();
+        // if(data?.date_of_birth){
+        //   throw new Error 
+        // }
         throw new Error(data.detail || "Failed to save profile");
       }
       let msg = hasProfile
@@ -203,7 +212,9 @@ export default function UpdateProfilePage() {
   return (
     <div>
       <h1 className="text-4xl font-bold mb-6">Update Profile</h1>
-
+<p className="text-slate-500 text-sm mb-5">
+  If you wish to update other information, please <Link className="font-bold text-blue-500 underline hover:text-blue-800" href={"/applicant/user"}>click here</Link> to update your account.
+            </p>
       <AppModal
         isOpen={showModal}
         setIsClose={() => {
@@ -230,7 +241,6 @@ export default function UpdateProfilePage() {
         </div>
       )}
       <div className="shadow rounded-lg p-5 bg-white">
-        {message && <p className="mb-4 text-blue-500">{message}</p>}
 
         <form onSubmit={handleSubmit} className=" gap-6">
           {/* LEFT SIDE */}
@@ -413,6 +423,11 @@ export default function UpdateProfilePage() {
               />
             </div>
           </div>
+        {message && <div className={`${updateHasError ? "bg-red-100":"bg-blue-100"} p-5 mt-4`}>
+
+        <p className={` ${updateHasError ? "text-red-500":"text-blue-500"} `} >{message}</p>
+        </div>}
+
 
           {/* Submit button full width */}
           <div className="md:col-span-2 mt-5">

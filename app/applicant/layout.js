@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile sidebar toggle
- const [userCounty, setUserCounty] = useState(null); // store user application
+  const [userCounty, setUserCounty] = useState(null); // store user application
   const [counties, setCounties] = useState(null);
 
   // Fetch counties on mount
@@ -40,7 +40,7 @@ export default function DashboardLayout({ children }) {
     fetchCounties();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (counties && user) {
       let county = counties?.find((c) => c?.id === user.county?.id);
       setUserCounty(county);
@@ -92,9 +92,9 @@ export default function DashboardLayout({ children }) {
           {sidebarOpen ? (
             <CircleX size={30} color="red" />
           ) : (
-           <div className="flex flex-row gap-2 items-center">
-             <ThreeLineHorizontal color="green" size={30} /> MENU
-           </div>
+            <div className="flex flex-row gap-2 items-center">
+              <ThreeLineHorizontal color="green" size={30} /> MENU
+            </div>
           )}
         </button>
       </div>
@@ -106,23 +106,31 @@ export default function DashboardLayout({ children }) {
       >
         <div className="mt-14 md:mt-0">
           <h2 className="text-xl font-bold mb-6 text-white">Dashboard</h2>
-           <div className="inline-flex items-center gap-3 px-2 py-3 border-green-500 border rounded-lg  bg-white mb-5 w-full">
-              <img
-                src={userCounty?.logo || "/cog.png"}
-                alt={userCounty?.name}
-                className="w-9 h-9 object-contain rounded-md"
-              />
-              <div className="min-w-0">
-                <h2 className="font-semibold truncate text-slate-600 text-xs">
-                  {userCounty?.name} County
-                </h2>
-                <p className="text-slate-500 text-xs">
-                  Ends:{" "}
-                  {FormatDate(userCounty?.end_of_application, false) ||
-                    "Not specified"}
-                </p>
-              </div>
+          <div className="inline-flex items-center gap-3 px-2 py-3 border-green-500 border rounded-lg  bg-white mb-5 w-full">
+            <img
+              src={userCounty?.logo || "/cog.png"}
+              alt={userCounty?.name}
+              className="w-9 h-9 object-contain rounded-md"
+            />
+            <div className="min-w-0">
+              <h2 className="font-semibold truncate text-slate-600 text-xs">
+                {userCounty?.name} County
+              </h2>
+              <p className="text-slate-500 text-xs">
+                {userCounty?.is_open ? (
+                  <>
+                    Ends:{" "}
+                    {FormatDate(userCounty.end_of_application, false) ||
+                      "Not specified"}
+                  </>
+                ) : (
+                  <span className="text-orange-500">
+                    🚫 Applications closed
+                  </span>
+                )}
+              </p>
             </div>
+          </div>
           <nav className="flex flex-col space-y-1">
             {sidebarLinks.map((link) => {
               const isActive =
@@ -135,7 +143,9 @@ export default function DashboardLayout({ children }) {
                   key={link.href}
                   href={link.href}
                   className={`px-3 py-2 rounded  hover:text-teal-600 hover:bg-gray-50 ${
-                    isActive ? "bg-white text-slate-700 font-semibold" : "text-white"
+                    isActive
+                      ? "bg-white text-slate-700 font-semibold"
+                      : "text-white"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
