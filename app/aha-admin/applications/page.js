@@ -395,6 +395,16 @@ export default function ApplicationsPage() {
          Project {user?.county?.project || "-"}
         </p>
 
+        <p className="text-xs">
+      userCounty   {JSON.stringify(userCounty)}
+
+        </p>
+
+  <p className="text-xs">
+       user  {JSON.stringify(user)}
+
+        </p>
+
       {/* Filters + Search row */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <div className="flex items-center gap-2">
