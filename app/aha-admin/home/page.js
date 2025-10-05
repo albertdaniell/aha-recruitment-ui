@@ -297,7 +297,7 @@ export default function ApplicationsPage() {
               )}
             </>
           ) : (
-            <div className="flex items-center justify-center h-full text-slate-600">
+            <div className="flex items-center justify-center h-full text-slate-600 p-5">
               <p className="text-center">No stats to show</p>
             </div>
           )}
