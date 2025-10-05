@@ -102,9 +102,6 @@ export default function ApplicationsPage() {
   };
 
   useEffect(()=>{
-    console.log({userCounty})
-    console.log({counties})
-
     if(counties && userCounty){
       let app_counties = counties
       app_counties = app_counties?.filter((county)=>{
@@ -113,7 +110,7 @@ export default function ApplicationsPage() {
       console.log({app_counties})
       setCounties(app_counties)
     }
-  },[counties, userCounty, user])
+  },[counties, userCounty,])
 
   useEffect(() => {
     if (counties && user) {
