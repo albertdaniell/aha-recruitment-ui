@@ -165,7 +165,7 @@ export default function ApplicationsPage() {
 
   return (
     <div className="">
-      {userCounty && (
+      {userCounty ? 
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-start justify-between">
           {/* LEFT SIDE */}
           <div className="col-span-2">
@@ -199,46 +199,88 @@ export default function ApplicationsPage() {
             </div>
           )}
         </div>
-      )}
+    :
+    <>
+    <div className="col-span-2">
+            <h1 className="text-3xl font-bold text-[#009639]">
+              Welcome, {user?.role} - {user?.first_name}!
+            </h1>
+            <p className="text-gray-600 mt-2">Email: {user.email}</p>
+            {/* {user.fpo?.name && (
+              <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
+            )} */}
+          </div>
+    
+    </>
+    }
 
       {applications?.length === 0 && (
-        <div className="bg-orange-300 p-5 rounded-md">
+        <div className="bg-orange-300 p-5 rounded-md my-4">
           <p className="text-orange-800">
             There seems to be no applications made.
           </p>
         </div>
       )}
 
-      <div className="grid md:grid-cols-3 grid-cols-2 md:gap-6 gap-2 my-4">
+      <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 md:gap-3 gap-2 my-4">
         {/* School Year */}
-        <div className="bg-gradient-to-r from-sky-400 to-sky-500 rounded-2xl shadow-md px-6 py-4  text-center">
+        <div className="bg-gradient-to-r from-purple-400 to-purple-500 rounded-2xl shadow-md px-6 py-4  text-center">
           <p className="text-sm text-white opacity-80">Applications</p>
           <p className="text-xl font-bold text-white">
-            {applications?.length || 0}
+            {/* {applications?.length || 0} */}
+            {
+                stats?.all_applications || 0
+              }
           </p>
         </div>
 
         {/* Semester */}
-        <div className="bg-gradient-to-r from-pink-400 to-red-500 rounded-2xl shadow-md px-6 py-4  text-center">
+        <div className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl shadow-md px-6 py-4  text-center">
           <p className="text-sm text-white opacity-80">Submitted</p>
           <p className="text-xl font-bold text-white">
-            {applications?.filter((app) => app?.status === "submitted")
-              ?.length || 0}
+            {/* {applications?.filter((app) => app?.status === "submitted")
+              ?.length || 0} */}
+              {
+                stats?.all_applications_submitted || 0
+              }
           </p>
         </div>
 
         {/* Quarter */}
-        <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl shadow-md px-6 py-4  text-center">
+        <div className="bg-gradient-to-r from-slate-400 to-slate-500 rounded-2xl shadow-md px-6 py-4  text-center">
           <p className="text-sm text-white opacity-80">Drafts</p>
           <p className="text-xl font-bold text-white">
-            {applications?.filter((app) => app?.status === "draft")?.length ||
-              0}
+            {/* {applications?.filter((app) => app?.status === "draft")?.length ||
+              0} */}
+              {
+                stats?.all_applications_drafts || 0
+              }
+          </p>
+        </div>
+        <div className="bg-gradient-to-r from-green-400 to-green-500 rounded-2xl shadow-md px-6 py-4  text-center">
+          <p className="text-sm text-white opacity-80">Shortlisted</p>
+          <p className="text-xl font-bold text-white">
+            {/* {applications?.filter((app) => app?.status === "draft")?.length ||
+              0} */}
+              {
+                stats?.all_applications_shortlisted || 0
+              }
+          </p>
+        </div>
+        <div className="bg-gradient-to-r from-red-400 to-red-500 rounded-2xl shadow-md px-6 py-4  text-center">
+          <p className="text-sm text-white opacity-80">Rejected</p>
+          <p className="text-xl font-bold text-white">
+            {/* {applications?.filter((app) => app?.status === "draft")?.length ||
+              0} */}
+              {
+                stats?.all_applications_rejected || 0
+              }
           </p>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-5">
-        <div className="shadow-lg rounded-xl p-3 bg-white md:col-span-1">
+      <div className="grid md:grid-cols-0   lg:grid-cols-3  md:grid-cols-0 gap-5">
+        <div className="shadow-lg rounded-xl p-3 bg-white  lg:col-span-1">
           <p className="text-sm text-slate-600 mb-3">Submissions By Gender</p>
           {/* {JSON.stringify(stats)} */}
           {stats?.gender_stats?.male ? (
