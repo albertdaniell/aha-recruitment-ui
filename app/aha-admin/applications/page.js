@@ -107,6 +107,7 @@ export default function ApplicationsPage() {
       app_counties = app_counties?.filter((county)=>{
         return county?.project === userCounty?.project
       })
+      console.log({app_counties})
       setCounties(app_counties)
     }
 
