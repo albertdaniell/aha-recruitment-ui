@@ -45,6 +45,9 @@ function AppNav() {
   let LINKS = [
     { name: "Home", link: "#" },
     { name: "Learn More", link: "#learn-more" },
+    { name: "NAVCDP", link: "/" },
+    { name: "FSRP", link: "/fsrp" },
+
   ];
 
   return (
