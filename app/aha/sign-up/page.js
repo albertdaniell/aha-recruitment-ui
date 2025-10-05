@@ -699,9 +699,11 @@ if (!selectedCounty || !formData.subcounty || !formData.ward) {
                     <label className="text-slate-900 text-sm">
                       Are you an agripreneur
                     </label>
+                   {/* formData {JSON.stringify(formData?.is_agripreneur)} */}
+
                     {/* Sublocation dropdown */}
                     <select
-                      name="sublocation"
+                      name="is_agripreneur"
                       value={formData.is_agripreneur}
                       onChange={handleChange}
                       className="w-full p-2 border rounded focus:border-green-500"

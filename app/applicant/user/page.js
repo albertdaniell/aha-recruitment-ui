@@ -547,6 +547,7 @@ export default function ProfilePage() {
                     </label>
                     {/* Sublocation dropdown */}
                     <select
+                    
                       name="sublocation"
                       value={formData.is_agripreneur}
                       onChange={handleChange}
