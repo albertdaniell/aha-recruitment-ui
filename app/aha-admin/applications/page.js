@@ -382,14 +382,18 @@ export default function ApplicationsPage() {
 
   return (
     <div className="">
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-2xl font-bold mb-2">
         Applications{" "}
+       
         {user.county?.name
           ? `${
               user?.role === "REVIEWER" ? `for ${user.county.name} county` : ""
             }`
           : ""}
       </h1>
+       <p className="text-sm mb-6">
+         Project {user?.county?.project || "-"}
+        </p>
 
       {/* Filters + Search row */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
