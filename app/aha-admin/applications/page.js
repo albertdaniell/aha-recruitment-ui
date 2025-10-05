@@ -113,7 +113,7 @@ export default function ApplicationsPage() {
       console.log({app_counties})
       setCounties(app_counties)
     }
-  },counties,userCounty,user)
+  },[counties, userCounty, user])
 
   useEffect(() => {
     if (counties && user) {
@@ -391,11 +391,11 @@ export default function ApplicationsPage() {
             }`
           : ""}
       </h1>
-       <p className="text-sm mb-6">
+       <p className="text-xs mb-6">
          Project {user?.county?.project || "-"}
         </p>
 
-        <p className="text-xs">
+        {/* <p className="text-xs">
       userCounty   {JSON.stringify(userCounty)}
 
         </p>
@@ -403,7 +403,7 @@ export default function ApplicationsPage() {
   <p className="text-xs">
        user  {JSON.stringify(user)}
 
-        </p>
+        </p> */}
 
       {/* Filters + Search row */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
