@@ -409,6 +409,9 @@ if (!selectedCounty || !formData.subcounty || !formData.ward) {
                         <h2 className="md:text-md font-semibold break-words whitespace-normal">
                           {county.name}
                         </h2>
+                        <p className="text-xs text-slate-400">
+                          {county?.project}
+                        </p>
                       </div>
                     </div>
 
