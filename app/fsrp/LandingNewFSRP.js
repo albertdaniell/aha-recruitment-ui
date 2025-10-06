@@ -9,16 +9,16 @@ const data = [
     id: "1000",
     title:
       "Ward Veterinary Surgeons and Veterinary Para Professionals for County FMD & PPR Vaccination Campaign",
-    project: "NAVCDP Project",
+    project: "Food Systems Resilience Project (FSRP)",
     system: "E-Voucher System",
     deadline: "………… 2025", // left as in PDF since exact date not filled
     issued_by: [
       "County Governments",
-      "National Agricultural Value Chain Development Project (NAVCDP)",
+      "Food Systems Resilience Project - FSRP",
       "Directorate of Veterinary Services",
     ],
     description:
-      "The County Governments in collaboration with the National Agricultural Value Chain Development Project (NAVCDP) and the Directorate of Veterinary Services invite qualified and licensed Veterinarians and Veterinary Para-professionals to apply to participate in the upcoming Foot and Mouth Disease (FMD) and Peste des Petits Ruminants (PPR) vaccination campaign. This initiative will be implemented through the e-voucher system to ensure efficient service delivery and transparent compensation.",
+      "The County Governments in collaboration with the Food Systems Resilience Project (FSRP) and the Directorate of Veterinary Services invite qualified and licensed Veterinarians and Veterinary Para-professionals to apply to participate in the upcoming Foot and Mouth Disease (FMD) and Peste des Petits Ruminants (PPR) vaccination campaign. This initiative will be implemented through the e-voucher system to ensure efficient service delivery and transparent compensation.",
     objectives: [
       "Enhance livestock health and productivity across Kenya",
       "Prevent and control outbreaks of FMD and PPR",
@@ -95,7 +95,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="mt-6 text-slate-600 md:text-lg">
-              The County Governments, in collaboration with FSRP and the
+              The County Governments, in collaboration with Food Systems Resilience Project (FSRP) and the
               Directorate of Veterinary Services, invite qualified and licensed
               Veterinarians and Veterinary Para-professionals to apply for the
               upcoming Foot and Mouth Disease (FMD) and Peste des Petits
