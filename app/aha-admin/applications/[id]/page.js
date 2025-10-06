@@ -187,10 +187,14 @@ export default function ApplicationDetails({ params }) {
                   <span className="font-medium">Ward:</span>{" "}
                   {application.ward || "—"}
                 </p>
-                <p>
+                {
+                  application?.fpo &&
+<p>
                   <span className="font-medium">FPO:</span>{" "}
                   {application.fpo || "—"}
                 </p>
+                }
+                
               </div>
 
               {/* Profile Info */}
@@ -204,7 +208,7 @@ export default function ApplicationDetails({ params }) {
                       <img
                         src={application.profile.profile_picture}
                         alt="Profile"
-                        className="w-20 h-20 rounded-full border"
+                        className="w-24 h-24 rounded-full border object-cover"
                       />
                     </div>
                   )}
