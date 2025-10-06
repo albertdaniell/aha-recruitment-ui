@@ -102,7 +102,7 @@ export default function ApplicationDetails({ params }) {
 
 
       const res = await fetch(
-        `${url}${id}/recruit/`,
+        `${url}${id}/${actionType === "recruit" ? "recruit":"shortlist"}/`,
         {
           method: "PATCH",
           headers: {
