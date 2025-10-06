@@ -11,6 +11,16 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import AppChart from "@/app/components/AppChart";
 
+function Card({ name, value, gradient = "from-teal-500 to-teal-500" }) {
+  return (
+    <div
+      className={`bg-gradient-to-r ${gradient} rounded-2xl shadow-lg px-6 py-5 text-center transform hover:scale-[1.02] transition-all duration-300`}
+    >
+      <p className="text-sm text-white/90 tracking-wide uppercase">{name}</p>
+      <p className="text-xl font-extrabold text-white mt-1">{value ?? 0}</p>
+    </div>
+  );
+}
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState(null);
   const [user, setUser] = useState(null);
@@ -22,10 +32,10 @@ export default function ApplicationsPage() {
 
   // Limit to 4 unless "showAll" is true
   // const submittedApps = applications?.filter((app) => app.status === "submitted");
-  const submittedApps = applications;
+  const submittedApps = applications?.results;
 
   // ✅ Show 4 first
-  const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 4);
+  const displayedApps = showAll ? submittedApps : submittedApps?.slice(0, 12);
   const router = useRouter();
 
   // Fetch counties on mount
@@ -91,7 +101,7 @@ export default function ApplicationsPage() {
         }
 
         const res = await fetch(
-          process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL,
+          process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL_PAGINATION,
           {
             headers: {
               "Content-Type": "application/json",
@@ -165,7 +175,7 @@ export default function ApplicationsPage() {
 
   return (
     <div className="">
-      {userCounty ? 
+      {userCounty ? (
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-start justify-between">
           {/* LEFT SIDE */}
           <div className="col-span-2">
@@ -199,9 +209,9 @@ export default function ApplicationsPage() {
             </div>
           )}
         </div>
-    :
-    <>
-    <div className="col-span-2">
+      ) : (
+        <>
+          <div className="col-span-2">
             <h1 className="text-3xl font-bold text-[#009639]">
               Welcome, {user?.role} - {user?.first_name}!
             </h1>
@@ -210,9 +220,8 @@ export default function ApplicationsPage() {
               <p className="text-gray-600 mt-2">FPO: {user.fpo?.name}</p>
             )} */}
           </div>
-    
-    </>
-    }
+        </>
+      )}
 
       {applications?.length === 0 && (
         <div className="bg-orange-300 p-5 rounded-md my-4">
@@ -223,60 +232,39 @@ export default function ApplicationsPage() {
       )}
 
       <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 md:gap-3 gap-2 my-4">
-        {/* School Year */}
-        <div className="bg-gradient-to-r from-purple-400 to-purple-500 rounded-2xl shadow-md px-6 py-4  text-center">
-          <p className="text-sm text-white opacity-80">Applications</p>
-          <p className="text-xl font-bold text-white">
-            {/* {applications?.length || 0} */}
-            {
-                stats?.all_applications || 0
-              }
-          </p>
-        </div>
+        <Card
+          gradient={"from-purple-400 to-purple-500"}
+          value={stats?.all_applications}
+          name={"Applications"}
+        ></Card>
 
-        {/* Semester */}
-        <div className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-2xl shadow-md px-6 py-4  text-center">
-          <p className="text-sm text-white opacity-80">Submitted</p>
-          <p className="text-xl font-bold text-white">
-            {/* {applications?.filter((app) => app?.status === "submitted")
-              ?.length || 0} */}
-              {
-                stats?.all_applications_submitted || 0
-              }
-          </p>
-        </div>
+        <Card
+          gradient={"from-blue-400 to-blue-500"}
+          value={stats?.all_applications_submitted}
+          name={"Submitted"}
+        ></Card>
 
-        {/* Quarter */}
-        <div className="bg-gradient-to-r from-slate-400 to-slate-500 rounded-2xl shadow-md px-6 py-4  text-center">
-          <p className="text-sm text-white opacity-80">Drafts</p>
-          <p className="text-xl font-bold text-white">
-            {/* {applications?.filter((app) => app?.status === "draft")?.length ||
-              0} */}
-              {
-                stats?.all_applications_drafts || 0
-              }
-          </p>
-        </div>
-        <div className="bg-gradient-to-r from-green-400 to-green-500 rounded-2xl shadow-md px-6 py-4  text-center">
-          <p className="text-sm text-white opacity-80">Shortlisted</p>
-          <p className="text-xl font-bold text-white">
-            {/* {applications?.filter((app) => app?.status === "draft")?.length ||
-              0} */}
-              {
-                stats?.all_applications_shortlisted || 0
-              }
-          </p>
-        </div>
-        <div className="bg-gradient-to-r from-red-400 to-red-500 rounded-2xl shadow-md px-6 py-4  text-center">
-          <p className="text-sm text-white opacity-80">Rejected</p>
-          <p className="text-xl font-bold text-white">
-            {/* {applications?.filter((app) => app?.status === "draft")?.length ||
-              0} */}
-              {
-                stats?.all_applications_rejected || 0
-              }
-          </p>
-        </div>
+        <Card
+          gradient={"from-slate-400 to-slate-500"}
+          value={stats?.all_applications_drafts}
+          name={"Drafts"}
+        ></Card>
+
+        <Card
+          gradient={"from-green-400 to-green-500"}
+          value={stats?.all_applications_shortlisted}
+          name={"Shortlisted"}
+        ></Card>
+        <Card
+          gradient={"from-red-400 to-red-500"}
+          value={stats?.all_applications_rejected}
+          name={"Rejected"}
+        ></Card>
+        <Card
+          gradient={"from-teal-500 to-teal-600"}
+          value={stats?.all_applications_recruited}
+          name={"Recruited"}
+        ></Card>
       </div>
 
       <div className="grid md:grid-cols-0   lg:grid-cols-3  md:grid-cols-0 gap-5">
@@ -463,77 +451,98 @@ export default function ApplicationsPage() {
 
       <div className="space-y-6">
         {/* Grid of Applications */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {displayedApps?.map((app) => (
             <div
               key={app.id}
-              className="bg-white border rounded-xl shadow p-4 flex flex-col items-center text-center hover:shadow-lg"
+              className={` border rounded-xl shadow hover:shadow-lg ${
+                app?.status === "draft"
+                  ? "opacity-2 bg-slate-100"
+                  : "bg-green-50"
+              }`}
             >
-              {/* Profile Picture */}
-              {app.profile?.profile_picture ? (
-                <img
-                  src={app.profile.profile_picture}
-                  alt={`${app.first_name} ${app.last_name}`}
-                  className="w-24 h-24 rounded-full border object-cover"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full border flex items-center justify-center bg-gray-100 text-gray-500">
-                  No Photo
-                </div>
-              )}
-
-              {/* Applicant Name */}
-              <h3 className="mt-3 font-semibold text-lg text-slate-800">
-                {app.first_name} {app.last_name}
-              </h3>
-
-              {/* Status */}
-              <p className="mt-1 text-sm">
-                <span
-                  className={`px-2 py-1 rounded ${
-                    app.status === "submitted"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-gray-200 text-gray-500"
-                  }`}
-                >
-                  {app.status}
+              <div className="relative flex items-start">
+                <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-br-lg ">
+                  {app?.position || "-"}
                 </span>
-              </p>
+              </div>
+              <div className="flex  flex-col items-center  p-4 text-center">
+                {/* Profile Picture */}
+                {app.profile?.profile_picture ? (
+                  <img
+                    src={app.profile.profile_picture}
+                    alt={`${app.first_name} ${app.last_name}`}
+                    className="w-24 h-24 rounded-full border object-cover"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full border flex items-center justify-center bg-gray-100 text-gray-500">
+                    No Photo
+                  </div>
+                )}
 
-              {/* Dates */}
-              <p className="mt-2 text-sm text-gray-600">
-                Submitted:{" "}
-                {app.submission_date
-                  ? FormatDate(app.submission_date, false)
-                  : "—"}
-              </p>
-              <p className="text-sm text-gray-600">
-                Created:{" "}
-                {app.created_at ? FormatDate(app.created_at, false) : "—"}
-              </p>
+                {/* Applicant Name */}
+                <h3 className="mt-3 font-semibold text-lg text-slate-800">
+                  {app.first_name} {app.last_name}
+                </h3>
 
-              {/* View Button */}
-              {app.status === "draft" ? (
-                <button
-                  disabled
-                  className="mt-4 px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed"
-                >
-                  View
-                </button>
-              ) : (
-                <Link
-                  href={`applications/${app.id}/`}
-                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                >
-                  View
-                </Link>
-              )}
+                <p className="text-xs my-2 text-slate-500">
+                  {app?.county} - {app?.ward}
+                </p>
+
+                {/* Status */}
+                <p className="mt-1 text-sm">
+                  <span
+                    className={`px-2 py-1 rounded ${
+                      app.status === "submitted"
+                        ? "bg-green-100 text-green-600"
+                        : "bg-gray-200 text-gray-500"
+                    }`}
+                  >
+                    {app.status}
+                  </span>
+                </p>
+
+                {/* Dates */}
+                <p className="mt-2 text-sm text-gray-600">
+                  Submitted:{" "}
+                  {app.submission_date
+                    ? FormatDate(app.submission_date, false)
+                    : "—"}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Created:{" "}
+                  {app.created_at ? FormatDate(app.created_at, false) : "—"}
+                </p>
+
+                {/* View Button */}
+                {app.status === "draft" ? (
+                  <Link
+                    href={`applications/${app.id}/`}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  >
+                    View
+                  </Link>
+                ) : (
+                  // <button
+                  //   disabled
+                  //   className="mt-4 px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed"
+                  // >
+                  //   View
+                  // </button>
+                  <Link
+                    href={`applications/${app.id}/`}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  >
+                    View
+                  </Link>
+                )}
+              </div>
             </div>
           ))}
         </div>
 
         {/* View More Button */}
-        {!showAll && applications?.length > 4 && (
+        {!showAll && applications?.results?.length > 12 && (
           <div className="flex justify-center">
             <button
               onClick={() => router.push("applications/")}

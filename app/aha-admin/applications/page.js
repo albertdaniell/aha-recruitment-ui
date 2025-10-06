@@ -310,6 +310,7 @@ export default function ApplicationsPage() {
       PWD_CERTIFICATE: app?.profile?.disability_certificate || "—",
       BIO: app?.profile?.bio || "—",
       EMAIL: app.email || app.user?.email || "—",
+      IS_AGRIPRENEUR: app.user?.is_agripreneur || "—",
       STATUS: app.is_shortlisted
         ? "Shortlisted"
         : app.is_not_shortlisted

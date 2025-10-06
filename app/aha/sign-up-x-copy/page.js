@@ -21,6 +21,7 @@ export default function RegisterPage() {
     ward: "",
     fpo: "",
     sublocation: "",
+    subcounty:""
   });
 
   // Data lists
@@ -261,9 +262,19 @@ export default function RegisterPage() {
     let dataToPost = { ...formData };
     dataToPost.county = selectedCounty?.id;
 
-    if (dataToPost.ward) {
-      // dataToPost.subcounty = selectedCounty?.id;
+    if(selectedCounty?.project === "NAVCDP"){
+      delete dataToPost.subcounty;
+      // delete dataToPost.is_agripreneur
+    }else{
+      delete dataToPost.sublocation;
+      delete dataToPost.fpo;
+
     }
+    dataToPost.county = selectedCounty?.id;
+    console.log({dataToPost})
+
+   
+
 
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_REGISTER_URL, {
