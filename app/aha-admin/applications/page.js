@@ -101,16 +101,22 @@ export default function ApplicationsPage() {
     // fetchApplications
   };
 
-  useEffect(()=>{
-    if(counties && userCounty){
-      let app_counties = counties
-      app_counties = app_counties?.filter((county)=>{
-        return county?.project === userCounty?.project
-      })
-      console.log({app_counties})
-      setCounties(app_counties)
-    }
-  },[counties, userCounty,])
+useEffect(() => {
+  if (userCounty && counties?.length) {
+    const filtered = counties.filter(
+      (county) => county?.project === userCounty?.project
+    );
+
+    // Only update if the filtered list is actually different
+    setCounties((prev) => {
+      const isSame =
+        prev.length === filtered.length &&
+        prev.every((c, i) => c.id === filtered[i].id);
+      return isSame ? prev : filtered;
+    });
+  }
+  // 👇 Remove `counties` from deps, so it doesn’t retrigger after setCounties()
+}, [userCounty]);
 
   useEffect(() => {
     if (counties && user) {
