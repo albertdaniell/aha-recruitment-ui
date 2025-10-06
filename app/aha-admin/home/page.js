@@ -320,6 +320,54 @@ export default function ApplicationsPage() {
 
         {/* show stats for fpo is user is not FPO */}
 
+        {
+          userCounty?.project === "FSRP" &&
+          <>
+            <div className="rounded-xl bg-white mt-3 overflow-auto">
+                <p className="text-sm text-slate-600 mb-3 px-2 pt-2">
+                  County Submission Table
+                </p>
+<div className="overflow-auto mt-2 rounded-sm h-[300px]">
+                  <table className="table-auto border-collapse border border-gray-200 w-full shadow-md rounded-lg text-xs">
+                    <thead>
+                      <tr className="bg-gray-100 text-left">
+                        <th className="border border-gray-200 px-4 py-2 text-gray-700 font-semibold">
+                          County
+                        </th>
+                        
+                        <th className="border border-gray-200 px-4 py-2 text-gray-700 font-semibold">
+                          Submitted Count
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        stats?.county_stats?.map((item,index)=>{
+                          return (
+                            <tr
+                             key={index}
+                                className={
+                                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                }
+                            >
+                              <td className="border border-gray-200 px-4 py-2">
+                                  {item?.user__county__name}
+                                </td>
+                                <td className="border border-gray-200 px-4 py-2">
+                                  {item?.count}
+                                </td>
+
+                            </tr>
+                          )
+                        })
+                      }
+                    </tbody>
+                    </table>
+                    </div>
+                </div>
+          </>
+        }
+
         {userCounty?.project === "NAVCDP" && (
           <>
             {user?.role !== "FPO" && (
