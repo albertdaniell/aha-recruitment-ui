@@ -350,7 +350,7 @@ export default function ApplicationDetails({ params }) {
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700  flex flex-row gap-5"
           onClick={() => {
             setShowModal(true);
-            setActionType("shortlist ✅");
+            setActionType("shortlist");
           }}
         >
           <Check /> Shortlist
@@ -359,7 +359,7 @@ export default function ApplicationDetails({ params }) {
           className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex flex-row gap-5"
           onClick={() => {
             setShowModal(true);
-            setActionType("reject ❌");
+            setActionType("reject");
           }}
         >
           <Cross /> Reject
