@@ -69,13 +69,15 @@ export default function ApplicationDetails({ params }) {
   async function handleActionConfirm() {
     if (!actionType) return;
 
+
+
     try {
       setLoading2(true);
       const loginDataRaw = localStorage.getItem("login_response");
       const loginData = JSON.parse(loginDataRaw);
       const token = loginData?.access;
 
-      const body =
+      let body =
         actionType === "shortlist"
           ? { is_shortlisted: true, is_not_shortlisted: false }
           : { is_shortlisted: false, is_not_shortlisted: true };
@@ -84,8 +86,22 @@ export default function ApplicationDetails({ params }) {
 
           // return 0
 
+          let url = process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL
+
+          if(actionType === "recruit"){
+            url = process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL
+            body = {
+              is_recruited:true
+            }
+          }
+
+    console.log({url})
+
+    // return 0
+
+
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL}${id}/shortlist/`,
+        `${url}${id}/recruit/`,
         {
           method: "PATCH",
           headers: {
@@ -121,6 +137,7 @@ export default function ApplicationDetails({ params }) {
       setApplication((prev) => ({ ...prev, ...updated }));
       setLoading2(false);
       setShowDownShortlist(true);
+      if (id) fetchApplicationDetail();
     } catch (err) {
       set_msg(`${err}`)
           setShowDownShortlist(true);
@@ -155,7 +172,7 @@ export default function ApplicationDetails({ params }) {
         </button>
 
         {accordionOpen && (
-          <div className="p-6 border-t grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 border-t grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* ✅ Left Column */}
             <div className="space-y-6">
               {/* Applicant Info */}
@@ -328,7 +345,7 @@ export default function ApplicationDetails({ params }) {
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700  flex flex-row gap-5"
           onClick={() => {
             setShowModal(true);
-            setActionType("shortlist");
+            setActionType("shortlist ✅");
           }}
         >
           <Check /> Shortlist
@@ -337,10 +354,20 @@ export default function ApplicationDetails({ params }) {
           className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex flex-row gap-5"
           onClick={() => {
             setShowModal(true);
-            setActionType("reject");
+            setActionType("reject ❌");
           }}
         >
           <Cross /> Reject
+        </button>
+
+          <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex flex-row gap-5"
+          onClick={() => {
+            setShowModal(true);
+            setActionType("recruit");
+          }}
+        >
+          <Cross /> Recruit
         </button>
       </div>
 
@@ -361,9 +388,9 @@ export default function ApplicationDetails({ params }) {
             <p>
               Are you sure you want to{" "}
               <span className="font-bold">
-                {actionType === "shortlist" ? "shortlist ✅" : "reject ❌"}
+                {actionType}
               </span>{" "}
-              this application?
+              this application/user? This will trigger an email to the user informing them of the status of their application.
             </p>
             {loading2 ? (
               <Spinner className="mt-3" />
