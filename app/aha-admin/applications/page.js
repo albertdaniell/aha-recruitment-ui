@@ -267,6 +267,7 @@ useEffect(() => {
       FPO: app?.fpo || "—",
       LOCATION: app?.profile?.location || "—",
       IS_PWD: app?.profile?.fpo || "—",
+      IS_AGRIPRENEUR: app?.profile?.is_agripreneur || "—",
       DISABILITY_TYPE: app?.profile?.disability_type || "—",
       PWD_CERTIFICATE: app?.profile?.disability_certificate || "—",
       BIO: app?.profile?.bio || "—",
