@@ -114,6 +114,13 @@ export default function ApplicationsPage() {
         </span>
       );
     }
+    if (app.is_recruited) {
+      return (
+        <span className="px-2 py-1 rounded bg-teal-600 text-white text-xs">
+          Recruited
+        </span>
+      );
+    }
     if (app.is_shortlisted) {
       return (
         <span className="px-2 py-1 rounded bg-blue-600 text-white text-xs">
