@@ -3,6 +3,7 @@ import AppModal from "@/app/components/AppModal/AppModal";
 import { FormatDate } from "@/app/constants/utils";
 import { Check, Cross } from "akar-icons";
 import { Spinner } from "flowbite-react";
+import { Briefcase } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -304,6 +305,10 @@ export default function ApplicationDetails({ params }) {
                   <span className="font-medium">Rejected:</span>{" "}
                   {application.is_not_shortlisted ? "✅ Yes" : "❌ No"}
                 </p>
+                <p>
+                  <span className="font-medium">Recruited:</span>{" "}
+                  {application.is_recruited ? "✅ Yes" : "❌ No"}
+                </p>
 
                 {/* ✅ New date fields */}
                 <p>
@@ -367,7 +372,7 @@ export default function ApplicationDetails({ params }) {
             setActionType("recruit");
           }}
         >
-          <Cross /> Recruit
+          <Briefcase /> Recruit
         </button>
       </div>
 
@@ -384,7 +389,7 @@ export default function ApplicationDetails({ params }) {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold mb-4">Confirm Action</h2>
+            <h2 className="text-lg font-semibold mb-4">Confirm {actionType}</h2>
             <p>
               Are you sure you want to{" "}
               <span className="font-bold">
@@ -405,8 +410,8 @@ export default function ApplicationDetails({ params }) {
                 <button
                   className={`px-4 py-2 text-white rounded ${
                     actionType === "shortlist"
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-red-600 hover:bg-red-700"
+                      ? "bg-teal-600 hover:bg-teal-700"
+                      : "bg-teal-600 hover:bg-teal-700"
                   }`}
                   onClick={handleActionConfirm}
                 >
@@ -459,7 +464,7 @@ export default function ApplicationDetails({ params }) {
   return null;
 })()}
       <h2 className="text-xl font-semibold mt-6 mb-4">Documents</h2>
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6">
         {[
           { label: "Cover Letter", url: application.cover_letter },
           { label: "CV", url: application.cv },
