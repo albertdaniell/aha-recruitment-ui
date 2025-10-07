@@ -56,6 +56,8 @@ export default function ProfilePage() {
   
     },counties,userCounty)
 
+    
+
   useEffect(() => {
     const fetchUserData = async () => {
       const loginData = JSON.parse(localStorage.getItem("login_response"));
@@ -160,6 +162,10 @@ export default function ProfilePage() {
   // ✅ Fetch wards when county changes
   useEffect(() => {
     if (!formData.county) return;
+    if (user?.project === "FSRP") {
+     
+      return;
+    }
     const fetchWards = async () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?county=${formData.county}`
@@ -168,6 +174,45 @@ export default function ProfilePage() {
       setWards(data);
     };
     fetchWards();
+  }, [formData.county]);
+
+
+  useEffect(() => {
+    if (!formData.subcounty) return;
+    const fetchWards = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WARD_LIST_URL}?subcounty=${formData.subcounty}`
+      );
+      const data = await res.json();
+      setWards(data);
+    };
+    fetchWards();
+  }, [formData.subcounty]);
+
+
+   // Fetch subcounties when county changes
+  useEffect(() => {
+    if (!formData.county) return;
+   
+    if (user?.project === "NAVCDP") {
+      setSubcounties([]);
+      setFormData((prev) => ({ ...prev, subcounty: "", ward: "", fpo: "" }));
+      return;
+    }
+    const fetchSubcounties = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SUBCOUNTY_LIST_URL}?county_id=${formData?.county}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch subcounties");
+        const data = await res.json();
+        console.log({ data });
+        setSubcounties(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSubcounties();
   }, [formData.county]);
 
   // ✅ Fetch FPOs when county changes
@@ -548,7 +593,7 @@ export default function ProfilePage() {
                     {/* Sublocation dropdown */}
                     <select
                     
-                      name="sublocation"
+                      name="is_agripreneur"
                       value={formData.is_agripreneur}
                       onChange={handleChange}
                       className="w-full p-2 border rounded focus:border-green-500"

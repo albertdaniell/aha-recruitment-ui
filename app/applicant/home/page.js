@@ -20,14 +20,18 @@ export default function HomePage() {
     if (hasProfile) {
       setCurrentStep(1);
       if (application) {
+        console.log({application})
         if (application?.status === "draft") {
           setCurrentStep(2);
         }
         if (application?.status === "submitted") {
           setCurrentStep(3);
         }
-        if (application?.is_shortlisted === "submitted") {
+        if (application?.is_shortlisted) {
           setCurrentStep(4);
+        }
+        if (application?.is_recruited) {
+          setCurrentStep(5);
         }
         // application?.is_not_shortlisted
       }
@@ -180,6 +184,13 @@ export default function HomePage() {
         {/* <p className="text-gray-600 mt-2">
           Get started by updating your profile or applying to the program.
         </p> */}
+        {application?.is_recruited  ?
+          <p className=" p-4 bg-blue-100 text-blue-800 rounded-lg font-semibold">
+            🎉 Congratulations! You have been recruited. We’ll
+            contact you with the next steps.
+          </p>
+        :
+        <>
         {application?.status === "submitted" &&
           !application?.is_shortlisted &&
           !application?.is_not_shortlisted && (
@@ -187,6 +198,8 @@ export default function HomePage() {
               ✅ We have received your application! Thank you for submitting.
             </p>
           )}
+
+          
 
         {application?.status === "submitted" && application?.is_shortlisted && (
           <p className=" p-4 bg-blue-100 text-blue-800 rounded-lg font-semibold">
@@ -203,6 +216,9 @@ export default function HomePage() {
               opportunities.
             </p>
           )}
+        </>
+        }
+        
       </div>
 
       {/* Cards */}
@@ -258,7 +274,7 @@ export default function HomePage() {
       }`
     ) : (
       // ✅ Submitted application
-      "✅ Application Submitted"
+      "Application Submitted"
     )
   ) : (
     // 🟢 No application yet

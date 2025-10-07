@@ -22,7 +22,7 @@ export default function RegisterPage() {
     ward: "",
     fpo: "",
     sublocation: "",
-    is_agripreneur:"no"
+    is_agripreneur: "no",
   });
 
   // Data lists
@@ -65,7 +65,7 @@ export default function RegisterPage() {
 
   // Fetch subcounties when county changes
   useEffect(() => {
-    console.log("0000")
+    console.log("0000");
     if (selectedCounty?.project === "NAVCDP") {
       setSubcounties([]);
       setFormData((prev) => ({ ...prev, subcounty: "", ward: "", fpo: "" }));
@@ -78,7 +78,7 @@ export default function RegisterPage() {
         );
         if (!res.ok) throw new Error("Failed to fetch subcounties");
         const data = await res.json();
-        console.log({data})
+        console.log({ data });
         setSubcounties(data);
       } catch (err) {
         console.error(err);
@@ -121,7 +121,6 @@ export default function RegisterPage() {
     };
     selectedCounty && fetchWards();
   }, [selectedCounty]);
-
 
   useEffect(() => {
     console.log({ selectedCounty });
@@ -254,10 +253,9 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setLoading(false);
-
-  },[])
+  }, []);
 
   const validateForm = () => {
     if (formData.password !== formData.password2) {
@@ -283,24 +281,23 @@ export default function RegisterPage() {
       setMessage("Phone number must be in format 254XXXXXXXXX");
       return false;
     }
-    if(selectedCounty?.project === "NAVCDP"){
-if (!selectedCounty || !formData.fpo) {
-      setMessage("Please select county, subcounty, ward and FPO");
-      return false;
-    }
+    if (selectedCounty?.project === "NAVCDP") {
+      if (!selectedCounty || !formData.fpo) {
+        setMessage("Please select county, subcounty, ward and FPO");
+        return false;
+      }
     }
 
-    console.log({formData})
-    console.log({selectedCounty})
+    console.log({ formData });
+    console.log({ selectedCounty });
 
+    if (selectedCounty?.project === "FSRP") {
+      if (!selectedCounty || !formData.subcounty || !formData.ward) {
+        setMessage("Please select county, subcounty, ward");
+        return false;
+      }
+    }
 
-    if(selectedCounty?.project === "FSRP"){
-if (!selectedCounty || !formData.subcounty || !formData.ward) {
-      setMessage("Please select county, subcounty, ward");
-      return false;
-    }
-    }
-    
     return true;
   };
 
@@ -312,22 +309,19 @@ if (!selectedCounty || !formData.subcounty || !formData.ward) {
 
     let dataToPost = { ...formData };
 
-    if(selectedCounty?.project === "NAVCDP"){
+    if (selectedCounty?.project === "NAVCDP") {
       delete dataToPost.subcounty;
       // delete dataToPost.is_agripreneur
-    }else{
+    } else {
       delete dataToPost.sublocation;
       delete dataToPost.fpo;
-
     }
     dataToPost.county = selectedCounty?.id;
-    console.log({dataToPost})
+    console.log({ dataToPost });
 
     if (dataToPost.ward) {
       // dataToPost.subcounty = selectedCounty?.id;
     }
-
-
 
     // return 0
 
@@ -603,45 +597,43 @@ if (!selectedCounty || !formData.subcounty || !formData.ward) {
                 </select> */}
 
                 {/* FPO dropdown */}
-                {
-                  selectedCounty?.project === "NAVCDP" ?
-  <div>
-                  <label className="text-slate-900 text-sm">FPO</label>
-                  <select
-                    name="fpo"
-                    value={formData.fpo}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:border-green-500"
-                    required
-                  >
-                    <option value="">Select FPO</option>
-                    {fpos.map((f) => (
-                      <option key={f.id} value={f.id}>
-                        {f.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>:
-
+                {selectedCounty?.project === "NAVCDP" ? (
                   <div>
-                  <label className="text-slate-900 text-sm">Subcounty</label>
-                  <select
-                  name="subcounty"
-                  value={formData?.subcounty}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded focus:border-green-500"
-                  required
-                >
-                  <option value="">Select SubCounty</option>
-                  {subcounties.map((sc) => (
-                    <option key={sc.id} value={sc.id}>
-                      {sc.name}
-                    </option>
-                  ))}
-                </select> 
-                </div>
-                }
-              
+                    <label className="text-slate-900 text-sm">FPO</label>
+                    <select
+                      name="fpo"
+                      value={formData.fpo}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded focus:border-green-500"
+                      required
+                    >
+                      <option value="">Select FPO</option>
+                      {fpos.map((f) => (
+                        <option key={f.id} value={f.id}>
+                          {f.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="text-slate-900 text-sm">Subcounty</label>
+                    <select
+                      name="subcounty"
+                      value={formData?.subcounty}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded focus:border-green-500"
+                      required
+                    >
+                      <option value="">Select SubCounty</option>
+                      {subcounties.map((sc) => (
+                        <option key={sc.id} value={sc.id}>
+                          {sc.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
 
               {/* {JSON.stringify(wards)} */}
@@ -668,59 +660,58 @@ if (!selectedCounty || !formData.subcounty || !formData.ward) {
                   </div>
                 </div>
 
-                {
-                  selectedCounty?.project === "NAVCDP"  ?
-  <div className=" grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-slate-900 text-sm">
-                      Sublocation
-                    </label>
-                    {/* Sublocation dropdown */}
-                    <select
-                      name="sublocation"
-                      value={formData.sublocation}
-                      onChange={handleChange}
-                      className="w-full p-2 border rounded focus:border-green-500"
-                      //   required
-                    >
-                      <option value="">Select Sublocation</option>
-                      {sublocations?.map((w) => (
-                        <option key={w.id} value={w.id}>
-                          {w.name}
-                        </option>
-                      ))}
-                    </select>
+                {selectedCounty?.project === "NAVCDP" ? (
+                  <div className=" grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-slate-900 text-sm">
+                        Sublocation
+                      </label>
+                      {/* Sublocation dropdown */}
+                      <select
+                        name="sublocation"
+                        value={formData.sublocation}
+                        onChange={handleChange}
+                        className="w-full p-2 border rounded focus:border-green-500"
+                        //   required
+                      >
+                        <option value="">Select Sublocation</option>
+                        {sublocations?.map((w) => (
+                          <option key={w.id} value={w.id}>
+                            {w.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                  
-                </div>:
+                ) : (
+                  <>
+                    <div>
+                      <label className="text-slate-900 text-sm">
+                        Are you an agripreneur
+                      </label>
+                      {/* formData {JSON.stringify(formData?.is_agripreneur)} */}
 
-                <>
-                 <div>
-                    <label className="text-slate-900 text-sm">
-                      Are you an agripreneur
-                    </label>
-                   {/* formData {JSON.stringify(formData?.is_agripreneur)} */}
-
-                    {/* Sublocation dropdown */}
-                    <select
-                      name="is_agripreneur"
-                      value={formData.is_agripreneur}
-                      onChange={handleChange}
-                      className="w-full p-2 border rounded focus:border-green-500"
-                      //   required
-                    >
-                      <option value="">Select</option>
-                      {[{"name":"Yes",id:"yes"},{"name":"No",id:"no"}]?.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-                }
-
-              
+                      {/* Sublocation dropdown */}
+                      <select
+                        name="is_agripreneur"
+                        value={formData.is_agripreneur}
+                        onChange={handleChange}
+                        className="w-full p-2 border rounded focus:border-green-500"
+                        //   required
+                      >
+                        <option value="">Select</option>
+                        {[
+                          { name: "Yes", id: "yes" },
+                          { name: "No", id: "no" },
+                        ]?.map((d) => (
+                          <option key={d.id} value={d.id}>
+                            {d.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Passwords */}
@@ -756,17 +747,15 @@ if (!selectedCounty || !formData.subcounty || !formData.ward) {
                 </div>
               </div>
 
-
-           {message && (
-  <p
-    className={`mb-4 ${
-      message.startsWith("✅") ? "text-green-600" : "text-red-600"
-    }`}
-  >
-    {message.replace(/^detail:\s*/, "")}
-  </p>
-)}
-
+              {message && (
+                <p
+                  className={`mb-4 ${
+                    message.startsWith("✅") ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {message.replace(/^detail:\s*/, "")}
+                </p>
+              )}
 
               <button
                 type="submit"

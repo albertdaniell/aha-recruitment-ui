@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import React from "react";
 const steps = [
   { id: 1, name: "Profile Updated" },
@@ -45,7 +46,7 @@ export default function Stepper({ currentStep }) {
                     : "border-gray-300 text-gray-400"
                 }`}
             >
-              {isCompleted ? "✓" : step.id}
+              {isCompleted || currentStep === steps.length ? <Check/> : step.id}
             </div>
 
             {/* Label */}

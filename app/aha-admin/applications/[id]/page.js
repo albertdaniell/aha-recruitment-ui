@@ -19,8 +19,8 @@ export default function ApplicationDetails({ params }) {
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(null);
   const [accordionOpen, setAccordionOpen] = useState(true);
-  let [msg,set_msg] = useState("Done shortlisting!")
-
+  let [msg, set_msg] = useState("Done shortlisting!");
+  const [rejectReason, setRejectReason] = useState("");
   async function fetchApplicationDetail() {
     try {
       const loginDataRaw = localStorage.getItem("login_response");
@@ -70,8 +70,6 @@ export default function ApplicationDetails({ params }) {
   async function handleActionConfirm() {
     if (!actionType) return;
 
-
-
     try {
       setLoading2(true);
       const loginDataRaw = localStorage.getItem("login_response");
@@ -80,29 +78,36 @@ export default function ApplicationDetails({ params }) {
 
       let body =
         actionType === "shortlist"
-          ? { is_shortlisted: true, is_not_shortlisted: false }
-          : { is_shortlisted: false, is_not_shortlisted: true };
-
-          console.log({body})
-
-          // return 0
-
-          let url = process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL
-
-          if(actionType === "recruit"){
-            url = process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL
-            body = {
-              is_recruited:true
+          ? {
+              is_shortlisted: true,
+              is_not_shortlisted: false,
+              reject_reason: rejectReason,
             }
-          }
+          : {
+              is_shortlisted: false,
+              is_not_shortlisted: true,
+              reject_reason: rejectReason,
+            };
 
-    console.log({url})
+      console.log({ body });
 
-    // return 0
+      // return 0
 
+      let url = process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL;
+
+      if (actionType === "recruit") {
+        url = process.env.NEXT_PUBLIC_APPLICATION_DETAIL_URL;
+        body = {
+          is_recruited: true,
+        };
+      }
+
+      console.log({ url });
+
+      // return 0
 
       const res = await fetch(
-        `${url}${id}/${actionType === "recruit" ? "recruit":"shortlist"}/`,
+        `${url}${id}/${actionType === "recruit" ? "recruit" : "shortlist"}/`,
         {
           method: "PATCH",
           headers: {
@@ -113,11 +118,11 @@ export default function ApplicationDetails({ params }) {
         }
       );
       // console.log(await re))
-      console.log({res})
+      console.log({ res });
 
       if (!res.ok) {
         let res_json = await res.json();
-        console.log({res_json})
+        console.log({ res_json });
         console.log(res_json);
         setLoading2(false);
 
@@ -129,19 +134,18 @@ export default function ApplicationDetails({ params }) {
         }
       }
 
-
       const updated = await res.json();
-      console.log({updated})
-      if(updated?.detail){
-        set_msg(updated?.detail)
+      console.log({ updated });
+      if (updated?.detail) {
+        set_msg(updated?.detail);
       }
       setApplication((prev) => ({ ...prev, ...updated }));
       setLoading2(false);
       setShowDownShortlist(true);
       if (id) fetchApplicationDetail();
     } catch (err) {
-      set_msg(`${err}`)
-          setShowDownShortlist(true);
+      set_msg(`${err}`);
+      setShowDownShortlist(true);
       // console.log(`Error : ${err}`)
       setLoading(false);
       // console.error(err);
@@ -158,7 +162,15 @@ export default function ApplicationDetails({ params }) {
   if (!application) return <p className="p-6">Application not found</p>;
   return (
     <div className="p-6 bg-white shadow-md rounded-2xl">
-      <h1 className="text-md  mb-4"><Link className="text-blue-500 hover:underline" href={"/aha-admin/applications/"}>Back to Applications</Link> / <Link href={"#"}>Application Details</Link></h1>
+      <h1 className="text-md  mb-4">
+        <Link
+          className="text-blue-500 hover:underline"
+          href={"/aha-admin/applications/"}
+        >
+          Back to Applications
+        </Link>{" "}
+        / <Link href={"#"}>Application Details</Link>
+      </h1>
 
       <div className="border rounded-lg shadow-sm">
         <button
@@ -205,14 +217,12 @@ export default function ApplicationDetails({ params }) {
                   <span className="font-medium">Ward:</span>{" "}
                   {application.ward || "—"}
                 </p>
-                {
-                  application?.fpo &&
-<p>
-                  <span className="font-medium">FPO:</span>{" "}
-                  {application.fpo || "—"}
-                </p>
-                }
-                
+                {application?.fpo && (
+                  <p>
+                    <span className="font-medium">FPO:</span>{" "}
+                    {application.fpo || "—"}
+                  </p>
+                )}
               </div>
 
               {/* Profile Info */}
@@ -347,7 +357,8 @@ export default function ApplicationDetails({ params }) {
       {/* Actions */}
       <div className="mt-6 flex gap-4">
         <button
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700  flex flex-row gap-5"
+        disabled={application?.status === "draft"}
+          className={`${application?.status === "draft" ? "bg-slate-300 hover:bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700" } text-white px-4 py-2 rounded-lg  flex flex-row gap-5`}
           onClick={() => {
             setShowModal(true);
             setActionType("shortlist");
@@ -356,7 +367,8 @@ export default function ApplicationDetails({ params }) {
           <Check /> Shortlist
         </button>
         <button
-          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex flex-row gap-5"
+        disabled={application?.status === "draft"}
+          className={`${application?.status === "draft" ? "bg-slate-300 hover:bg-slate-300 cursor-not-allowed":"bg-red-600 hover:bg-red-700" }  text-white px-4 py-2 rounded-lg  flex flex-row gap-5`} 
           onClick={() => {
             setShowModal(true);
             setActionType("reject");
@@ -365,8 +377,13 @@ export default function ApplicationDetails({ params }) {
           <Cross /> Reject
         </button>
 
-          <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex flex-row gap-5"
+        <button
+          disabled={!application?.is_shortlisted || application?.is_recruited}
+          className={`${
+            !application?.is_shortlisted || application?.is_recruited
+              ? "bg-slate-300 hover:bg-slate-300 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          } text-white px-4 py-2 rounded-lg  flex flex-row gap-5`}
           onClick={() => {
             setShowModal(true);
             setActionType("recruit");
@@ -388,37 +405,68 @@ export default function ApplicationDetails({ params }) {
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold mb-4">Confirm {actionType}</h2>
-            <p>
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[40%] z-40">
+            <h2 className="text-lg font-semibold mb-4 capitalize">
+              Confirm {actionType}
+            </h2>
+            <p className="text-sm text-gray-700 mb-4">
               Are you sure you want to{" "}
-              <span className="font-bold">
-                {actionType}
-              </span>{" "}
-              this application/user? This will trigger an email to the user informing them of the status of their application.
+              <span className="font-bold">{actionType}</span> this
+              application/user? This will trigger an email to the user informing
+              them of the status of their application.
             </p>
-            {loading2 ? (
-              <Spinner className="mt-3" />
-            ) : (
-              <div className="mt-6 flex justify-end gap-3">
-                <button
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  className={`px-4 py-2 text-white rounded ${
-                    actionType === "shortlist"
-                      ? "bg-teal-600 hover:bg-teal-700"
-                      : "bg-teal-600 hover:bg-teal-700"
-                  }`}
-                  onClick={handleActionConfirm}
-                >
-                  Confirm
-                </button>
+
+            {actionType === "reject" && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Reason for Rejection
+                </label>
+                <textarea
+                  disabled={loading2}
+                  rows="3"
+                  placeholder="Enter reason for rejection..."
+                  className="w-full border rounded-md p-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                />
               </div>
             )}
+
+            {loading2 ? (
+  <div className="flex justify-center mt-4">
+    <Spinner />
+  </div>
+) : (
+  <div className="mt-6 flex justify-end gap-3">
+    {/* Cancel Button */}
+    <button
+      onClick={() => setShowModal(false)}
+      className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 transition-all duration-200 ease-in-out shadow-sm active:scale-95"
+    >
+      Cancel
+    </button>
+
+    {/* Confirm / Action Button */}
+    <button
+      onClick={handleActionConfirm}
+      disabled={actionType === "reject" && !rejectReason.trim()}
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-medium shadow-sm active:scale-95 transition-all duration-200 ease-in-out
+        ${
+          actionType === "reject"
+            ? "bg-red-600 hover:bg-red-700 disabled:bg-red-300"
+            : actionType === "shortlist"
+            ? "bg-green-600 hover:bg-green-700 disabled:bg-blue-300"
+            : actionType === "recruit"
+            ? "bg-teal-600 hover:bg-teal-700 disabled:bg-green-300"
+            : "bg-teal-600 hover:bg-teal-700"
+        }`}
+    >
+      {actionType === "reject" && "Reject"}
+      {actionType === "shortlist" && "Shortlist"}
+      {actionType === "recruit" && "Recruit"}
+    </button>
+  </div>
+)}
           </div>
         </div>
       )}
@@ -426,43 +474,46 @@ export default function ApplicationDetails({ params }) {
       {/* Documents */}
       {/* {JSON.stringify(application)} */}
       {/* ⚠️ Draft Warning */}
-{application?.status === "draft" && (
-  <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded">
-    <p>
-      This application is still in <strong>Draft</strong> mode and has not been submitted yet.
-    </p>
-  </div>
-)}
+      {application?.status === "draft" && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded">
+          <p>
+            This application is still in <strong>Draft</strong> mode and has not
+            been submitted yet.
+          </p>
+        </div>
+      )}
 
+      {/* ⚠️ Missing Documents Warning */}
+      {(() => {
+        const requiredDocs = [
+          { label: "Cover Letter", key: "cover_letter" },
+          { label: "CV", key: "cv" },
+          { label: "KVB Certificate", key: "kvb_certificate" },
+          { label: "National ID", key: "national_id_document" },
+          {
+            label: "Professional Certificate",
+            key: "professional_certificate",
+          },
+        ];
 
-{/* ⚠️ Missing Documents Warning */}
-{(() => {
-  const requiredDocs = [
-    { label: "Cover Letter", key: "cover_letter" },
-    { label: "CV", key: "cv" },
-    { label: "KVB Certificate", key: "kvb_certificate" },
-    { label: "National ID", key: "national_id_document" },
-    { label: "Professional Certificate", key: "professional_certificate" },
-  ];
+        const missingDocs = requiredDocs.filter((doc) => !application[doc.key]);
 
-  const missingDocs = requiredDocs.filter((doc) => !application[doc.key]);
-
-  if (missingDocs.length > 0) {
-    return (
-      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-4 rounded">
-        <p className="font-semibold mb-2">
-          Some required documents are missing:
-        </p>
-        <ul className="list-disc list-inside">
-          {missingDocs.map((doc) => (
-            <li key={doc.key}>{doc.label}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-  return null;
-})()}
+        if (missingDocs.length > 0) {
+          return (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-4 rounded">
+              <p className="font-semibold mb-2">
+                Some required documents are missing:
+              </p>
+              <ul className="list-disc list-inside">
+                {missingDocs.map((doc) => (
+                  <li key={doc.key}>{doc.label}</li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+        return null;
+      })()}
       <h2 className="text-xl font-semibold mt-6 mb-4">Documents</h2>
       <div className="grid lg:grid-cols-2 gap-6">
         {[

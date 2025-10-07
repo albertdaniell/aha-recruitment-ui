@@ -671,30 +671,33 @@ export default function ApplyPage() {
 
       {/* Tailwind Confirmation Modal */}
       {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Confirm Submission</h2>
-            <p className="mb-6">
-              Are you sure you want to submit your application? Once submitted,
-              you won't be able to edit documents.
-            </p>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 font-bold"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmSubmit}
-                className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 font-bold"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+    <div className="bg-white p-8 rounded-2xl shadow-2xl w-[90%] max-w-md transition-all transform scale-100">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-3 text-center">
+        Confirm Submission
+      </h2>
+      <p className="text-gray-600 text-center leading-relaxed mb-8">
+        Are you sure you want to submit your application? Once submitted, you won’t be able
+        to edit any documents.
+      </p>
+
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={() => setShowConfirm(false)}
+          className="px-6 py-2.5 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={confirmSubmit}
+          className="px-6 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200 shadow-sm"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
