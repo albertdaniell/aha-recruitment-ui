@@ -223,6 +223,25 @@ export default function ApplicationsPage() {
         </>
       )}
 
+      {
+        user?.role !== "ADMIN"
+
+        &&
+        <>
+        
+      {stats?.all_applications_shortlisted > 0 && (
+  <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 my-4 rounded-lg shadow-sm">
+    <h3 className="font-semibold text-lg mb-1">Applicants Shortlisted ✅</h3>
+    <p className="text-sm">
+      Some applicants have been successfully shortlisted.  
+      Please proceed to the <span className="font-semibold">Applications</span> section, open the shortlisted application, and click <span className="font-semibold text-green-700">“Recruit”</span> to finalize their selection.
+    </p>
+  </div>
+)}
+        </>
+      }
+
+
       {applications?.length === 0 && (
         <div className="bg-orange-300 p-5 rounded-md my-4">
           <p className="text-orange-800">
