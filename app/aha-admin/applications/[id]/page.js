@@ -354,11 +354,49 @@ export default function ApplicationDetails({ params }) {
           </div>
         )}
       </div>
+
+      {
+        application?.is_not_shortlisted &&
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-4 rounded">
+              <p className="font-semibold mb-2">
+                Application rejected
+              </p>
+             <p>
+              This application has been rejected
+             </p>
+            </div>
+      }
+      
+      {
+        application?.is_recruited ?
+        <div className="bg-red-100 border-l-4 border-green-500 text-green-700 p-4 my-4 rounded">
+              <p className="font-semibold mb-2">
+                Application/user recruited
+              </p>
+             <p>
+              This user has been recruited
+             </p>
+            </div>
+      :
+      <>
+      {
+        application?.is_shortlisted &&
+        <div className="bg-red-100 border-l-4 border-green-500 text-green-700 p-4 my-4 rounded">
+              <p className="font-semibold mb-2">
+                Application shortlisted
+              </p>
+             <p>
+              This application has been shortlisted
+             </p>
+            </div>
+      }
+      </>
+      }
       {/* Actions */}
       <div className="mt-6 flex gap-4">
         <button
-        disabled={application?.status === "draft"}
-          className={`${application?.status === "draft" ? "bg-slate-300 hover:bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700" } text-white px-4 py-2 rounded-lg  flex flex-row gap-5`}
+        disabled={application?.status === "draft" || application?.is_not_shortlisted}
+          className={`${application?.status === "draft" || application?.is_not_shortlisted ? "bg-slate-300 hover:bg-slate-300 cursor-not-allowed":"bg-green-600 hover:bg-green-700" } text-white px-4 py-2 rounded-lg  flex flex-row gap-5`}
           onClick={() => {
             setShowModal(true);
             setActionType("shortlist");
